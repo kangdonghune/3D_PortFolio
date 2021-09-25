@@ -1,0 +1,317 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="00. Management">
+      <UniqueIdentifier>{ee97fdb5-5a41-43e7-9723-6c527d947949}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Scene">
+      <UniqueIdentifier>{2dda3fc5-5861-4f27-acd6-0fb7a3ce3db1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Layer">
+      <UniqueIdentifier>{8f053907-2f55-4f05-856a-04b0b28601a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject">
+      <UniqueIdentifier>{abb8e066-b82e-40e0-b7d2-d3281f3371f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component">
+      <UniqueIdentifier>{fc13f265-012e-409b-9d49-973059f78e74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99. Export">
+      <UniqueIdentifier>{e7ef1fa9-f796-45fb-9750-b0cd3ed515fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\00. VIBuffer">
+      <UniqueIdentifier>{791a8974-82c4-4e68-a7f8-3ec20a03c1ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\00. VIBuffer\00. TriCol">
+      <UniqueIdentifier>{ca144ada-1d13-4e79-8a5a-6a3e24104e70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. ProtoMgr">
+      <UniqueIdentifier>{f9da7993-b7eb-44e9-a9e4-6c3e27e9cdc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\01. Transform">
+      <UniqueIdentifier>{88d21773-325a-4b6a-a9b5-fcc38a7b7d85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\00. VIBuffer\01. RcCol">
+      <UniqueIdentifier>{abf6d37f-d5f0-4bdb-baf1-3fafdd517e11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\02. Texture">
+      <UniqueIdentifier>{b4033c9b-00e1-4787-abe0-64e3bd7172ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\00. VIBuffer\02. RcTex">
+      <UniqueIdentifier>{bd1b26f2-9140-48ff-bbcf-78115be9e306}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\03. Renderer">
+      <UniqueIdentifier>{482d03e8-27c6-432c-9eed-f3c09f7b8081}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\00. VIBuffer\03. TerrainTex">
+      <UniqueIdentifier>{6fdf7565-7aa9-4454-849c-1d6443f16a56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\Camera">
+      <UniqueIdentifier>{e8e3503d-41ef-4eed-a277-8fde0be774c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\00. VIBuffer\04. CubeTex">
+      <UniqueIdentifier>{c531e853-cbe3-4db4-a7d3-153144a61360}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\04. Calculator">
+      <UniqueIdentifier>{c4d550a0-a0c1-489c-89d7-973cbae2afd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Light">
+      <UniqueIdentifier>{3e27af9e-a12d-4c1c-90af-8c8c72a06102}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Light\Manager">
+      <UniqueIdentifier>{1d043dc4-9a4a-4141-86a5-0c2c5b143c55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\05. StaticMesh">
+      <UniqueIdentifier>{b6dfe65f-9bfc-4c0f-9581-8119168cd7b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\06. DynamicMesh">
+      <UniqueIdentifier>{1e228adf-29b2-4a60-8a71-c55209e07b4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\07. Collider">
+      <UniqueIdentifier>{e11ca45b-304b-4442-bbda-50adba8735c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\06. DynamicMesh\00. HierarchyLoader">
+      <UniqueIdentifier>{ea2be94f-c4aa-49b4-9053-666c9d08b840}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\06. DynamicMesh\01. AniCtrl">
+      <UniqueIdentifier>{6b10cdae-9aed-4748-811f-18137043d7c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\08. Optimization">
+      <UniqueIdentifier>{08c9d135-9f0d-47e9-b67e-779eee3ea100}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\08. Optimization\00. Frustum">
+      <UniqueIdentifier>{dea05c97-58c8-4d5f-8ca7-1201db10771d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\08. Optimization\01. QuadTree">
+      <UniqueIdentifier>{c7ec9b46-c859-441f-a9f9-8e19e5729dcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\09. NaviMesh">
+      <UniqueIdentifier>{77a9e135-7b55-4d88-a793-fe69c061bee4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\09. NaviMesh\00. Line">
+      <UniqueIdentifier>{fb8e89ef-522a-482d-bdf2-32a2aae68efb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\09. NaviMesh\01. Cell">
+      <UniqueIdentifier>{1b53ceed-3585-491b-a9f6-2444acd182cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\10. Shader">
+      <UniqueIdentifier>{4c40320a-453f-40b2-b96d-13ef33312098}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\10. Shader\hpp">
+      <UniqueIdentifier>{9692f30a-7855-4ff5-9d14-b8d3c448119a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\11.SphrerMeshs">
+      <UniqueIdentifier>{75675801-4674-4987-ac13-78f91ed80b03}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Code\Management.cpp">
+      <Filter>00. Management</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\VIBuffer.cpp">
+      <Filter>04. Component\00. VIBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TriCol.cpp">
+      <Filter>04. Component\00. VIBuffer\00. TriCol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Component.cpp">
+      <Filter>04. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameObject.cpp">
+      <Filter>03. GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Layer.cpp">
+      <Filter>02. Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Scene.cpp">
+      <Filter>01. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ProtoMgr.cpp">
+      <Filter>05. ProtoMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Transform.cpp">
+      <Filter>04. Component\01. Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RcCol.cpp">
+      <Filter>04. Component\00. VIBuffer\01. RcCol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Texture.cpp">
+      <Filter>04. Component\02. Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RcTex.cpp">
+      <Filter>04. Component\00. VIBuffer\02. RcTex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Renderer.cpp">
+      <Filter>04. Component\03. Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TerrainTex.cpp">
+      <Filter>04. Component\00. VIBuffer\03. TerrainTex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Camera.cpp">
+      <Filter>03. GameObject\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CubeTex.cpp">
+      <Filter>04. Component\00. VIBuffer\04. CubeTex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Calculator.cpp">
+      <Filter>04. Component\04. Calculator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Light.cpp">
+      <Filter>06. Light</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\LightMgr.cpp">
+      <Filter>06. Light\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\StaticMesh.cpp">
+      <Filter>04. Component\05. StaticMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Collider.cpp">
+      <Filter>04. Component\07. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\DynamicMesh.cpp">
+      <Filter>04. Component\06. DynamicMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\HierarchyLoader.cpp">
+      <Filter>04. Component\06. DynamicMesh\00. HierarchyLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\AniCtrl.cpp">
+      <Filter>04. Component\06. DynamicMesh\01. AniCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Frustum.cpp">
+      <Filter>04. Component\08. Optimization\00. Frustum</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Optimization.cpp">
+      <Filter>04. Component\08. Optimization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\QuadTree.cpp">
+      <Filter>04. Component\08. Optimization\01. QuadTree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\NaviMesh.cpp">
+      <Filter>04. Component\09. NaviMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Line.cpp">
+      <Filter>04. Component\09. NaviMesh\00. Line</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Cell.cpp">
+      <Filter>04. Component\09. NaviMesh\01. Cell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Shader.cpp">
+      <Filter>04. Component\10. Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SphereMeshs.cpp">
+      <Filter>04. Component\11.SphrerMeshs</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Code\Management.h">
+      <Filter>00. Management</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\VIBuffer.h">
+      <Filter>04. Component\00. VIBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\TriCol.h">
+      <Filter>04. Component\00. VIBuffer\00. TriCol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Component.h">
+      <Filter>04. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameObject.h">
+      <Filter>03. GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Layer.h">
+      <Filter>02. Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Scene.h">
+      <Filter>01. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Header\Export_Utility.h">
+      <Filter>99. Export</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\ProtoMgr.h">
+      <Filter>05. ProtoMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Transform.h">
+      <Filter>04. Component\01. Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\RcCol.h">
+      <Filter>04. Component\00. VIBuffer\01. RcCol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Texture.h">
+      <Filter>04. Component\02. Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\RcTex.h">
+      <Filter>04. Component\00. VIBuffer\02. RcTex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Renderer.h">
+      <Filter>04. Component\03. Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\TerrainTex.h">
+      <Filter>04. Component\00. VIBuffer\03. TerrainTex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Camera.h">
+      <Filter>03. GameObject\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\CubeTex.h">
+      <Filter>04. Component\00. VIBuffer\04. CubeTex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Calculator.h">
+      <Filter>04. Component\04. Calculator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Light.h">
+      <Filter>06. Light</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\LightMgr.h">
+      <Filter>06. Light\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\StaticMesh.h">
+      <Filter>04. Component\05. StaticMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Collider.h">
+      <Filter>04. Component\07. Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\DynamicMesh.h">
+      <Filter>04. Component\06. DynamicMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\HierarchyLoader.h">
+      <Filter>04. Component\06. DynamicMesh\00. HierarchyLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\AniCtrl.h">
+      <Filter>04. Component\06. DynamicMesh\01. AniCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Frustum.h">
+      <Filter>04. Component\08. Optimization\00. Frustum</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Optimization.h">
+      <Filter>04. Component\08. Optimization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\QuadTree.h">
+      <Filter>04. Component\08. Optimization\01. QuadTree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\NaviMesh.h">
+      <Filter>04. Component\09. NaviMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Line.h">
+      <Filter>04. Component\09. NaviMesh\00. Line</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Cell.h">
+      <Filter>04. Component\09. NaviMesh\01. Cell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Shader_Sample.hpp">
+      <Filter>04. Component\10. Shader\hpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Shader.h">
+      <Filter>04. Component\10. Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Shader_Terrain.hpp">
+      <Filter>04. Component\10. Shader\hpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\SphereMeshs.h">
+      <Filter>04. Component\11.SphrerMeshs</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Header\Export_Utility.inl">
+      <Filter>99. Export</Filter>
+    </None>
+  </ItemGroup>
+</Project>

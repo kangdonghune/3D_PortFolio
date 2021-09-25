@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="00.MainFrame">
+      <UniqueIdentifier>{615fa9ea-c691-4c66-997f-2c2084b3bdb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.View">
+      <UniqueIdentifier>{980188f6-fab1-4175-b161-4cbe55883af5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Document">
+      <UniqueIdentifier>{8b16cc70-ad76-45c2-a62a-70a1f90a5f94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.View\00.Form">
+      <UniqueIdentifier>{8578b483-59ac-42c4-86f7-0b2c2388514f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Scene">
+      <UniqueIdentifier>{578e497b-ce85-4eb2-a342-d6a5244db64f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Scene\01.Stage">
+      <UniqueIdentifier>{0b14b3a4-d4f1-49de-855b-9cb220ad95d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject">
+      <UniqueIdentifier>{f6cc3245-d8b1-4935-a545-6e03c177ca97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\00.BackGround">
+      <UniqueIdentifier>{eb93acc9-e8f3-4135-a4f7-705c99beedde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.Default">
+      <UniqueIdentifier>{95ff2683-01e8-477c-8c21-861126dbba71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\01.Terrain">
+      <UniqueIdentifier>{5531fba5-1171-44a3-b7eb-b86f5e2244bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\02.DynamicCamera">
+      <UniqueIdentifier>{30cdf1f2-c32b-42a1-ba51-e147824f477f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.View\00.Form\00.Object">
+      <UniqueIdentifier>{a7d990bf-524e-401b-98b4-b09d4b163f76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.View\00.Form\01.Terrain">
+      <UniqueIdentifier>{5a5d9a47-b3b5-4f17-94fc-b49c3849f37d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.View\00.Form\02.Char">
+      <UniqueIdentifier>{196ae986-413d-417f-8ad9-7f593f33114c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\03.Player">
+      <UniqueIdentifier>{1486bc63-3170-4912-b0e2-c5566f453516}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\04.Monster">
+      <UniqueIdentifier>{c8b4f778-10af-4069-b81e-dc0009a5f454}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\05.Sphrer">
+      <UniqueIdentifier>{76fc9538-4664-4d7a-8be0-4e0f5e21b8f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Scene\01.Stage\00.Public">
+      <UniqueIdentifier>{b3ec5023-7c2f-4b3c-b920-7dd178c5b079}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MainFrm.h">
+      <Filter>00.MainFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="MFCDoc.h">
+      <Filter>02.Document</Filter>
+    </ClInclude>
+    <ClInclude Include="MFC.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Define.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Stage.h">
+      <Filter>02.Scene\01.Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\BackGround.h">
+      <Filter>03.GameObject\00.BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Terrain.h">
+      <Filter>03.GameObject\01.Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\DynamicCamera.h">
+      <Filter>03.GameObject\02.DynamicCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Form.h">
+      <Filter>01.View\00.Form</Filter>
+    </ClInclude>
+    <ClInclude Include="TabObject.h" />
+    <ClInclude Include="TabTerrain.h" />
+    <ClInclude Include="TabChar.h">
+      <Filter>01.View\00.Form\02.Char</Filter>
+    </ClInclude>
+    <ClInclude Include="MFCView.h">
+      <Filter>01.View</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Player.h">
+      <Filter>03.GameObject\03.Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Monster.h">
+      <Filter>03.GameObject\04.Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Sphrer.h">
+      <Filter>03.GameObject\05.Sphrer</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>00.MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCDoc.cpp">
+      <Filter>02.Document</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCView.cpp">
+      <Filter>01.View</Filter>
+    </ClCompile>
+    <ClCompile Include="MFC.cpp">
+      <Filter>99.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>99.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Stage.cpp">
+      <Filter>02.Scene\01.Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\BackGround.cpp">
+      <Filter>03.GameObject\00.BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Terrain.cpp">
+      <Filter>03.GameObject\01.Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\DynamicCamera.cpp">
+      <Filter>03.GameObject\02.DynamicCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Form.cpp">
+      <Filter>01.View\00.Form</Filter>
+    </ClCompile>
+    <ClCompile Include="TabObject.cpp" />
+    <ClCompile Include="TabTerrain.cpp" />
+    <ClCompile Include="TabChar.cpp">
+      <Filter>01.View\00.Form\02.Char</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Player.cpp">
+      <Filter>03.GameObject\03.Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Monster.cpp">
+      <Filter>03.GameObject\04.Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Sphrer.cpp">
+      <Filter>03.GameObject\05.Sphrer</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MFC.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\MFC.rc2">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\MFCDoc.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\MFC.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
