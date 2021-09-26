@@ -59,6 +59,9 @@
     <Filter Include="02.Scene\01.Stage\00.Public">
       <UniqueIdentifier>{b3ec5023-7c2f-4b3c-b920-7dd178c5b079}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\06.Object">
+      <UniqueIdentifier>{2023d1b8-bc0f-400e-993d-feb83779bcd9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -100,7 +103,6 @@
     <ClInclude Include="Form.h">
       <Filter>01.View\00.Form</Filter>
     </ClInclude>
-    <ClInclude Include="TabObject.h" />
     <ClInclude Include="TabTerrain.h" />
     <ClInclude Include="TabChar.h">
       <Filter>01.View\00.Form\02.Char</Filter>
@@ -119,6 +121,12 @@
     </ClInclude>
     <ClInclude Include="..\Code\Sphrer.h">
       <Filter>03.GameObject\05.Sphrer</Filter>
+    </ClInclude>
+    <ClInclude Include="TabObject.h">
+      <Filter>01.View\00.Form\00.Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Object.h">
+      <Filter>03.GameObject\06.Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -152,7 +160,6 @@
     <ClCompile Include="Form.cpp">
       <Filter>01.View\00.Form</Filter>
     </ClCompile>
-    <ClCompile Include="TabObject.cpp" />
     <ClCompile Include="TabTerrain.cpp" />
     <ClCompile Include="TabChar.cpp">
       <Filter>01.View\00.Form\02.Char</Filter>
@@ -165,6 +172,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\Sphrer.cpp">
       <Filter>03.GameObject\05.Sphrer</Filter>
+    </ClCompile>
+    <ClCompile Include="TabObject.cpp">
+      <Filter>01.View\00.Form\00.Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Object.cpp">
+      <Filter>03.GameObject\06.Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

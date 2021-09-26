@@ -16,7 +16,10 @@
 #include "MainFrm.h"
 #include "Player.h"
 #include "Monster.h"
-
+#include "Object.h"
+#include "Form.h"
+#include "TabChar.h"
+#include "TabObject.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -157,6 +160,7 @@ int CMFCView::Update_MainView(const float & fTimeDelta)
 	Update_InputDev();
 
 
+
 	/*_long			MouseMove = 0;
 
 	if (MouseMove = Get_DIMouseMove(DIMS_Z))
@@ -214,11 +218,11 @@ void CMFCView::OnInitialUpdate()
 	int iGapY = rcMain.bottom - rcView.bottom;
 
 	pMain->SetWindowPos(nullptr, 0, 0, WINCX + iGapX + 1, WINCY + iGapY + 1, SWP_NOMOVE);
-
+	m_pForm = dynamic_cast<CForm*>(pMain->m_MainSplitter.GetPane(0, 0));
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 }
 
-HRESULT CMFCView::CreateCharictor(const _tchar * pLayerTag, const _tchar * pParentName, const _tchar * pObjProtoName)
+CGameObject* CMFCView::CreateCharictor(const _tchar * pLayerTag, const _tchar * pParentName, const _tchar * pObjProtoName)
 {
 	CGameObject* pGameObject = nullptr;
 	if (!lstrcmp(L"Player", pParentName))
@@ -229,8 +233,27 @@ HRESULT CMFCView::CreateCharictor(const _tchar * pLayerTag, const _tchar * pPare
 
 
 	if (pGameObject == nullptr)
-		return E_FAIL;
+		return nullptr;
 
 	m_pManagementClass->Get_Scene()->Add_GameObject(pLayerTag, pObjProtoName, pGameObject);
-	return S_OK;
+	m_pForm->m_ptabObject->Set_Object(nullptr);
+	return pGameObject;
+}
+
+CGameObject * CMFCView::CreateObject(const _tchar * pLayerTag, const _tchar * pParentName, const _tchar * pObjProtoName)
+{
+	CGameObject* pGameObject = nullptr;
+	if (!lstrcmp(L"Building", pParentName))
+		pGameObject = C_Object::Create(m_pGraphicDev, pObjProtoName);
+
+	if (!lstrcmp(L"Stuff", pParentName))
+		pGameObject = C_Object::Create(m_pGraphicDev, pObjProtoName);
+
+
+	if (pGameObject == nullptr)
+		return nullptr;
+
+	m_pManagementClass->Get_Scene()->Add_GameObject(pLayerTag, pObjProtoName, pGameObject);
+	m_pForm->m_ptabChar->Set_Object(nullptr);
+	return pGameObject;
 }

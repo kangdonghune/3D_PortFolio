@@ -3,6 +3,10 @@
 #include "Player.h"
 #include "Sphrer.h"
 #include "Export_Function.h"
+#include "MainFrm.h"
+#include "Form.h"
+#include "TabChar.h"
+#include "TabObject.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev)
@@ -29,12 +33,13 @@ HRESULT CPlayer::Ready_Object(void)
 
 	m_pTransformCom->Set_Scale(0.01f, 0.01f, 0.01f);
 	m_pTransformCom->Set_Pos(0.f, 0.f, 0.f);
-
-	
 	
 	//m_pNaviCom->Set_CellIndex(1);
 	m_pMeshCom->Set_AnimationIndex(0);
 	
+	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+	m_pForm = dynamic_cast<CForm*>(pMain->m_MainSplitter.GetPane(0, 0));
+
 	return S_OK;
 }
 
@@ -42,7 +47,7 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 {
 	CGameObject::Update_Object(fTimeDelta);
 
-	SetUp_OnTerrain();
+	//SetUp_OnTerrain();
 
 	Key_Input(fTimeDelta);
 
@@ -84,16 +89,17 @@ HRESULT CPlayer::Add_Component(void)
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Transform", pComponent);
 
+	// Calculator
+	pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
+
 	// renderer
 	pComponent = m_pRendererCom = Get_Renderer();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	pComponent->AddRef();
 	m_mapComponent[ID_STATIC].emplace(L"Com_Renderer", pComponent);
 
-	// Calculator
-	pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
 
 
@@ -117,38 +123,57 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 	m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
 
 
-	if (Get_DIKeyState(DIK_UP) & 0x80)
-	{
-		_vec3	vPos, vDir;
-		m_pTransformCom->Get_Info(INFO_POS, &vPos);
-		m_pTransformCom->Get_Info(INFO_LOOK, &vDir);
-		D3DXVec3Normalize(&vDir, &vDir);
+	//if (Get_DIKeyState(DIK_UP) & 0x80)
+	//{
+	//	_vec3	vPos, vDir;
+	//	m_pTransformCom->Get_Info(INFO_POS, &vPos);
+	//	m_pTransformCom->Get_Info(INFO_LOOK, &vDir);
+	//	D3DXVec3Normalize(&vDir, &vDir);
 
-		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimeDelta * 5.f)));
-		m_pMeshCom->Set_AnimationIndex(0);
-	}
-	
+	//	m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimeDelta * 5.f)));
+	//	m_pMeshCom->Set_AnimationIndex(0);
+	//}
+	//
 
-	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
-	{
-		D3DXVec3Normalize(&m_vDir, &m_vDir);
-		m_pTransformCom->Move_Pos(&m_vDir, -10.f, fTimeDelta);
-	}
+	//if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+	//{
+	//	D3DXVec3Normalize(&m_vDir, &m_vDir);
+	//	m_pTransformCom->Move_Pos(&m_vDir, -10.f, fTimeDelta);
+	//}
 
-	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
-	{
-		m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(180) * -fTimeDelta);
-	}
+	//if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+	//{
+	//	m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(180) * -fTimeDelta);
+	//}
 
-	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
-	{
-		m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(180) * fTimeDelta);
-	}	
+	//if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+	//{
+	//	m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(180) * fTimeDelta);
+	//}	
 
 	if (Get_DIMouseState(DIM_LB) & 0X80)
 	{
 		if (m_pCalculatorCom->raySphrerIntersection(g_HWnd, m_pShprer->Get_Radius(), m_pShprerTransCom))
-			MSG_BOX("Ãæµ¹");
+		{
+			m_pForm->m_ptabChar->Set_Object(this);
+			m_pForm->m_ptabObject->Set_Object(nullptr);
+			m_pForm->m_ptabChar->Get_Transform();
+			m_pForm->m_ptabChar->Get_Rotate();
+			m_pForm->m_ptabChar->Get_Scale();
+		}
+	}
+
+	if (Get_DIMouseState(DIM_RB) & 0X80)
+	{
+		if (m_pForm->m_ptabChar->m_pObject == nullptr)
+			return;
+
+		CTerrainTex*	pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Buffer", ID_STATIC));
+		CTransform*		pTerrainTransCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Transform", ID_DYNAMIC));
+		_vec3 MovePos = m_pCalculatorCom->Picking_OnTerrain(g_HWnd, pTerrainBufferCom, pTerrainTransCom);
+		if (MovePos.y == -100.f)
+			return;
+		m_pForm->m_ptabChar->Set_Transform(&MovePos);
 	}
 		
 	//if (Get_DIMouseState(DIM_RB) & 0X80)

@@ -5,6 +5,7 @@
 
 
 class CSphere;
+class CForm;
 BEGIN(Engine)
 
 class CDynamicMesh;
@@ -29,6 +30,7 @@ public:
 	virtual void Render_Object(void) override;
 
 private:
+	void					Key_Input(const _float& fTimeDelta);
 	HRESULT					Add_Component(void);
 	HRESULT					Add_Object(void);
 	void					SetUp_OnTerrain(void);
@@ -44,7 +46,7 @@ private:
 	_vec3					m_vDir;
 	CSphere*				m_pShprer;
 	CTransform*				m_pShprerTransCom = nullptr;
-
+	CForm*					m_pForm;
 public:
 	static CMonster*		Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pObjProtoName);
 

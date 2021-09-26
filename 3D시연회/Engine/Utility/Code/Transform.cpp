@@ -60,6 +60,16 @@ void Engine::CTransform::Rotation(ROTATION eType, const _float& fAngle)
 	*(((_float*)&m_vAngle) + eType) += fAngle;
 }
 
+void CTransform::Rotation2(ROTATION eType,const  _float & fAngle)
+{
+	*(((_float*)&m_vAngle) + eType) = fAngle;
+}
+
+const _float CTransform::Get_Rotate(ROTATION eType)
+{
+	return	*(((_float*)&m_vAngle) + eType);
+}
+
 
 void Engine::CTransform::Move_Pos(const _vec3* pDir, const _float& fSpeed, const _float& fTimeDelta)
 {
@@ -195,6 +205,11 @@ const _matrix * CTransform::Compute_LookAtTarget(const _vec3 * pTargetPos)
 	return D3DXMatrixRotationAxis(&matRot, &vAxis,
 											acosf(D3DXVec3Dot(D3DXVec3Normalize(&vDir, &vDir),
 															  D3DXVec3Normalize(&vUp, &m_vInfo[INFO_UP]))));
+}
+
+const _float CTransform::Get_Scale(SCALE eType)
+{
+	return *(((_float*)&m_vScale) + eType);
 }
 
 void Engine::CTransform::Set_ParentMatrix(const _matrix* pParentMatrix)

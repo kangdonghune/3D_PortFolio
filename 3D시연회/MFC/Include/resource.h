@@ -22,6 +22,21 @@
 #define IDC_SLIDER4                     1035
 #define IDC_TREE1                       1036
 #define IDC_TREE2                       1040
+#define IDC_SPIN1                       1044
+#define IDC_SPIN2                       1045
+#define IDC_SPIN3                       1046
+#define IDC_EDIT5                       1052
+#define IDC_EDIT6                       1053
+#define IDC_SPIN5                       1054
+#define IDC_SLIDER5                     1055
+#define IDC_SPIN6                       1056
+#define IDC_SLIDER6                     1057
+#define IDC_EDIT7                       1058
+#define IDC_SPIN7                       1059
+#define IDC_SLIDER7                     1060
+#define IDC_EDIT8                       1064
+#define IDC_SPIN8                       1065
+#define IDC_SLIDER8                     1066
 
 // Next default values for new objects
 // 
@@ -29,7 +44,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        330
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1042
+#define _APS_NEXT_CONTROL_VALUE         1056
 #define _APS_NEXT_SYMED_VALUE           311
 #endif
 #endif

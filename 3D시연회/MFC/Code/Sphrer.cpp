@@ -43,7 +43,7 @@ HRESULT CSphere::Ready_Object(void)
 	m_pVB->Lock(0, 0, (void**)&pVert, 0);
 	for (_int i = 0; i < iNumVertex; i++)
 	{
-		pVert[i].dwColor = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+		pVert[i].dwColor = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
 	}
 	m_pVB->Unlock();
 	m_pVB->Release();

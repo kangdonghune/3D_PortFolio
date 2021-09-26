@@ -11,6 +11,13 @@
 
 
 class CMFCDoc;
+class CForm;
+
+BEGIN(Engine)
+
+
+END
+
 class CMFCView : public CView
 {
 protected: // serialization에서만 만들어집니다.
@@ -53,16 +60,19 @@ public:
 	LPDIRECT3DDEVICE9		m_pGraphicDev = nullptr;
 	CGraphicDev*			m_pDeviceClass = nullptr;
 	CManagement*			m_pManagementClass = nullptr;
-
+	CForm*					m_pForm = nullptr;
 
 // 생성된 메시지 맵 함수
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
-	virtual void OnInitialUpdate();
+	virtual void			OnInitialUpdate();
+	
 
 public:
-	HRESULT					CreateCharictor(const _tchar* pLayerTag, const _tchar* pParentName, const _tchar* pObjProtoName);
+
+	CGameObject*			CreateCharictor(const _tchar* pLayerTag, const _tchar* pParentName, const _tchar* pObjProtoName);
+	CGameObject*			CreateObject(const _tchar* pLayerTag, const _tchar* pParentName, const _tchar* pObjProtoName);
 };
 
 #ifndef _DEBUG  // MFCView.cpp의 디버그 버전

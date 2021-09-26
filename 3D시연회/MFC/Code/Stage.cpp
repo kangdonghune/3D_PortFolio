@@ -191,8 +191,6 @@ HRESULT CStage::Ready_Resource(LPDIRECT3DDEVICE9 pGraphicDev)
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_Terrain", CTexture::Create(m_pGraphicDev, L"../../Resource/Texture/Terrain/Terrain.dds", TYPE_NORMAL, 2)), E_FAIL);
 
 	// 메쉬
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Tree", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Mesh/StaticMesh/Tree/", L"Tree01.X")), E_FAIL);
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Stone", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Mesh/StaticMesh/TombStone/", L"TombStone.X")), E_FAIL);
 	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Sphrer", CSphrerMeshs::Create(m_pGraphicDev)), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Navi", CNaviMesh::Create(m_pGraphicDev)), E_FAIL);
 	//플레이어
@@ -201,6 +199,9 @@ HRESULT CStage::Ready_Resource(LPDIRECT3DDEVICE9 pGraphicDev)
 	//몬스터
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Goblin", CDynamicMesh::Create(m_pGraphicDev, L"../../Resource/Dynamicmesh/Monster/Goblin/", L"Goblin.X")), E_FAIL);
 
+	//오브젝트
+	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Stone", CDynamicMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Stone/", L"TombStone.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Train", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Train/", L"Train.X")), E_FAIL);
 
 	// 기타 등등
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Calculator", CCalculator::Create(m_pGraphicDev)), E_FAIL);

@@ -66,9 +66,9 @@ void CForm::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 
-	m_tabctrl.InsertItem(1, _T("Mesh"));
-	m_tabctrl.InsertItem(0, _T("Terrain"));
+	m_tabctrl.InsertItem(1, _T("Object"));
 	m_tabctrl.InsertItem(2, _T("NaviMesh"));
+	m_tabctrl.InsertItem(0, _T("Charictor"));
 
 	m_tabctrl.SetCurSel(0);
 

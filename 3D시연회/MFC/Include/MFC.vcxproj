@@ -201,6 +201,7 @@
     <ClInclude Include="..\Code\Define.h" />
     <ClInclude Include="..\Code\DynamicCamera.h" />
     <ClInclude Include="..\Code\Monster.h" />
+    <ClInclude Include="..\Code\Object.h" />
     <ClInclude Include="..\Code\Player.h" />
     <ClInclude Include="..\Code\Sphrer.h" />
     <ClInclude Include="..\Code\Stage.h" />
@@ -222,6 +223,7 @@
     <ClCompile Include="..\Code\BackGround.cpp" />
     <ClCompile Include="..\Code\DynamicCamera.cpp" />
     <ClCompile Include="..\Code\Monster.cpp" />
+    <ClCompile Include="..\Code\Object.cpp" />
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\Sphrer.cpp" />
     <ClCompile Include="..\Code\Stage.cpp" />

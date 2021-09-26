@@ -15,17 +15,20 @@ private:
 public:
 	void					Set_Pos(const _float& fX, const _float& fY, const _float& fZ);
 	void					Set_Pos(_vec3* pPos);
-	const _matrix*			Get_WorldMatrix(void);
-	const _matrix*			Get_NRotWorldMatrix(void);
+	const	_matrix*		Get_WorldMatrix(void);
+	const	 _matrix*		Get_NRotWorldMatrix(void);
 	void					Get_WorldMatrix(_matrix* pWorld) const;
 	void					Get_Info(INFO eType, _vec3* pInfo);
 	void					Move_Pos(const _vec3* pDir, const _float& fSpeed, const _float& fTimeDelta);
 	void					Move_Pos(const _vec3* pDir, const _float& fDist);
 	void					Move_PickingPos(const _vec3* pPos, const _float& fSpeed, const _float& fTimeDelta);
 	void					Rotation(ROTATION eType, const _float& fAngle);
+	void					Rotation2(ROTATION eType, const _float& fAngle);
+	const	_float			Get_Rotate(ROTATION eType);
 
 	void					Chase_Target(const _vec3* pTargetPos, const _float& fSpeed, const _float& fTimeDelta);
-	const _matrix*			Compute_LookAtTarget(const _vec3* pTargetPos);
+	const	_matrix*		Compute_LookAtTarget(const _vec3* pTargetPos);
+	const	_float			Get_Scale(SCALE eType);
 	void					Set_Scale(const _float& fX, const _float& fY, const _float& fZ);
 
 
