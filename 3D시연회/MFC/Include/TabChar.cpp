@@ -78,6 +78,8 @@ BEGIN_MESSAGE_MAP(CTabChar, CDialogEx)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN6, &CTabChar::OnDeltaposSpin6)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN7, &CTabChar::OnDeltaposSpin7)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN8, &CTabChar::OnDeltaposSpin8)
+				ON_BN_CLICKED(IDC_BUTTON1, &CTabChar::OnBnClickedCharDelete)
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
@@ -277,6 +279,9 @@ void CTabChar::OnNMDblclkTree1(NMHDR *pNMHDR, LRESULT *pResult)
 
 void CTabChar::OnEnChangeEdit1()
 {
+	if (m_pObject == nullptr)
+		return;
+
 	UpdateData(true);
 	//Xcount
 	CTransform* pTransCom = (CTransform*)m_pObject->Get_Component(L"Com_Transform", ID_DYNAMIC);
@@ -292,6 +297,9 @@ void CTabChar::OnEnChangeEdit1()
 
 void CTabChar::OnEnChangeEdit2()
 {
+	if (m_pObject == nullptr)
+		return;
+
 	UpdateData(true);
 	//Ycount
 	CTransform* pTransCom = (CTransform*)m_pObject->Get_Component(L"Com_Transform", ID_DYNAMIC);
@@ -307,6 +315,9 @@ void CTabChar::OnEnChangeEdit2()
 
 void CTabChar::OnEnChangeEdit3()
 {
+	if (m_pObject == nullptr)
+		return;
+
 	UpdateData(true);
 	//Zcount
 	CTransform* pTransCom = (CTransform*)m_pObject->Get_Component(L"Com_Transform", ID_DYNAMIC);
@@ -329,6 +340,9 @@ void CTabChar::OnEnChangeEdit3()
 
 void CTabChar::OnDeltaposSpin1(NMHDR *pNMHDR, LRESULT *pResult)
 {
+	if (m_pObject == nullptr)
+		return;
+
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	_vec3 tempVec = { X_Counter, Y_Counter, Z_Counter };
@@ -348,6 +362,9 @@ void CTabChar::OnDeltaposSpin1(NMHDR *pNMHDR, LRESULT *pResult)
 
 void CTabChar::OnDeltaposSpin2(NMHDR *pNMHDR, LRESULT *pResult)
 {
+	if (m_pObject == nullptr)
+		return;
+
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	_vec3 tempVec = { X_Counter, Y_Counter, Z_Counter };
@@ -367,6 +384,9 @@ void CTabChar::OnDeltaposSpin2(NMHDR *pNMHDR, LRESULT *pResult)
 
 void CTabChar::OnDeltaposSpin3(NMHDR *pNMHDR, LRESULT *pResult)
 {
+	if (m_pObject == nullptr)
+		return;
+
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	_vec3 tempVec = { X_Counter, Y_Counter, Z_Counter };
@@ -389,6 +409,8 @@ void CTabChar::OnDeltaposSpin3(NMHDR *pNMHDR, LRESULT *pResult)
 
 void CTabChar::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
+	if (m_pObject == nullptr)
+		return;
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 
 	_int iXPos = m_XCountSlider.GetPos();
@@ -425,6 +447,8 @@ void CTabChar::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 void CTabChar::OnEnChangeRotX()
 {
+	if (m_pObject == nullptr)
+		return;
 	UpdateData(true);
 	//Rotx
 	CTransform* pTransCom = (CTransform*)m_pObject->Get_Component(L"Com_Transform", ID_DYNAMIC);
@@ -440,6 +464,9 @@ void CTabChar::OnEnChangeRotX()
 
 void CTabChar::OnEnChangeRotY()
 {
+	if (m_pObject == nullptr)
+		return;
+
 	UpdateData(true);
 	//Rotx
 	CTransform* pTransCom = (CTransform*)m_pObject->Get_Component(L"Com_Transform", ID_DYNAMIC);
@@ -455,6 +482,9 @@ void CTabChar::OnEnChangeRotY()
 
 void CTabChar::OnEnChangeRotZ()
 {
+	if (m_pObject == nullptr)
+		return;
+
 	UpdateData(true);
 	//Rotx
 	CTransform* pTransCom = (CTransform*)m_pObject->Get_Component(L"Com_Transform", ID_DYNAMIC);
@@ -470,6 +500,9 @@ void CTabChar::OnEnChangeRotZ()
 
 void CTabChar::OnEnChangeScale()
 {
+	if (m_pObject == nullptr)
+		return;
+
 	UpdateData(true);
 	//Rotx
 	CTransform* pTransCom = (CTransform*)m_pObject->Get_Component(L"Com_Transform", ID_DYNAMIC);
@@ -483,6 +516,9 @@ void CTabChar::OnEnChangeScale()
 
 void CTabChar::OnDeltaposSpin5(NMHDR *pNMHDR, LRESULT *pResult) //rot x
 {
+	if (m_pObject == nullptr)
+		return;
+
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	_vec3 tempVec = { m_RotateX, m_RotateY, m_RotateZ };
@@ -502,6 +538,9 @@ void CTabChar::OnDeltaposSpin5(NMHDR *pNMHDR, LRESULT *pResult) //rot x
 
 void CTabChar::OnDeltaposSpin6(NMHDR *pNMHDR, LRESULT *pResult)
 {
+	if (m_pObject == nullptr)
+		return;
+
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	_vec3 tempVec = { m_RotateX, m_RotateY, m_RotateZ };
@@ -521,6 +560,8 @@ void CTabChar::OnDeltaposSpin6(NMHDR *pNMHDR, LRESULT *pResult)
 
 void CTabChar::OnDeltaposSpin7(NMHDR *pNMHDR, LRESULT *pResult)
 {
+	if (m_pObject == nullptr)
+		return;
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	_vec3 tempVec = { m_RotateX, m_RotateY, m_RotateZ };
@@ -540,6 +581,9 @@ void CTabChar::OnDeltaposSpin7(NMHDR *pNMHDR, LRESULT *pResult)
 
 void CTabChar::OnDeltaposSpin8(NMHDR *pNMHDR, LRESULT *pResult)
 {
+	if (m_pObject == nullptr)
+		return;
+
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	_float tempScale = m_Scale;
@@ -555,3 +599,15 @@ void CTabChar::OnDeltaposSpin8(NMHDR *pNMHDR, LRESULT *pResult)
 	}
 	*pResult = 0;
 }
+
+
+void CTabChar::OnBnClickedCharDelete()
+{	
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (m_pObject != nullptr)
+	{
+		m_pObject->Set_Dead(true);
+	}
+}	
+
+

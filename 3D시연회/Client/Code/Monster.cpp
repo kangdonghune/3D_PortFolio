@@ -32,7 +32,8 @@ Engine::_int CMonster::Update_Object(const _float& fTimeDelta)
 {
 	CGameObject::Update_Object(fTimeDelta);
 
-	CTransform*	pPlayerTransform = dynamic_cast<CTransform*>(Engine::Get_Component(L"Environment", L"Player", L"Com_Transform", ID_DYNAMIC));
+	list<CGameObject*> pPlayerlst = Engine::Get_List(L"Environment", L"Player");
+	CTransform*	pPlayerTransform = dynamic_cast<CTransform*>((*pPlayerlst.begin())->Get_Component(L"Com_Transform", ID_DYNAMIC));
 	NULL_CHECK_RETURN(pPlayerTransform, -1);
 
 	_vec3		vPlayerPos;

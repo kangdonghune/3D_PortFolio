@@ -35,7 +35,7 @@ protected:
 private:
 	CComponent*			Find_Component(const _tchar* pComponentTag, COMPONENTID eID);
 
-private:
+protected:
 	_bool			m_bDead = false;
 
 public:

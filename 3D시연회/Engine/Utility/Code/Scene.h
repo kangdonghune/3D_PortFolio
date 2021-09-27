@@ -12,11 +12,8 @@ protected:
 	virtual ~CScene(void);
 
 public:
-	CComponent*		Get_Component(const _tchar* pLayerTag,
-								const _tchar* pObjTag,
-								const _tchar* pComponentTag,
-								COMPONENTID eID);
-	HRESULT			Add_GameObject(const _tchar* pLayerTag, const _tchar* pObjTag, CGameObject* pInstance);
+	list<CGameObject*>		Get_List(const _tchar* pLayerTag, const _tchar* pObjTag);
+	HRESULT					Add_GameObject(const _tchar* pLayerTag, const _tchar* pObjTag, CGameObject* pInstance);
 
 public:
 	virtual HRESULT		Ready_Scene(void);

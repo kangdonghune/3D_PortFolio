@@ -80,4 +80,6 @@ public:
 
 	
 
+	afx_msg void OnBnClickedCharDelete();
+
 };

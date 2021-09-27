@@ -45,6 +45,10 @@ HRESULT CPlayer::Ready_Object(void)
 
 Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 {
+	if(m_bDead)
+		return 0;
+	
+
 	CGameObject::Update_Object(fTimeDelta);
 
 	//SetUp_OnTerrain();
@@ -168,8 +172,10 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		if (m_pForm->m_ptabChar->m_pObject == nullptr)
 			return;
 
-		CTerrainTex*	pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Buffer", ID_STATIC));
-		CTransform*		pTerrainTransCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Transform", ID_DYNAMIC));
+		list<CGameObject*> pTerrainTexlst = Engine::Get_List(L"GameLogic", L"Terrain");
+		  
+		CTerrainTex*	pTerrainBufferCom = dynamic_cast<CTerrainTex*>((*pTerrainTexlst.begin())->Get_Component(L"Com_Buffer", ID_STATIC));
+		CTransform*		pTerrainTransCom = dynamic_cast<CTransform*>((*pTerrainTexlst.begin())->Get_Component(L"Com_Transform", ID_DYNAMIC));
 		_vec3 MovePos = m_pCalculatorCom->Picking_OnTerrain(g_HWnd, pTerrainBufferCom, pTerrainTransCom);
 		if (MovePos.y == -100.f)
 			return;
@@ -190,7 +196,10 @@ void CPlayer::SetUp_OnTerrain(void)
 	_vec3	vPos;
 	m_pTransformCom->Get_Info(INFO_POS, &vPos);
 
-	CTerrainTex*		pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Buffer", ID_STATIC));
+
+	list<CGameObject*> pTerrainTexlst = Engine::Get_List(L"GameLogic", L"Terrain");
+
+	CTerrainTex*	pTerrainBufferCom = dynamic_cast<CTerrainTex*>((*pTerrainTexlst.begin())->Get_Component(L"Com_Buffer", ID_STATIC));
 	NULL_CHECK(pTerrainBufferCom);
 
 	const _vec3*	ptPos = pTerrainBufferCom->Get_VtxPos();
@@ -203,10 +212,13 @@ void CPlayer::SetUp_OnTerrain(void)
 
 Engine::_vec3 CPlayer::PickUp_OnTerrain(void)
 {
-	CTerrainTex*		pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Buffer", ID_STATIC));
-	NULL_CHECK_RETURN(pTerrainBufferCom, _vec3());
 
-	CTransform*		pTerrainTransCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Transform", ID_DYNAMIC));
+
+	list<CGameObject*> pTerrainTexlst = Engine::Get_List(L"GameLogic", L"Terrain");
+
+	CTerrainTex*	pTerrainBufferCom = dynamic_cast<CTerrainTex*>((*pTerrainTexlst.begin())->Get_Component(L"Com_Buffer", ID_STATIC));
+	CTransform*		pTerrainTransCom = dynamic_cast<CTransform*>((*pTerrainTexlst.begin())->Get_Component(L"Com_Transform", ID_DYNAMIC));
+	NULL_CHECK_RETURN(pTerrainBufferCom, _vec3());
 	NULL_CHECK_RETURN(pTerrainTransCom, _vec3());
 
 
@@ -239,5 +251,6 @@ CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pObjProtoN
 void CPlayer::Free(void)
 {
 	CGameObject::Free();
+	m_pShprer->Set_Dead(true);
 }
 

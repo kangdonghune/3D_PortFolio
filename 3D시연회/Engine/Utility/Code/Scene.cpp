@@ -13,18 +13,14 @@ Engine::CScene::~CScene(void)
 
 }
 
-CComponent * CScene::Get_Component(const _tchar * pLayerTag, 
-									const _tchar * pObjTag, 
-									const _tchar * pComponentTag,
-									COMPONENTID eID)
+
+
+list<CGameObject*> CScene::Get_List(const _tchar * pLayerTag, const _tchar * pObjTag)
 {
 	auto		iter = find_if(m_mapLayer.begin(), m_mapLayer.end(), CTag_Finder(pLayerTag));
 
-	if (iter == m_mapLayer.end())
-		return nullptr;
+	return iter->second->Get_List(pObjTag);
 
-
-	return iter->second->Get_Component(pObjTag, pComponentTag, eID);
 }
 
 HRESULT CScene::Add_GameObject(const _tchar * pLayerTag, const _tchar * pObjTag, CGameObject * pInstance)

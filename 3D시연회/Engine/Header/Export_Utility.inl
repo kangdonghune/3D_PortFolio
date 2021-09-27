@@ -23,12 +23,9 @@ void				Render_Scene(LPDIRECT3DDEVICE9& pGraphicDev)
 	CManagement::GetInstance()->Render_Scene(pGraphicDev);
 }
 
-CComponent*		Get_Component(const _tchar* pLayerTag,
-	const _tchar* pObjTag,
-	const _tchar* pComponentTag,
-	COMPONENTID eID)
+list<CGameObject*>		Get_List(const _tchar* pLayerTag, const _tchar* pObjTag)
 {
-	return CManagement::GetInstance()->Get_Component(pLayerTag, pObjTag, pComponentTag, eID);
+	return CManagement::GetInstance()->Get_List(pLayerTag, pObjTag);
 }
 
 

@@ -37,10 +37,7 @@ inline _int				Update_Scene(const _float& fTimeDelta);
 inline void				Render_Scene(LPDIRECT3DDEVICE9& pGraphicDev);
 
 
-inline 	CComponent*		Get_Component(const _tchar* pLayerTag,
-	const _tchar* pObjTag,
-	const _tchar* pComponentTag,
-	COMPONENTID eID);
+inline 	list<CGameObject*>		Get_List(const _tchar* pLayerTag, const _tchar* pObjTag);
 
 
 // protomgr

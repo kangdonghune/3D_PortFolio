@@ -14,12 +14,9 @@ Engine::CManagement::~CManagement(void)
 	Free();
 }
 
-CComponent * CManagement::Get_Component(const _tchar * pLayerTag, const _tchar * pObjTag, const _tchar * pComponentTag, COMPONENTID eID)
+list<CGameObject*> CManagement::Get_List(const _tchar * pLayerTag, const _tchar * pObjTag)
 {
-	if (nullptr == m_pScene)
-		return nullptr;
-
-	return m_pScene->Get_Component(pLayerTag, pObjTag, pComponentTag, eID);
+	return m_pScene->Get_List(pLayerTag, pObjTag);
 }
 
 HRESULT Engine::CManagement::Ready_Shader(LPDIRECT3DDEVICE9& pGraphicDev)

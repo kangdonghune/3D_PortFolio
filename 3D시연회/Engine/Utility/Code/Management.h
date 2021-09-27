@@ -15,10 +15,7 @@ private:
 	virtual ~CManagement(void);
 
 public:
-	CComponent*		Get_Component(const _tchar* pLayerTag,
-		const _tchar* pObjTag,
-		const _tchar* pComponentTag,
-		COMPONENTID eID);
+	list<CGameObject*>		Get_List(const _tchar* pLayerTag, const _tchar* pObjTag);
 
 public:
 	CScene*			Get_Scene() { return m_pScene; }

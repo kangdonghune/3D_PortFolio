@@ -58,8 +58,8 @@ HRESULT CSphere::Ready_Object(void)
 Engine::_int CSphere::Update_Object(const _float& fTimeDelta)
 {
 
-	if (Get_Dead())
-		return -1;
+	if (m_bDead)
+		return 0;
 
 	CGameObject::Update_Object(fTimeDelta);
 	Add_RenderGroup(RENDER_NONALPHA, this);
@@ -157,6 +157,5 @@ CSphere* CSphere::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float fRadius)
 
 void CSphere::Free(void)
 {
-	m_pSphereMesh->Release();
 	CGameObject::Free();
 }

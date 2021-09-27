@@ -26,8 +26,6 @@ HRESULT Engine::CGameObject::Ready_Object(void)
 
 Engine::_int Engine::CGameObject::Update_Object(const _float& fTimeDelta)
 {
-
-
 	for (auto& iter : m_mapComponent[ID_DYNAMIC])
 	{
 		iter.second->Update_Component(fTimeDelta);

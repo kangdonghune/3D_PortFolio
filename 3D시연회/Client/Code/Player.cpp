@@ -144,30 +144,31 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 
 void CPlayer::SetUp_OnTerrain(void)
 {
-	_vec3	vPos;
-	m_pTransformCom->Get_Info(INFO_POS, &vPos);
+	//_vec3	vPos;
+	//m_pTransformCom->Get_Info(INFO_POS, &vPos);
 
-	CTerrainTex*		pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Buffer", ID_STATIC));
-	NULL_CHECK(pTerrainBufferCom);
+	//CTerrainTex*		pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Buffer", ID_STATIC));
+	//NULL_CHECK(pTerrainBufferCom);
 
-	const _vec3*	ptPos = pTerrainBufferCom->Get_VtxPos();
+	//const _vec3*	ptPos = pTerrainBufferCom->Get_VtxPos();
 
 
-	_float		fHeight = m_pCalculatorCom->Compute_HeightOnTerrain(&vPos, pTerrainBufferCom->Get_VtxPos(), VTXCNTX, VTXCNTZ);
+	//_float		fHeight = m_pCalculatorCom->Compute_HeightOnTerrain(&vPos, pTerrainBufferCom->Get_VtxPos(), VTXCNTX, VTXCNTZ);
 
-	m_pTransformCom->Set_Pos(vPos.x, fHeight, vPos.z);
+	//m_pTransformCom->Set_Pos(vPos.x, fHeight, vPos.z);
 }
 
 Engine::_vec3 CPlayer::PickUp_OnTerrain(void)
 {
-	CTerrainTex*		pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Buffer", ID_STATIC));
-	NULL_CHECK_RETURN(pTerrainBufferCom, _vec3());
+	//CTerrainTex*		pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Buffer", ID_STATIC));
+	//NULL_CHECK_RETURN(pTerrainBufferCom, _vec3());
 
-	CTransform*		pTerrainTransCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Transform", ID_DYNAMIC));
-	NULL_CHECK_RETURN(pTerrainTransCom, _vec3());
+	//CTransform*		pTerrainTransCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Transform", ID_DYNAMIC));
+	//NULL_CHECK_RETURN(pTerrainTransCom, _vec3());
 
 
-	return m_pCalculatorCom->Picking_OnTerrain(g_hWnd, pTerrainBufferCom, pTerrainTransCom);
+	//return m_pCalculatorCom->Picking_OnTerrain(g_hWnd, pTerrainBufferCom, pTerrainTransCom);
+	return _vec3();
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev)
