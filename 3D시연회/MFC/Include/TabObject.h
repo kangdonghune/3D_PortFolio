@@ -78,4 +78,6 @@ public:
 	afx_msg void OnDeltaposScale(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnNMDblclkTree1(NMHDR *pNMHDR, LRESULT *pResult);
+
+	afx_msg void OnBnClickedDeleteObject();
 };

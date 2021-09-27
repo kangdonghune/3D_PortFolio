@@ -70,6 +70,8 @@ BEGIN_MESSAGE_MAP(CTabObject, CDialogEx)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN8, &CTabObject::OnDeltaposScale)
 	ON_WM_HSCROLL()
 	ON_NOTIFY(NM_DBLCLK, IDC_TREE1, &CTabObject::OnNMDblclkTree1)
+
+	ON_BN_CLICKED(IDC_BUTTON1, &CTabObject::OnBnClickedDeleteObject)
 END_MESSAGE_MAP()
 
 
@@ -531,4 +533,17 @@ void CTabObject::OnNMDblclkTree1(NMHDR *pNMHDR, LRESULT *pResult)
 	Get_Scale();
 
 	*pResult = 0;
+}
+
+
+
+
+
+void CTabObject::OnBnClickedDeleteObject()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (m_pObject != nullptr)
+	{
+		m_pObject->Set_Dead(true);
+	}
 }

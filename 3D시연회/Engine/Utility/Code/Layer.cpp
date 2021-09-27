@@ -75,14 +75,14 @@ void Engine::CLayer::Free(void)
 {
 	for (auto& iter = m_mapObject.begin(); iter != m_mapObject.end(); iter++)
 	{
-		for (auto& iter2 = iter->second.begin(); iter2 != iter->second.end(); )
+		for (auto& iter2 = iter->second.begin(); iter2 != iter->second.end(); iter2++)
 		{
 			if ((*iter2)->Get_Dead() == true)
 			{
 				Safe_Release((*iter2));
-				iter2 = iter->second.erase(iter2);
 			}
 		}
+		iter->second.clear();
 	}
 	m_mapObject.clear();
 }
