@@ -85,6 +85,7 @@ BEGIN_MESSAGE_MAP(CTabChar, CDialogEx)
 
 	ON_BN_CLICKED(IDC_BUTTON4, &CTabChar::OnBnClickedMonsterSave)
 	ON_BN_CLICKED(IDC_BUTTON2, &CTabChar::OnBnClickedLoad)
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
@@ -272,7 +273,6 @@ void CTabChar::OnNMDblclkTree1(NMHDR *pNMHDR, LRESULT *pResult)
 	HTREEITEM hItem_parent = m_TreeTask.GetParentItem(hItem_dc);
 	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	CMFCView* pView = dynamic_cast<CMFCView*>(pMain->m_MainSplitter.GetPane(0, 1));
-
 	m_pObject = pView->CreateCharictor(L"GameLogic", m_TreeTask.GetItemText(hItem_parent), m_TreeTask.GetItemText(hItem_dc));
 	Get_Transform();
 	Get_Rotate();
@@ -771,4 +771,13 @@ void CTabChar::OnBnClickedLoad()
 		}
 		CloseHandle(hFile);
 	}
+}
+
+
+void CTabChar::OnDestroy()
+{
+	CDialogEx::OnDestroy();
+
+	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+
 }

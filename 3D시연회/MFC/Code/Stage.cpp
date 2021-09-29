@@ -3,6 +3,7 @@
 
 #include "Terrain.h"
 #include "DynamicCamera.h"
+#include "Player.h"
 
 
 #include "Export_Function.h"
@@ -110,9 +111,7 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar * pLayerTag)
 
 //#pragma region PLAYER
 //	// Player
-//	pGameObject = CPlayer::Create(m_pGraphicDev);
-//	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-//	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player", pGameObject), E_FAIL);
+
 //
 //	// Sword
 //	pGameObject = CSword::Create(m_pGraphicDev);
@@ -140,9 +139,13 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar * pLayerTag)
 	//}
 	//
 
-
+	/*pGameObject = CPlayer::Create(m_pGraphicDev, L"Proto_Mesh_Hunter");
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player", pGameObject), E_FAIL);*/
 
 	m_mapLayer.emplace(pLayerTag, pLayer);
+
+
 
 	return S_OK;
 }

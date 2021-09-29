@@ -118,7 +118,6 @@ HRESULT CPlayer::Add_Object(void)
 	m_pShprer = CSphere::Create(m_pGraphicDev, 1.f);
 	m_pShprer->Set_Height(1.f);
 	m_pShprerTransCom = (CTransform*)m_pShprer->Get_Component(L"Com_Transform", ID_DYNAMIC);
-	(CTransform*)m_pShprer->Get_Component(L"Com_Transform", ID_DYNAMIC)->AddRef();
 	return S_OK;
 }
 

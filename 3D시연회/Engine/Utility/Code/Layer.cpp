@@ -79,6 +79,7 @@ void Engine::CLayer::Free(void)
 		for (auto& iter2 = iter->second.begin(); iter2 != iter->second.end(); iter2++)
 		{
 			Safe_Release(*iter2);
+			(*iter);
 		}
 		iter->second.clear();
 	}
