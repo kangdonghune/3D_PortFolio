@@ -220,24 +220,37 @@ void CMFCView::OnInitialUpdate()
 	pMain->SetWindowPos(nullptr, 0, 0, WINCX + iGapX + 1, WINCY + iGapY + 1, SWP_NOMOVE);
 	m_pForm = dynamic_cast<CForm*>(pMain->m_MainSplitter.GetPane(0, 0));
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+
+	//CGameObject* pGameObject = nullptr;
+	//pGameObject = CPlayer::Create(m_pGraphicDev, L"Proto_Mesh_Hunter");
+	//m_pManagementClass->Get_Scene()->Add_GameObject(L"GameLogic", L"Proto_Mesh_Hunter", pGameObject);
 }
 
 CGameObject* CMFCView::CreateCharictor(const _tchar * pLayerTag, const _tchar * pParentName, const _tchar * pObjProtoName)
 {
 	CGameObject* pGameObject = nullptr;
 	if (!lstrcmp(L"Player", pParentName))
+	{
 		pGameObject = CPlayer::Create(m_pGraphicDev, pObjProtoName);
+		m_pManagementClass->Get_Scene()->Add_GameObject(pLayerTag, L"Player", pGameObject);
+		m_pForm->m_ptabObject->Set_Object(nullptr);
+		return pGameObject;
+	}
 
 	if (!lstrcmp(L"Monster", pParentName))
+	{
 		pGameObject = CMonster::Create(m_pGraphicDev, pObjProtoName);
+		m_pManagementClass->Get_Scene()->Add_GameObject(pLayerTag, L"Monster", pGameObject);
+		m_pForm->m_ptabObject->Set_Object(nullptr);
+		return pGameObject;
+	}
+
 
 
 	if (pGameObject == nullptr)
 		return nullptr;
 
-	m_pManagementClass->Get_Scene()->Add_GameObject(pLayerTag, pObjProtoName, pGameObject);
-	m_pForm->m_ptabObject->Set_Object(nullptr);
-	return pGameObject;
+	
 }
 
 CGameObject * CMFCView::CreateObject(const _tchar * pLayerTag, const _tchar * pParentName, const _tchar * pObjProtoName)

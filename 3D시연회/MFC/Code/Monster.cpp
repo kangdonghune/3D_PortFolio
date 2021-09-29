@@ -208,7 +208,7 @@ HRESULT CMonster::Select_ProtoMesh(const _tchar * pObjProtoName)
 CMonster* CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pObjProtoName)
 {
 	CMonster*	pInstance = new CMonster(pGraphicDev);
-
+	pInstance->Set_NameTag(pObjProtoName);
 	if (FAILED(pInstance->Select_ProtoMesh(pObjProtoName)))
 		Safe_Release(pInstance);
 	if (FAILED(pInstance->Ready_Object()))

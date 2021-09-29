@@ -82,4 +82,8 @@ public:
 
 	afx_msg void OnBnClickedCharDelete();
 
+	afx_msg void OnBnClickedUnitSave();
+
+	afx_msg void OnBnClickedMonsterSave();
+	afx_msg void OnBnClickedLoad();
 };

@@ -44,6 +44,7 @@
 #include <functional>
 #include <unordered_map>
 #include <ctime>
+#include <Windows.h>
 
 
 #include <process.h>
@@ -65,7 +66,7 @@
 #include "Enum.h"
 using namespace std;
 
-
+#define _CRTDBG_MAP_ALLOC
 
 
 

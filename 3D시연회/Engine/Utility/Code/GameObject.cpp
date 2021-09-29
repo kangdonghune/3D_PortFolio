@@ -47,6 +47,8 @@ void Engine::CGameObject::Free(void)
 		m_mapComponent[i].clear();
 	}
 
+
+//	m_wstrNameTag.clear();
 	Safe_Release(m_pGraphicDev);
 }
 

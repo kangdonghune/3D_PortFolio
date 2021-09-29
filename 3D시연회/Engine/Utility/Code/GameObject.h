@@ -13,8 +13,10 @@ protected:
 	virtual ~CGameObject(void);
 
 public:
-	CComponent*		Get_Component(const _tchar* pComponentTag, COMPONENTID eID);
-	_float			Get_ViewZ(void) { return m_fViewZ; }
+	CComponent*				Get_Component(const _tchar* pComponentTag, COMPONENTID eID);
+	_float					Get_ViewZ(void) { return m_fViewZ; }
+	void					Set_NameTag(const _tchar* wstrTag) { m_wstrNameTag = wstrTag; }
+	wstring&				Get_NameTag() { return m_wstrNameTag; }
 
 	const		bool		Get_Dead() { return m_bDead; }
 	void					Set_Dead(_bool isDead) { m_bDead = isDead; }
@@ -36,7 +38,8 @@ private:
 	CComponent*			Find_Component(const _tchar* pComponentTag, COMPONENTID eID);
 
 protected:
-	_bool			m_bDead = false;
+	_bool				m_bDead = false;
+	wstring				m_wstrNameTag;
 
 public:
 	virtual void	Free(void);

@@ -16,6 +16,7 @@ HRESULT Engine::CLayer::Add_GameObject(const _tchar* pObjTag, CGameObject* pInst
 {
 	if (nullptr == pInstance)
 		return E_FAIL;
+
 	auto	iter = find_if(m_mapObject.begin(), m_mapObject.end(), CTag_Finder(pObjTag));
 
 	if (iter == m_mapObject.end())
@@ -77,10 +78,7 @@ void Engine::CLayer::Free(void)
 	{
 		for (auto& iter2 = iter->second.begin(); iter2 != iter->second.end(); iter2++)
 		{
-			if ((*iter2)->Get_Dead() == true)
-			{
-				Safe_Release((*iter2));
-			}
+			Safe_Release(*iter2);
 		}
 		iter->second.clear();
 	}

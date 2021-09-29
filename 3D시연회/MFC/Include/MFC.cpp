@@ -2,7 +2,11 @@
 // MFC.cpp : 응용 프로그램에 대한 클래스 동작을 정의합니다.
 //
 
+
+
 #include "stdafx.h"
+
+#include <crtdbg.h>
 #include "afxwinappex.h"
 #include "afxdialogex.h"
 #include "MFC.h"
@@ -150,7 +154,7 @@ int CMFCApp::ExitInstance()
 {
 	//TODO: 추가한 추가 리소스를 처리합니다.
 	AfxOleTerm(FALSE);
-
+	_CrtDumpMemoryLeaks();
 	return CWinAppEx::ExitInstance();
 }
 
@@ -158,6 +162,7 @@ int CMFCApp::ExitInstance()
 
 BOOL CMFCApp::OnIdle(LONG ICount)
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	Update_TimeDelta(L"Timer_Immediate");
 	_float fTimeImmediate = Get_TimeDelta(L"Timer_Immediate");
 

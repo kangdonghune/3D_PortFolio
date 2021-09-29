@@ -239,7 +239,7 @@ HRESULT CPlayer::Select_ProtoMesh(const _tchar * pObjProtoName)
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pObjProtoName)
 {
 	CPlayer*	pInstance = new CPlayer(pGraphicDev);
-
+	pInstance->Set_NameTag(pObjProtoName);
 	if (FAILED(pInstance->Select_ProtoMesh(pObjProtoName)))
 		Safe_Release(pInstance);
 	if (FAILED(pInstance->Ready_Object()))

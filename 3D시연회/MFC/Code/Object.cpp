@@ -203,7 +203,7 @@ HRESULT C_Object::Select_ProtoMesh(const _tchar * pObjProtoName)
 C_Object* C_Object::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pObjProtoName)
 {
 	C_Object*	pInstance = new C_Object(pGraphicDev);
-
+	pInstance->Set_NameTag(pObjProtoName);
 	if (FAILED(pInstance->Select_ProtoMesh(pObjProtoName)))
 		Safe_Release(pInstance);
 	if (FAILED(pInstance->Ready_Object()))

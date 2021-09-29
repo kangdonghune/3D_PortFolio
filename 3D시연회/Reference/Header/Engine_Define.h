@@ -48,4 +48,7 @@ using namespace Engine;
 #define PI 3.141592f
 #define RADIAN 57.296f
 
+#define UNITLAYERTAG	L"GameLogic"
+#define OBJECTLAYERTAG	L"GameLogic"
+
 #endif // Engine_Define_h__

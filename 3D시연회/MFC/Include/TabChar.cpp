@@ -9,6 +9,7 @@
 #include "MFCView.h"
 #include "Player.h"
 
+
 #include "Export_Function.h"
 
 
@@ -80,6 +81,10 @@ BEGIN_MESSAGE_MAP(CTabChar, CDialogEx)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN8, &CTabChar::OnDeltaposSpin8)
 				ON_BN_CLICKED(IDC_BUTTON1, &CTabChar::OnBnClickedCharDelete)
 	ON_WM_DESTROY()
+	ON_BN_CLICKED(IDC_BUTTON3, &CTabChar::OnBnClickedUnitSave)
+
+	ON_BN_CLICKED(IDC_BUTTON4, &CTabChar::OnBnClickedMonsterSave)
+	ON_BN_CLICKED(IDC_BUTTON2, &CTabChar::OnBnClickedLoad)
 END_MESSAGE_MAP()
 
 
@@ -267,6 +272,7 @@ void CTabChar::OnNMDblclkTree1(NMHDR *pNMHDR, LRESULT *pResult)
 	HTREEITEM hItem_parent = m_TreeTask.GetParentItem(hItem_dc);
 	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	CMFCView* pView = dynamic_cast<CMFCView*>(pMain->m_MainSplitter.GetPane(0, 1));
+
 	m_pObject = pView->CreateCharictor(L"GameLogic", m_TreeTask.GetItemText(hItem_parent), m_TreeTask.GetItemText(hItem_dc));
 	Get_Transform();
 	Get_Rotate();
@@ -611,3 +617,105 @@ void CTabChar::OnBnClickedCharDelete()
 }	
 
 
+
+
+void CTabChar::OnBnClickedUnitSave()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CFileDialog Dlg(FALSE, // 다른이름으로 저장. 만약 TRUE 파일 열기. 
+		L"dat",// 디폴트 확장자 
+		L"Player.dat",// 디폴트 파일 이름 
+		OFN_OVERWRITEPROMPT);// 덮어쓸때 경고 메시지 띄어주겠다. 
+	TCHAR szCurDir[MAX_PATH]{};
+	GetCurrentDirectory(MAX_PATH, szCurDir); //현재 디렉토리 반환. ..../3D_시연회//MFC//Include
+	PathRemoveFileSpec(szCurDir); //끝에 경로 제거. //Include 제거
+	PathRemoveFileSpec(szCurDir); //끝에 경로 제거. //MFC 제거
+	lstrcat(szCurDir, L"\\ReSource");
+	lstrcat(szCurDir, L"\\Data");
+	lstrcat(szCurDir, L"\\Unit"); //
+	Dlg.m_ofn.lpstrInitialDir = szCurDir;
+	if (IDOK == Dlg.DoModal()) //저장 시 시작 경로
+	{
+		CString wstrFilePath = Dlg.GetPathName();
+		HANDLE hFile = CreateFile(wstrFilePath.GetString(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (INVALID_HANDLE_VALUE == hFile)
+			return;
+		DWORD dwByte = 0;
+		DWORD dwStringCount = 0;
+		//순회하면서 키와 리스트 아이템들 저장
+		list<CGameObject*> pPlayerlst = Engine::Get_List(L"GameLogic", L"Player");
+	
+		//저장요소. 오브젝트 태그명(proto type name), pos, rotate, scale 
+		for (CGameObject* pObj : pPlayerlst)
+		{
+			CTransform* pTransCom = (CTransform*)m_pObject->Get_Component(L"Com_Transform", ID_DYNAMIC);
+			_vec3 SavePos = {};
+			_vec3 SaveRot = { pTransCom->Get_Rotate(ROT_X),pTransCom->Get_Rotate(ROT_Y),pTransCom->Get_Rotate(ROT_Z)};
+			_vec3 SaveScale = { pTransCom->Get_Scale(SCALE_X),pTransCom->Get_Scale(SCALE_Y),pTransCom->Get_Scale(SCALE_Z) };
+			pTransCom->Get_Info(INFO_POS, &SavePos);
+			dwStringCount = (pObj->Get_NameTag().length() + 1) * sizeof(_tchar);
+			WriteFile(hFile, &dwStringCount, sizeof(DWORD), &dwByte, nullptr);
+			WriteFile(hFile, pObj->Get_NameTag().c_str(), dwStringCount, &dwByte, nullptr);
+			WriteFile(hFile, &SavePos, sizeof(_vec3), &dwByte, nullptr);
+			WriteFile(hFile, &SaveRot, sizeof(_vec3), &dwByte, nullptr);
+			WriteFile(hFile, &SaveScale, sizeof(_vec3), &dwByte, nullptr);
+		}
+		CloseHandle(hFile);
+	}
+
+}
+
+
+
+
+void CTabChar::OnBnClickedMonsterSave()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CFileDialog Dlg(FALSE, // 다른이름으로 저장. 만약 TRUE 파일 열기. 
+		L"dat",// 디폴트 확장자 
+		L"Monster.dat",// 디폴트 파일 이름 
+		OFN_OVERWRITEPROMPT);// 덮어쓸때 경고 메시지 띄어주겠다. 
+	TCHAR szCurDir[MAX_PATH]{};
+	GetCurrentDirectory(MAX_PATH, szCurDir); //현재 디렉토리 반환. ..../3D_시연회//MFC//Include
+	PathRemoveFileSpec(szCurDir); //끝에 경로 제거. //Include 제거
+	PathRemoveFileSpec(szCurDir); //끝에 경로 제거. //MFC 제거
+	lstrcat(szCurDir, L"\\ReSource");
+	lstrcat(szCurDir, L"\\Data");
+	lstrcat(szCurDir, L"\\Unit"); //
+	Dlg.m_ofn.lpstrInitialDir = szCurDir;
+	if (IDOK == Dlg.DoModal()) //저장 시 시작 경로
+	{
+		CString wstrFilePath = Dlg.GetPathName();
+		HANDLE hFile = CreateFile(wstrFilePath.GetString(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (INVALID_HANDLE_VALUE == hFile)
+			return;
+		DWORD dwByte = 0;
+		DWORD dwStringCount = 0;
+		//순회하면서 키와 리스트 아이템들 저장
+		list<CGameObject*> pPlayerlst = Engine::Get_List(L"GameLogic", L"Monster");
+
+		//저장요소. 오브젝트 태그명(proto type name), pos, rotate, scale 
+		for (CGameObject* pObj : pPlayerlst)
+		{
+			CTransform* pTransCom = (CTransform*)m_pObject->Get_Component(L"Com_Transform", ID_DYNAMIC);
+			_vec3 SavePos = {};
+			_vec3 SaveRot = { pTransCom->Get_Rotate(ROT_X),pTransCom->Get_Rotate(ROT_Y),pTransCom->Get_Rotate(ROT_Z) };
+			_vec3 SaveScale = { pTransCom->Get_Scale(SCALE_X),pTransCom->Get_Scale(SCALE_Y),pTransCom->Get_Scale(SCALE_Z) };
+			pTransCom->Get_Info(INFO_POS, &SavePos);
+			dwStringCount = (pObj->Get_NameTag().length() + 1) * sizeof(_tchar);
+			WriteFile(hFile, &dwStringCount, sizeof(DWORD), &dwByte, nullptr);
+			WriteFile(hFile, pObj->Get_NameTag().c_str(), dwStringCount, &dwByte, nullptr);
+			WriteFile(hFile, &SavePos, sizeof(_vec3), &dwByte, nullptr);
+			WriteFile(hFile, &SaveRot, sizeof(_vec3), &dwByte, nullptr);
+			WriteFile(hFile, &SaveScale, sizeof(_vec3), &dwByte, nullptr);
+		}
+		CloseHandle(hFile);
+	}
+
+}
+
+
+void CTabChar::OnBnClickedLoad()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
