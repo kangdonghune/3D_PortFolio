@@ -38,7 +38,7 @@ inline void				Render_Scene(LPDIRECT3DDEVICE9& pGraphicDev);
 
 
 inline 	list<CGameObject*>		Get_List(const _tchar* pLayerTag, const _tchar* pObjTag);
-
+inline	void					Clear_List(const _tchar* pLayerTag, const _tchar* pObjTag);
 
 // protomgr
 inline HRESULT			Ready_Proto(const _tchar* pProtoTag, CComponent* pComponent);

@@ -16,6 +16,7 @@ private:
 
 public:
 	list<CGameObject*>		Get_List(const _tchar* pLayerTag, const _tchar* pObjTag);
+	void					Clear_List(const _tchar* pLayerTag, const _tchar* pObjTag);
 
 public:
 	CScene*			Get_Scene() { return m_pScene; }

@@ -18,6 +18,8 @@ public:
 								  COMPONENTID eID);
 
 	list<CGameObject*>			Get_List(const _tchar* pObjTag);
+
+	void		Clear_List(const _tchar* pObjTag);
 public:
 	HRESULT		Add_GameObject(const _tchar* pObjTag, CGameObject* pInstance);
 	HRESULT		Ready_Layer(void);

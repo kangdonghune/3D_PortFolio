@@ -111,5 +111,19 @@ list<CGameObject*> CLayer::Get_List(const _tchar * pObjTag)
 	
 }
 
+void CLayer::Clear_List(const _tchar * pObjTag)
+{
+	auto	iter = find_if(m_mapObject.begin(), m_mapObject.end(), CTag_Finder(pObjTag));
+	
+	if (iter == m_mapObject.end())
+		return;
+
+	for (auto& iter2 = iter->second.begin(); iter2 != iter->second.end(); iter2++)
+	{
+		Safe_Release(*iter2);
+	}
+	iter->second.clear();
+}
+
 
 

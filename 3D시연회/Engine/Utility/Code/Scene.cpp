@@ -23,6 +23,16 @@ list<CGameObject*> CScene::Get_List(const _tchar * pLayerTag, const _tchar * pOb
 
 }
 
+void CScene::Clear_List(const _tchar * pLayerTag, const _tchar * pObjTag)
+{
+	auto		iter = find_if(m_mapLayer.begin(), m_mapLayer.end(), CTag_Finder(pLayerTag));
+	
+	if (iter == m_mapLayer.end())
+		return;
+
+	iter->second->Clear_List(pObjTag);
+}
+
 HRESULT CScene::Add_GameObject(const _tchar * pLayerTag, const _tchar * pObjTag, CGameObject * pInstance)
 {
 	auto		iter = find_if(m_mapLayer.begin(), m_mapLayer.end(), CTag_Finder(pLayerTag));

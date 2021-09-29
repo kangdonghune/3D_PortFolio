@@ -13,6 +13,7 @@ protected:
 
 public:
 	list<CGameObject*>		Get_List(const _tchar* pLayerTag, const _tchar* pObjTag);
+	void					Clear_List(const _tchar* pLayerTag, const _tchar* pObjTag);
 	HRESULT					Add_GameObject(const _tchar* pLayerTag, const _tchar* pObjTag, CGameObject* pInstance);
 
 public:

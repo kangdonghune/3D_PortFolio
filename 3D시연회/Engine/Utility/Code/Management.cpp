@@ -19,6 +19,11 @@ list<CGameObject*> CManagement::Get_List(const _tchar * pLayerTag, const _tchar 
 	return m_pScene->Get_List(pLayerTag, pObjTag);
 }
 
+void CManagement::Clear_List(const _tchar * pLayerTag, const _tchar * pObjTag)
+{
+	return m_pScene->Clear_List(pLayerTag, pObjTag);
+}
+
 HRESULT Engine::CManagement::Ready_Shader(LPDIRECT3DDEVICE9& pGraphicDev)
 {
 	CShader*		pShader = nullptr;

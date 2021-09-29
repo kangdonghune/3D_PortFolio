@@ -28,6 +28,10 @@ list<CGameObject*>		Get_List(const _tchar* pLayerTag, const _tchar* pObjTag)
 	return CManagement::GetInstance()->Get_List(pLayerTag, pObjTag);
 }
 
+void					Clear_List(const _tchar* pLayerTag, const _tchar* pObjTag)
+{
+	return CManagement::GetInstance()->Clear_List(pLayerTag, pObjTag);
+}
 
 HRESULT			Ready_Proto(const _tchar* pProtoTag, CComponent* pComponent)
 {
