@@ -44,7 +44,6 @@ private:
 
 private:
 	CDynamicMesh*			m_pMeshCom = nullptr;
-	CNaviMesh*				m_pNaviCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
 	CCalculator*			m_pCalculatorCom = nullptr;

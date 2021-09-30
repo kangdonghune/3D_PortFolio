@@ -83,6 +83,7 @@ void CMonster::Key_Input(const _float& fTimeDelta)
 
 	if (Get_DIMouseState(DIM_LB) & 0X80)
 	{
+
 		if (m_pCalculatorCom->raySphrerIntersection(g_HWnd, m_pShprer->Get_Radius(), m_pShprerTransCom))
 		{
 			m_pForm->m_ptabChar->Set_Object(this);
@@ -97,7 +98,6 @@ void CMonster::Key_Input(const _float& fTimeDelta)
 	{
 		if (m_pForm->m_ptabChar->m_pObject == nullptr)
 			return;
-
 
 		list<CGameObject*> pTerrainTexlst = Engine::Get_List(L"GameLogic", L"Terrain");
 
@@ -152,7 +152,6 @@ HRESULT CMonster::Add_Object(void)
 	m_pShprer = CSphere::Create(m_pGraphicDev, 1.f);
 	m_pShprer->Set_Height(1.f);
 	m_pShprerTransCom = (CTransform*)m_pShprer->Get_Component(L"Com_Transform", ID_DYNAMIC);
-	(CTransform*)m_pShprer->Get_Component(L"Com_Transform", ID_DYNAMIC)->AddRef();
 	return S_OK;	
 }
 

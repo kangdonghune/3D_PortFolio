@@ -20,6 +20,7 @@
 #include "Form.h"
 #include "TabChar.h"
 #include "TabObject.h"
+#include "TabTerrain.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -38,6 +39,7 @@ BEGIN_MESSAGE_MAP(CMFCView, CView)
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
+	ON_WM_RBUTTONDOWN()
 END_MESSAGE_MAP()
 
 // CMFCView 생성/소멸
@@ -219,6 +221,7 @@ void CMFCView::OnInitialUpdate()
 
 	pMain->SetWindowPos(nullptr, 0, 0, WINCX + iGapX + 1, WINCY + iGapY + 1, SWP_NOMOVE);
 	m_pForm = dynamic_cast<CForm*>(pMain->m_MainSplitter.GetPane(0, 0));
+
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 
 	//CGameObject* pGameObject = nullptr;
@@ -257,12 +260,20 @@ CGameObject * CMFCView::CreateObject(const _tchar * pLayerTag, const _tchar * pP
 {
 	CGameObject* pGameObject = nullptr;
 	if (!lstrcmp(L"Building", pParentName))
+	{
 		pGameObject = C_Object::Create(m_pGraphicDev, pObjProtoName);
+		m_pManagementClass->Get_Scene()->Add_GameObject(pLayerTag, L"Building", pGameObject);
+		m_pForm->m_ptabObject->Set_Object(nullptr);
+		return pGameObject;
+	}
 
 	if (!lstrcmp(L"Stuff", pParentName))
+	{
 		pGameObject = C_Object::Create(m_pGraphicDev, pObjProtoName);
-
-
+		m_pManagementClass->Get_Scene()->Add_GameObject(pLayerTag, L"Stuff", pGameObject);
+		m_pForm->m_ptabObject->Set_Object(nullptr);
+		return pGameObject;
+	}
 	if (pGameObject == nullptr)
 		return nullptr;
 
@@ -270,3 +281,5 @@ CGameObject * CMFCView::CreateObject(const _tchar * pLayerTag, const _tchar * pP
 	m_pForm->m_ptabChar->Set_Object(nullptr);
 	return pGameObject;
 }
+
+

@@ -73,7 +73,7 @@ void CPlayer::Render_Object(void)
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
 
-	//m_pNaviCom->Render_NaviMesh();
+
 
 	m_pMeshCom->Render_Meshes();;
 }
@@ -83,10 +83,7 @@ HRESULT CPlayer::Add_Component(void)
 	CComponent*			pComponent = nullptr;
 
 
-	// NaviMesh
-	pComponent = m_pNaviCom = dynamic_cast<CNaviMesh*>(Clone_Proto(L"Proto_Mesh_Navi"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].emplace(L"Com_Navi", pComponent);
+
 
 	// Transform
 	pComponent = m_pTransformCom = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_Transform"));

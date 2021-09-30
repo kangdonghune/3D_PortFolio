@@ -62,6 +62,7 @@ public:
 	CManagement*			m_pManagementClass = nullptr;
 	CForm*					m_pForm = nullptr;
 
+
 // 생성된 메시지 맵 함수
 protected:
 	DECLARE_MESSAGE_MAP()
@@ -73,6 +74,7 @@ public:
 
 	CGameObject*			CreateCharictor(const _tchar* pLayerTag, const _tchar* pParentName, const _tchar* pObjProtoName);
 	CGameObject*			CreateObject(const _tchar* pLayerTag, const _tchar* pParentName, const _tchar* pObjProtoName);
+
 };
 
 #ifndef _DEBUG  // MFCView.cpp의 디버그 버전

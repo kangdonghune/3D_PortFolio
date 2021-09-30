@@ -80,4 +80,8 @@ public:
 	afx_msg void OnNMDblclkTree1(NMHDR *pNMHDR, LRESULT *pResult);
 
 	afx_msg void OnBnClickedDeleteObject();
+	afx_msg void OnBnClickedBuildingSave();
+	afx_msg void OnBnClickedBuildingLoad();
+	afx_msg void OnBnClickedStuffSave();
+	afx_msg void OnBnClickedStuffLoad();
 };

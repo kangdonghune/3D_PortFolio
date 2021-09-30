@@ -3,6 +3,7 @@
 
 #include "Terrain.h"
 #include "DynamicCamera.h"
+
 #include "Player.h"
 
 
@@ -59,8 +60,9 @@ void CStage::Render_Scene(void)
 		m_fTime = 0.f;
 		m_dwRenderCnt = 0;
 	}
-
+	
 	Render_Font(L"Font_Jinji", m_szFPS, &_vec2(400.f, 20.f), D3DXCOLOR(0.f, 0.f, 0.f, 1.f));
+
 
 }
 
@@ -106,42 +108,6 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar * pLayerTag)
 	pGameObject = CTerrain::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
-
-
-
-//#pragma region PLAYER
-//	// Player
-
-//
-//	// Sword
-//	pGameObject = CSword::Create(m_pGraphicDev);
-//	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-//	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Sword", pGameObject), E_FAIL);
-//#pragma endregion PLAYER
-
-
-	//// Stone
-	//pGameObject = CStone::Create(m_pGraphicDev);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Stone", pGameObject), E_FAIL);
-
-	//// Tree
-	//pGameObject = CTree::Create(m_pGraphicDev);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Tree", pGameObject), E_FAIL);
-
-	//for (_ulong i = 0; i < 150; ++i)
-	//{
-	//	// effect
-	//	pGameObject = CEffect::Create(m_pGraphicDev);
-	//	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Effect", pGameObject), E_FAIL);
-	//}
-	//
-
-	/*pGameObject = CPlayer::Create(m_pGraphicDev, L"Proto_Mesh_Hunter");
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player", pGameObject), E_FAIL);*/
 
 	m_mapLayer.emplace(pLayerTag, pLayer);
 
@@ -203,7 +169,6 @@ HRESULT CStage::Ready_Resource(LPDIRECT3DDEVICE9 pGraphicDev)
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Goblin", CDynamicMesh::Create(m_pGraphicDev, L"../../Resource/Dynamicmesh/Monster/Goblin/", L"Goblin.X")), E_FAIL);
 
 	//오브젝트
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Stone", CDynamicMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Stone/", L"TombStone.X")), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Train", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Train/", L"Train.X")), E_FAIL);
 
 	// 기타 등등
@@ -214,6 +179,8 @@ HRESULT CStage::Ready_Resource(LPDIRECT3DDEVICE9 pGraphicDev)
 
 	return S_OK;
 }
+
+
 
 CStage* CStage::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {

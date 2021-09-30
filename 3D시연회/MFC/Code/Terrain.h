@@ -2,7 +2,8 @@
 #define Terrain_h__
 
 #include "GameObject.h"
-
+class CForm;
+class CSphere;
 BEGIN(Engine)
 
 class CTerrainTex;
@@ -11,6 +12,9 @@ class CTransform;
 class CRenderer;
 class COptimization;
 class CShader;
+class CNaviMesh;
+class CCell;
+class CCalculator;
 
 END
 class CTerrain : public CGameObject
@@ -26,10 +30,13 @@ public:
 	virtual void Render_Object(void) override;
 
 private:
-	HRESULT					Add_Component(void);
-	HRESULT					SetUp_Material(void);
-	HRESULT					SetUp_ConstantTable(LPD3DXEFFECT& pEffect);
-	
+	HRESULT						Add_Component(void);
+	HRESULT						SetUp_Material(void);
+	HRESULT						SetUp_ConstantTable(LPD3DXEFFECT& pEffect);
+	HRESULT						SetUp_NaviMesh();
+
+	void						Key_Input(const _float& fTimeDelta);
+
 private:
 	CTerrainTex*				m_pBufferCom = nullptr;
 	CTexture*					m_pTextureCom = nullptr;
@@ -37,13 +44,18 @@ private:
 	CRenderer*					m_pRendererCom = nullptr;
 	COptimization*				m_pOptimizationCom = nullptr;
 	CShader*					m_pShaderCom = nullptr;
+	CNaviMesh*					m_pNaviCom = nullptr;
+	CCalculator*				m_pCalculatorCom = nullptr;
 
 	INDEX32*					m_pIndex = nullptr;
 	_ulong						m_dwTriCnt = 0;
 
-
+	CForm*						m_pForm;
+	vector<CCell*>				m_vecCell;
+	vector<CSphere*>			m_vecShpere;
 public:
-	static CTerrain*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CTerrain*			Create(LPDIRECT3DDEVICE9 pGraphicDev);
+
 
 private:
 	virtual void		Free(void);

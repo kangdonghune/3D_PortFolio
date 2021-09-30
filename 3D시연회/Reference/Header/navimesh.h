@@ -20,13 +20,15 @@ public:
 	HRESULT				Ready_NaviMesh(void);
 	void				Render_NaviMesh(void);
 
+
+	HRESULT				Add_Cell(CCell* pCell);
 	_vec3				Move_OnNaviMesh(const _vec3* pTargetPos, const _vec3* pTargetDir);
 
 private:
 	HRESULT				Link_Cell(void);
 
 private:
-	vector<CCell*>			m_vecCell;
+	vector<CCell*>			m_vecCell; 
 	_ulong					m_dwIndex;
 
 public:

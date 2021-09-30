@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "Terrain.h"
+#include "MainFrm.h"
+#include "Form.h"
+#include "Sphrer.h"
 
+#include "TabTerrain.h"
 #include "Export_Function.h"
 
 CTerrain::CTerrain(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -22,7 +26,11 @@ CTerrain::~CTerrain(void)
 
 HRESULT CTerrain::Ready_Object(void)
 {
+	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+	m_pForm = dynamic_cast<CForm*>(pMain->m_MainSplitter.GetPane(0, 0));
+
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
+	FAILED_CHECK_RETURN(SetUp_NaviMesh(), E_FAIL);
 	FAILED_CHECK_RETURN(CGameObject::Ready_Object(), E_FAIL);
 
 	//m_pIndex = new INDEX32[m_pBufferCom->Get_TriCnt()];
@@ -41,6 +49,8 @@ Engine::_int CTerrain::Update_Object(const _float& fTimeDelta)
 												&m_dwTriCnt);*/
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
+
+	Key_Input(fTimeDelta);
 
 	return 0;
 }
@@ -68,6 +78,9 @@ void CTerrain::Render_Object(void)
 	pEffect->End();
 
 	Safe_Release(pEffect);
+
+	m_pNaviCom->Render_NaviMesh();
+
 
 }
 
@@ -105,7 +118,18 @@ HRESULT CTerrain::Add_Component(void)
 	pComponent = m_pShaderCom = dynamic_cast<CShader*>(Clone_Proto(L"Proto_Shader_Terrain"));
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_Shader", pComponent);
-	
+
+
+	// NaviMesh
+	pComponent = m_pNaviCom = dynamic_cast<CNaviMesh*>(Clone_Proto(L"Proto_Mesh_Navi"));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_STATIC].emplace(L"Com_Navi", pComponent);
+
+	// Calculator
+	pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
+
 	return S_OK;
 }
 
@@ -162,6 +186,36 @@ HRESULT CTerrain::SetUp_ConstantTable(LPD3DXEFFECT& pEffect)
 	return S_OK;
 }
 
+HRESULT CTerrain::SetUp_NaviMesh()
+{
+	for (CCell* pCell : m_vecCell)
+	{
+		m_pNaviCom->Add_Cell(pCell);
+	}
+
+	return S_OK;
+}
+
+void CTerrain::Key_Input(const _float & fTimeDelta)
+{
+	if (Get_DIMouseState(DIM_LB) & 0X80)
+	{
+		_vec3 MovePos = m_pCalculatorCom->Picking_OnTerrain(g_HWnd, m_pBufferCom, m_pTransformCom);
+		if (MovePos.y == -100.f)
+			return;
+		CSphere* pSphere = m_pForm->m_ptabTerrain->Create_Sphrer(m_pGraphicDev, &MovePos);
+		if (pSphere == nullptr)
+			return;
+		m_vecShpere.push_back(pSphere);
+	}
+
+	if (Get_DIMouseState(DIM_RB) & 0X80)
+	{
+		
+	}
+
+}
+
 CTerrain* CTerrain::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	CTerrain*	pInstance = new CTerrain(pGraphicDev);
@@ -177,7 +231,8 @@ void CTerrain::Free(void)
 
 	//Safe_Delete_Array(m_pIndex);
 
-
+	m_vecCell.clear();
+	m_vecShpere.clear();
 	CGameObject::Free();
 }
 

@@ -103,7 +103,6 @@
     <ClInclude Include="Form.h">
       <Filter>01.View\00.Form</Filter>
     </ClInclude>
-    <ClInclude Include="TabTerrain.h" />
     <ClInclude Include="TabChar.h">
       <Filter>01.View\00.Form\02.Char</Filter>
     </ClInclude>
@@ -127,6 +126,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\Object.h">
       <Filter>03.GameObject\06.Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TabTerrain.h">
+      <Filter>01.View\00.Form\01.Terrain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -160,7 +162,6 @@
     <ClCompile Include="Form.cpp">
       <Filter>01.View\00.Form</Filter>
     </ClCompile>
-    <ClCompile Include="TabTerrain.cpp" />
     <ClCompile Include="TabChar.cpp">
       <Filter>01.View\00.Form\02.Char</Filter>
     </ClCompile>
@@ -178,6 +179,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Object.cpp">
       <Filter>03.GameObject\06.Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TabTerrain.cpp">
+      <Filter>01.View\00.Form\01.Terrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

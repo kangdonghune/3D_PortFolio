@@ -8,6 +8,8 @@
 #include "MainFrm.h"
 #include "MFCView.h"
 #include "Player.h"
+#include "Form.h"
+#include "TabObject.h"
 
 
 #include "Export_Function.h"
@@ -86,6 +88,7 @@ BEGIN_MESSAGE_MAP(CTabChar, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON4, &CTabChar::OnBnClickedMonsterSave)
 	ON_BN_CLICKED(IDC_BUTTON2, &CTabChar::OnBnClickedLoad)
 	ON_WM_DESTROY()
+	ON_BN_CLICKED(IDC_BUTTON5, &CTabChar::OnBnClickedLoadMonster)
 END_MESSAGE_MAP()
 
 
@@ -273,6 +276,8 @@ void CTabChar::OnNMDblclkTree1(NMHDR *pNMHDR, LRESULT *pResult)
 	HTREEITEM hItem_parent = m_TreeTask.GetParentItem(hItem_dc);
 	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	CMFCView* pView = dynamic_cast<CMFCView*>(pMain->m_MainSplitter.GetPane(0, 1));
+	CForm* pForm = dynamic_cast<CForm*>(pMain->m_MainSplitter.GetPane(0, 0));
+	pForm->m_ptabObject->Set_Object(nullptr);
 	m_pObject = pView->CreateCharictor(L"GameLogic", m_TreeTask.GetItemText(hItem_parent), m_TreeTask.GetItemText(hItem_dc));
 	Get_Transform();
 	Get_Rotate();
@@ -648,7 +653,7 @@ void CTabChar::OnBnClickedUnitSave()
 		//저장요소. 오브젝트 태그명(proto type name), pos, rotate, scale 
 		for (CGameObject* pObj : pPlayerlst)
 		{
-			CTransform* pTransCom = (CTransform*)m_pObject->Get_Component(L"Com_Transform", ID_DYNAMIC);
+			CTransform* pTransCom = (CTransform*)pObj->Get_Component(L"Com_Transform", ID_DYNAMIC);
 			_vec3 SavePos = {};
 			_vec3 SaveRot = { pTransCom->Get_Rotate(ROT_X),pTransCom->Get_Rotate(ROT_Y),pTransCom->Get_Rotate(ROT_Z)};
 			_vec3 SaveScale = { pTransCom->Get_Scale(SCALE_X),pTransCom->Get_Scale(SCALE_Y),pTransCom->Get_Scale(SCALE_Z) };
@@ -692,12 +697,12 @@ void CTabChar::OnBnClickedMonsterSave()
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		//순회하면서 키와 리스트 아이템들 저장
-		list<CGameObject*> pPlayerlst = Engine::Get_List(L"GameLogic", L"Monster");
+		list<CGameObject*> pMonsterlst = Engine::Get_List(L"GameLogic", L"Monster");
 
 		//저장요소. 오브젝트 태그명(proto type name), pos, rotate, scale 
-		for (CGameObject* pObj : pPlayerlst)
+		for (CGameObject* pObj : pMonsterlst)
 		{
-			CTransform* pTransCom = (CTransform*)m_pObject->Get_Component(L"Com_Transform", ID_DYNAMIC);
+			CTransform* pTransCom = (CTransform*)pObj->Get_Component(L"Com_Transform", ID_DYNAMIC);
 			_vec3 SavePos = {};
 			_vec3 SaveRot = { pTransCom->Get_Rotate(ROT_X),pTransCom->Get_Rotate(ROT_Y),pTransCom->Get_Rotate(ROT_Z) };
 			_vec3 SaveScale = { pTransCom->Get_Scale(SCALE_X),pTransCom->Get_Scale(SCALE_Y),pTransCom->Get_Scale(SCALE_Z) };
@@ -774,10 +779,64 @@ void CTabChar::OnBnClickedLoad()
 }
 
 
-void CTabChar::OnDestroy()
+
+
+
+void CTabChar::OnBnClickedLoadMonster()
 {
-	CDialogEx::OnDestroy();
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CFileDialog Dlg(TRUE, // 다른이름으로 저장. 만약 TRUE 파일 열기. 
+		L"dat",// 디폴트 확장자 
+		L"Monster.dat",// 디폴트 파일 이름 
+		OFN_OVERWRITEPROMPT);// 덮어쓸때 경고 메시지 띄어주겠다. 
+	TCHAR szCurDir[MAX_PATH]{};
+	GetCurrentDirectory(MAX_PATH, szCurDir);
+	PathRemoveFileSpec(szCurDir); //끝에 경로 제거. //Include 제거
+	PathRemoveFileSpec(szCurDir); //끝에 경로 제거. //MFC 제거
+	lstrcat(szCurDir, L"\\ReSource");
+	lstrcat(szCurDir, L"\\Data");
+	lstrcat(szCurDir, L"\\Unit");
+	Dlg.m_ofn.lpstrInitialDir = szCurDir;
+	if (IDOK == Dlg.DoModal())
+	{
+		CString wstrFilePath = Dlg.GetPathName();
+		HANDLE hFile = CreateFile(wstrFilePath.GetString(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (INVALID_HANDLE_VALUE == hFile)
+			return;
+		//리스트 초기화 진행 
+		Clear_List(L"GameLogic", L"Monster");
+		DWORD dwByte = 0;
+		DWORD dwStringCount = 0;
+		TCHAR* szBuf = nullptr;
+		CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+		CMFCView* pView = dynamic_cast<CMFCView*>(pMain->m_MainSplitter.GetPane(0, 1));
 
-	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
-
+		//로드 순서 1. 네임태그 2. pos 3. rotate 4. scale
+		while (true)
+		{
+			CGameObject* pObj = nullptr;
+			wstring wstrNametag;
+			_vec3   LoadPos = {};
+			_vec3	LoadRot = {};
+			_vec3	LoadScale = {};
+			ReadFile(hFile, &dwStringCount, sizeof(DWORD), &dwByte, nullptr);
+			if (0 == dwByte)
+				break;//읽어올 게 없으면 종료
+			szBuf = new TCHAR[dwStringCount];
+			ReadFile(hFile, szBuf, dwStringCount, &dwByte, nullptr);
+			wstrNametag = szBuf;
+			Safe_Delete_Array(szBuf);
+			ReadFile(hFile, &LoadPos, sizeof(_vec3), &dwByte, nullptr);
+			ReadFile(hFile, &LoadRot, sizeof(_vec3), &dwByte, nullptr);
+			ReadFile(hFile, &LoadScale, sizeof(_vec3), &dwByte, nullptr);
+			pObj = pView->CreateCharictor(L"GameLogic", L"Monster", wstrNametag.c_str());
+			CTransform* pTransCom = (CTransform*)pObj->Get_Component(L"Com_Transform", ID_DYNAMIC);
+			pTransCom->Set_Pos(&LoadPos);
+			pTransCom->Rotation2(ROT_X, LoadRot.x);
+			pTransCom->Rotation2(ROT_Y, LoadRot.y);
+			pTransCom->Rotation2(ROT_Z, LoadRot.z);
+			pTransCom->Set_Scale(LoadScale.x, LoadScale.y, LoadScale.z);
+		}
+		CloseHandle(hFile);
+	}
 }
