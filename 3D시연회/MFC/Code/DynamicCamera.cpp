@@ -96,7 +96,7 @@ void CDynamicCamera::Key_Input(const _float& fTimeDelta, const _float& fSpeed)
 		m_vAt -= vLength;
 	}
 
-	if (Get_DIKeyState(DIK_F1) & 0x80)
+	if (Get_DIKeyState(DIK_X) & 0x80)
 	{
 		if (true == m_bClick)
 			return;

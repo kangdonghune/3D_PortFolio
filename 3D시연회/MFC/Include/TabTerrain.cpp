@@ -68,16 +68,18 @@ void CTabTerrain::Set_Sphere(CSphere * pShphere)
 
 void CTabTerrain::Get_SphereInfo()
 {
+	if (m_pShpere == nullptr)
+		return;
 	UpdateData(true);
-	if (m_pShpere != nullptr)
-	{
-		CTransform* pTrans = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
-		_vec3	Pos = {};
-		pTrans->Get_Info(INFO_POS, &Pos);
-		m_fXCount = Pos.x;
-		m_fYCount = Pos.y;
-		m_fZCount = Pos.z;
-	}
+
+	CTransform* pTrans = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	_vec3	Pos = {};
+	pTrans->Get_Info(INFO_POS, &Pos);
+	m_fXCount = Pos.x;
+	m_fYCount = Pos.y;
+	m_fZCount = Pos.z;
+
+
 	UpdateData(false);
 }
 
@@ -135,19 +137,19 @@ void CTabTerrain::Create_MFCCell()
 	CTransform* pTransA = (CTransform*)m_pPointA->Get_Component(L"Com_Transform", ID_DYNAMIC);
 	CTransform* pTransB = (CTransform*)m_pPointB->Get_Component(L"Com_Transform", ID_DYNAMIC);
 	CTransform* pTransC = (CTransform*)m_pPointC->Get_Component(L"Com_Transform", ID_DYNAMIC);
-	_vec3 PosA = {};
-	pTransA->Get_Info(INFO_POS, &PosA);
-	_vec3 PosB = {};
-	pTransB->Get_Info(INFO_POS, &PosB);
-	_vec3 PosC = {};
-	pTransC->Get_Info(INFO_POS, &PosC);
+	_vec3* PosA = nullptr;
+	PosA = (_vec3*)pTransA->Get_InfoRef(INFO_POS);
+	_vec3* PosB = nullptr;
+	PosB = (_vec3*)pTransB->Get_InfoRef(INFO_POS);
+	_vec3* PosC = nullptr;
+	PosC = (_vec3*)pTransC->Get_InfoRef(INFO_POS);
 
-	if (PosA.x >= PosB.x) //조건 1
+	if (PosA->x >= PosB->x) //조건 1B
 		return;
-	if (PosA.z <= PosC.z) //조건 2
+	if (PosA->z <= PosC->z) //조건 2
 		return;
 
-	if (PosA == PosB || PosB == PosC || PosC == PosA)
+	if (m_pPointA->m_iID == m_pPointB->m_iID || m_pPointB->m_iID == m_pPointC->m_iID || m_pPointC->m_iID == m_pPointA->m_iID)
 		return;
 
 
@@ -156,7 +158,7 @@ void CTabTerrain::Create_MFCCell()
 
 
 	MFCCELL tempMFCCell = {};
-	tempMFCCell.pCell = CCell::Create(pView->m_pGraphicDev, m_dwIndex++, &PosA, &PosB, &PosC);
+	tempMFCCell.pCell = CCell::Create(pView->m_pGraphicDev, m_dwIndex++, PosA, PosB, PosC);
 	tempMFCCell.PointA = m_pPointA->m_iID;
 	tempMFCCell.PointB = m_pPointB->m_iID;
 	tempMFCCell.PointC = m_pPointC->m_iID;
@@ -177,6 +179,33 @@ void CTabTerrain::Send_Info(_vec3* pPos)
 	CTransform* pTrans = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
 	pTrans->Set_Pos(pPos);
 	Get_SphereInfo();
+}
+
+void CTabTerrain::Update_VecCell()
+{
+	UpdateData(true);
+	list<CGameObject*> pTerrainlst = Engine::Get_List(L"GameLogic", L"Terrain");
+	CTerrain*	pTerrain = (CTerrain*)pTerrainlst.front();
+	for (int i = 0; i < pTerrain->m_vecCell.size(); i++)
+	{
+		if (pTerrain->m_vecCell[i].PointA == m_pShpere->m_iID)
+		{
+			CTransform* pTransMove = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
+			pTerrain->m_vecCell[i].pCell->Set_Point(CCell::POINT_A, (_vec3*)pTransMove->Get_InfoRef(INFO_POS));
+		}
+		if (pTerrain->m_vecCell[i].PointB == m_pShpere->m_iID)
+		{
+			CTransform* pTransMove = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
+			pTerrain->m_vecCell[i].pCell->Set_Point(CCell::POINT_B, (_vec3*)pTransMove->Get_InfoRef(INFO_POS));
+		}
+		if (pTerrain->m_vecCell[i].PointC == m_pShpere->m_iID)
+		{
+			CTransform* pTransMove = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
+			pTerrain->m_vecCell[i].pCell->Set_Point(CCell::POINT_C, (_vec3*)pTransMove->Get_InfoRef(INFO_POS));
+		}
+
+	}
+	UpdateData(false);
 }
 
 
@@ -253,6 +282,8 @@ void CTabTerrain::OnEnChangeMoveX()
 	CTransform* pTrans = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
 	_vec3 InputPos = { m_fXCount, m_fYCount, m_fZCount };
 	pTrans->Set_Pos(&InputPos);
+
+
 	UpdateData(false);
 }
 
@@ -266,6 +297,7 @@ void CTabTerrain::OnEnChangeMoveY()
 	CTransform* pTrans = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
 	_vec3 InputPos = { m_fXCount, m_fYCount, m_fZCount };
 	pTrans->Set_Pos(&InputPos);
+	Update_VecCell();
 	UpdateData(false);
 }
 
@@ -324,11 +356,13 @@ void CTabTerrain::OnDeltaposY(NMHDR *pNMHDR, LRESULT *pResult)
 	{
 		tempVec.y += 0.1f;
 		Send_Info(&tempVec);
+		Update_VecCell();
 	}
 	else
 	{
 		tempVec.y -= 0.1f;
 		Send_Info(&tempVec);
+		Update_VecCell();
 	}
 
 

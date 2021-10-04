@@ -33,6 +33,11 @@ void CTransform::Set_Pos(const _float & fX, const _float & fY, const _float & fZ
 	m_vInfo[INFO_POS].z = fZ;
 }
 
+const void * CTransform::Get_InfoRef(INFO eType)
+{
+	return  &m_matWorld.m[eType][0];
+}
+
 void CTransform::Set_Pos(_vec3 * pPos)
 {
 	//memcpy(&m_matWorld._41, pPos, sizeof(_vec3));

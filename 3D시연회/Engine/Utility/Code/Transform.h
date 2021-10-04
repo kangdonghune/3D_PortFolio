@@ -14,6 +14,7 @@ private:
 
 public:
 	void					Set_Pos(const _float& fX, const _float& fY, const _float& fZ);
+	const	void*			Get_InfoRef(INFO eType);
 	void					Set_Pos(_vec3* pPos);
 	const	_matrix*		Get_WorldMatrix(void);
 	const	 _matrix*		Get_NRotWorldMatrix(void);

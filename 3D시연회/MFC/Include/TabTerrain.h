@@ -47,6 +47,7 @@ public:
 	void			Create_MFCCell();
 
 	void			Send_Info(_vec3* pPos);
+	void			Update_VecCell();
 
 
 

@@ -198,13 +198,18 @@ HRESULT CTerrain::SetUp_NaviMesh()
 
 void CTerrain::Key_Input(const _float & fTimeDelta)
 {
+	if (Get_DIKeyState(DIK_C) & 0X80)
+	{
+		m_bRBPress = false;
+		m_bLBPress = false;
+	}
+
 	if (Get_DIMouseState(DIM_LB) & 0X80 && !m_bLBPress)
 	{
 		CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 		m_pForm = dynamic_cast<CForm*>(pMain->m_MainSplitter.GetPane(0, 0));
-
-		m_bRBPress = false;
 		m_bLBPress = true;
+
 		CSphere* pShprer = nullptr;
 		for (int i = 0; i < m_vecShpere.size(); i++)
 		{
@@ -240,7 +245,6 @@ void CTerrain::Key_Input(const _float & fTimeDelta)
 	{
 		CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 		m_pForm = dynamic_cast<CForm*>(pMain->m_MainSplitter.GetPane(0, 0));
-		m_bLBPress = false;
 		_vec3 MovePos = {};
 		CSphere* pSphere = nullptr;
 		switch (m_pForm->m_ptabTerrain->eType)
