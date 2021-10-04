@@ -130,6 +130,9 @@
     <ClInclude Include="TabTerrain.h">
       <Filter>01.View\00.Form\01.Terrain</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\Struct.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFrm.cpp">

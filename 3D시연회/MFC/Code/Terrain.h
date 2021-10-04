@@ -2,8 +2,8 @@
 #define Terrain_h__
 
 #include "GameObject.h"
+#include "Sphrer.h"
 class CForm;
-class CSphere;
 BEGIN(Engine)
 
 class CTerrainTex;
@@ -51,9 +51,13 @@ private:
 	_ulong						m_dwTriCnt = 0;
 
 	CForm*						m_pForm;
-	vector<CCell*>				m_vecCell;
-	vector<CSphere*>			m_vecShpere;
+
+
+	_bool						m_bRBPress = false;
+	_bool						m_bLBPress = false;
 public:
+	vector<MFCCELL>				m_vecCell;
+	vector<CSphere*>			m_vecShpere;
 	static CTerrain*			Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
 

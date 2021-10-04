@@ -53,6 +53,10 @@ private:
 	_ulong							m_dwFVF;	// FVFÀÇÁ¾·ù
 
 public:
+	static	_int			m_iShpereCount;
+	_int					m_iID;
+
+public:
 	static CSphere*		Create(LPDIRECT3DDEVICE9 pGraphicDev, _float fRadius = 1);
 
 private:

@@ -64,6 +64,7 @@
 #endif
 
 #include "Enum.h"
+#include "Struct.h"
 using namespace std;
 
 #define _CRTDBG_MAP_ALLOC

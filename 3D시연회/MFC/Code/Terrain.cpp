@@ -30,7 +30,7 @@ HRESULT CTerrain::Ready_Object(void)
 	m_pForm = dynamic_cast<CForm*>(pMain->m_MainSplitter.GetPane(0, 0));
 
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
-	FAILED_CHECK_RETURN(SetUp_NaviMesh(), E_FAIL);
+//	FAILED_CHECK_RETURN(SetUp_NaviMesh(), E_FAIL);
 	FAILED_CHECK_RETURN(CGameObject::Ready_Object(), E_FAIL);
 
 	//m_pIndex = new INDEX32[m_pBufferCom->Get_TriCnt()];
@@ -188,9 +188,9 @@ HRESULT CTerrain::SetUp_ConstantTable(LPD3DXEFFECT& pEffect)
 
 HRESULT CTerrain::SetUp_NaviMesh()
 {
-	for (CCell* pCell : m_vecCell)
+	for (MFCCELL MFCCell : m_vecCell)
 	{
-		m_pNaviCom->Add_Cell(pCell);
+		m_pNaviCom->Add_Cell(MFCCell.pCell);
 	}
 
 	return S_OK;
@@ -198,20 +198,72 @@ HRESULT CTerrain::SetUp_NaviMesh()
 
 void CTerrain::Key_Input(const _float & fTimeDelta)
 {
-	if (Get_DIMouseState(DIM_LB) & 0X80)
+	if (Get_DIMouseState(DIM_LB) & 0X80 && !m_bLBPress)
 	{
-		_vec3 MovePos = m_pCalculatorCom->Picking_OnTerrain(g_HWnd, m_pBufferCom, m_pTransformCom);
-		if (MovePos.y == -100.f)
-			return;
-		CSphere* pSphere = m_pForm->m_ptabTerrain->Create_Sphrer(m_pGraphicDev, &MovePos);
-		if (pSphere == nullptr)
-			return;
-		m_vecShpere.push_back(pSphere);
-	}
+		CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+		m_pForm = dynamic_cast<CForm*>(pMain->m_MainSplitter.GetPane(0, 0));
 
-	if (Get_DIMouseState(DIM_RB) & 0X80)
-	{
+		m_bRBPress = false;
+		m_bLBPress = true;
+		CSphere* pShprer = nullptr;
+		for (int i = 0; i < m_vecShpere.size(); i++)
+		{
+			if (m_pCalculatorCom->raySphrerIntersection(g_HWnd, m_vecShpere[i]->Get_Radius(), (CTransform*)m_vecShpere[i]->Get_Component(L"Com_Transform", ID_DYNAMIC)))
+			{
+				pShprer = m_vecShpere[i];
+				break;
+			}
+		}
+		if (pShprer != nullptr)
+		{
+			switch (m_pForm->m_ptabTerrain->eType)
+			{
+			case TerrainTool::SPHERE:
+				m_pForm->m_ptabTerrain->Set_Sphere(pShprer);
+				break;
+			case TerrainTool::CELL:
+				m_pForm->m_ptabTerrain->Set_Sphere(pShprer);
+				m_pForm->m_ptabTerrain->InPut_Point(pShprer);
+				break;
+			default:
+				break;
+			}
+	
+		}
+
+
 		
+
+		
+	}
+	if (Get_DIMouseState(DIM_RB) & 0X80 && !m_bRBPress) // 0X0000 0X0001 0X8000 0X8001
+	{
+		CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+		m_pForm = dynamic_cast<CForm*>(pMain->m_MainSplitter.GetPane(0, 0));
+		m_bLBPress = false;
+		_vec3 MovePos = {};
+		CSphere* pSphere = nullptr;
+		switch (m_pForm->m_ptabTerrain->eType)
+		{
+		case TerrainTool::SPHERE:
+		
+				m_bRBPress = true;
+				MovePos = m_pCalculatorCom->Picking_OnTerrain(g_HWnd, m_pBufferCom, m_pTransformCom);
+				if (MovePos.y == -100.f)
+					return;
+				pSphere = m_pForm->m_ptabTerrain->Create_Sphrer(m_pGraphicDev, &MovePos);
+				if (pSphere == nullptr)
+					return;
+				m_vecShpere.push_back(pSphere);
+			break;
+		case TerrainTool::CELL:
+			break;
+		default:
+			break;
+		}
+		
+
+	
 	}
 
 }
