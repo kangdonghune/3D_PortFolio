@@ -80,6 +80,7 @@ void CTerrain::Render_Object(void)
 	Safe_Release(pEffect);
 
 	m_pNaviCom->Render_NaviMesh();
+	m_pNaviCom->Delete_Cell();
 
 
 }

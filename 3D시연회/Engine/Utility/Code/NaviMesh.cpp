@@ -1,5 +1,6 @@
 #include "NaviMesh.h"
 
+
 USING(Engine)
 
 Engine::CNaviMesh::CNaviMesh(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -57,7 +58,11 @@ HRESULT Engine::CNaviMesh::Ready_NaviMesh(void)
 void Engine::CNaviMesh::Render_NaviMesh(void)
 {
 	for (auto& iter : m_vecCell)
+	{
+		if (iter->Get_Dead())
+			continue;
 		iter->Render_Cell();
+	}
 }
 
 
@@ -135,6 +140,23 @@ HRESULT CNaviMesh::Add_Cell(CCell * pCell)
 	m_vecCell.push_back(pCell);
 	m_vecCell.reserve(m_vecCell.capacity());
 	FAILED_CHECK_RETURN(Link_Cell(), E_FAIL);
+	return S_OK;
+}
+
+HRESULT CNaviMesh::Delete_Cell()
+{
+	for (_ulong i = 0; i < m_vecCell.size(); ++i)
+	{
+		if (m_vecCell[i]->Get_Dead())
+		{
+			Safe_Release(m_vecCell[i]);
+			m_vecCell.erase(m_vecCell.begin() + i);
+			i--;
+			continue;
+		}
+
+	}
+	Link_Cell();
 	return S_OK;
 }
 

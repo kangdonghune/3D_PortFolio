@@ -24,6 +24,7 @@ protected:
 
 public:
 	CSphere*			m_pShpere = nullptr;
+	MFCCELL*			m_pCell = nullptr;
 	CSphere*			m_pPointA = nullptr;
 	CSphere*			m_pPointB = nullptr;
 	CSphere*			m_pPointC = nullptr;
@@ -49,10 +50,13 @@ public:
 	void			Send_Info(_vec3* pPos);
 	void			Update_VecCell();
 
+	void			Delete_Cell();
+
 
 
 	afx_msg void OnBnClickedRadio1();
 	afx_msg void OnBnClickedRadio2();
+	afx_msg void OnBnClickedRadio3();
 	afx_msg void OnDestroy();
 	afx_msg void OnEnChangeMoveX();
 	afx_msg void OnEnChangeMoveY();
@@ -70,4 +74,7 @@ public:
 	int m_iPointANum;
 	int m_iPointBNum;
 	int m_iPointCNum;
+
+	afx_msg void OnBnClickedDeleteSphere();
+	afx_msg void OnBnClickedDeleteCell();
 };

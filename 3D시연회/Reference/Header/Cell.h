@@ -20,7 +20,10 @@ private:
 public:
 	const _vec3*		Get_Point(POINT eType) const { return &m_vPoint[eType]; }
 	void				Set_Point(POINT eType, _vec3* pPoint) { m_vPoint[eType] = *pPoint; }
+	_byte				Get_Index() { return m_dwIndex; }
 	CCell*				Get_Neighbor(NEIGHBOR eType) const { return m_pNeighbor[eType]; }
+	const _bool			Get_Dead() { return m_bDead; }
+	void				Set_Dead(_bool isDead) { m_bDead = isDead; }
 	void				Set_Neighbor(NEIGHBOR eType, CCell* pNeighbor) { m_pNeighbor[eType] = pNeighbor; }
 	const _ulong*		Get_CellIndex(void) { return &m_dwIndex; }
 public:
@@ -38,7 +41,7 @@ private:
 	LPDIRECT3DDEVICE9		m_pGraphicDev;
 	LPD3DXLINE				m_pD3DXLine;
 	_ulong					m_dwIndex;
-
+	_bool					m_bDead = false;
 public:
 	static CCell*		Create(LPDIRECT3DDEVICE9 pGraphicDev, const _ulong& dwIndex, const _vec3* pPointA, const _vec3* pPointB, const _vec3* pPointC);
 	virtual void		Free(void);

@@ -22,6 +22,7 @@ public:
 
 
 	HRESULT				Add_Cell(CCell* pCell);
+	HRESULT				Delete_Cell();
 	_vec3				Move_OnNaviMesh(const _vec3* pTargetPos, const _vec3* pTargetDir);
 
 private:

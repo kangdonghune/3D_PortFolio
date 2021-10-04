@@ -47,6 +47,7 @@ private:
 	CTransform*				m_pTransformCom = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
 	CCalculator*			m_pCalculatorCom = nullptr;
+	CNaviMesh*				m_pNaviCom = nullptr;
 	_vec3					m_vDir;
 	CSphere*				m_pShprer;
 	CTransform*				m_pShprerTransCom = nullptr;

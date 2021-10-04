@@ -97,6 +97,8 @@ Engine::_bool Engine::CCell::Compare_Point(const _vec3* pPointFirst, const _vec3
 
 void Engine::CCell::Render_Cell(void)
 {
+	if (m_bDead == true)
+		return;
 	_vec3			vPoint[4];
 
 	vPoint[0] = m_vPoint[POINT_A];

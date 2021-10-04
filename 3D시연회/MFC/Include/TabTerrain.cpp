@@ -208,6 +208,41 @@ void CTabTerrain::Update_VecCell()
 	UpdateData(false);
 }
 
+void CTabTerrain::Delete_Cell()
+{
+	if (m_pShpere == nullptr)
+		return;
+
+	list<CGameObject*> pTerrainlst = Engine::Get_List(L"GameLogic", L"Terrain");
+	CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
+	for (int i = 0; i < pTerrain->m_vecCell.size(); i++)
+	{
+		if (pTerrain->m_vecCell[i].PointA == m_pShpere->m_iID)
+		{
+			Safe_Release(pTerrain->m_vecCell[i].pCell);
+			pTerrain->m_vecCell.erase(pTerrain->m_vecCell.begin()+i);
+			i--;
+			continue;
+		}
+		if (pTerrain->m_vecCell[i].PointB == m_pShpere->m_iID)
+		{
+			Safe_Release(pTerrain->m_vecCell[i].pCell);
+			pTerrain->m_vecCell.erase(pTerrain->m_vecCell.begin() + i);
+			i--;
+			continue;
+		}
+		if (pTerrain->m_vecCell[i].PointC == m_pShpere->m_iID)
+		{
+			Safe_Release(pTerrain->m_vecCell[i].pCell);
+			pTerrain->m_vecCell.erase(pTerrain->m_vecCell.begin() + i);
+			i--;
+			continue;
+		}
+	}
+	//CNaviMesh* pNavi = (CNaviMesh*)pTerrain->Get_Component(L"Com_Navi", ID_STATIC);
+	//pNavi->Delete_Cell();
+}
+
 
 
 
@@ -231,6 +266,9 @@ BEGIN_MESSAGE_MAP(CTabTerrain, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON3, &CTabTerrain::OnBnClickedSaveSphere)
 	ON_BN_CLICKED(IDC_BUTTON7, &CTabTerrain::OnBnClickedLoadSphrer)
 	ON_BN_CLICKED(IDC_BUTTON9, &CTabTerrain::OnBnClickedPointClear)
+	ON_BN_CLICKED(IDC_RADIO3, &CTabTerrain::OnBnClickedRadio3)
+	ON_BN_CLICKED(IDC_BUTTON10, &CTabTerrain::OnBnClickedDeleteSphere)
+	ON_BN_CLICKED(IDC_BUTTON11, &CTabTerrain::OnBnClickedDeleteCell)
 END_MESSAGE_MAP()
 
 
@@ -424,4 +462,41 @@ void CTabTerrain::OnBnClickedPointClear()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	Clear_Points();
+}
+
+
+void CTabTerrain::OnBnClickedRadio3()
+{
+	eType = TerrainTool::TERRAIN_END;
+	m_pShpere = nullptr;
+}
+
+
+void CTabTerrain::OnBnClickedDeleteSphere()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (m_pShpere != nullptr)
+	{
+		Delete_Cell();
+		list<CGameObject*> pTerrainlst = Engine::Get_List(L"GameLogic", L"Terrain");
+		CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
+		for (int i = 0; i < pTerrain->m_vecShpere.size(); i++)
+		{
+			if (pTerrain->m_vecShpere[i]->m_iID == m_pShpere->m_iID)
+			{
+				pTerrain->m_vecShpere[i]->Set_Dead(true);
+				pTerrain->m_vecShpere.erase(pTerrain->m_vecShpere.begin() + i);
+			}
+		}
+	}
+}
+
+	
+void CTabTerrain::OnBnClickedDeleteCell()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	list<CGameObject*> pTerrainlst = Engine::Get_List(L"GameLogic", L"Terrain");
+	CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
+	pTerrain->m_vecCell.back().pCell->Set_Dead(true);
+	pTerrain->m_vecCell.pop_back();
 }

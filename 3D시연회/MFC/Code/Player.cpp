@@ -7,6 +7,7 @@
 #include "Form.h"
 #include "TabChar.h"
 #include "TabObject.h"
+#include "Terrain.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev)
@@ -102,6 +103,9 @@ HRESULT CPlayer::Add_Component(void)
 	m_mapComponent[ID_STATIC].emplace(L"Com_Renderer", pComponent);
 
 
+	//NaviMap
+	CTerrain* pTerrain = (CTerrain*)Engine::Get_List(L"GameLogic", L"Terrain").front();
+	m_pNaviCom = (CNaviMesh*)pTerrain->Get_Component(L"Com_Navi", ID_STATIC);
 
 
 
@@ -123,33 +127,33 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 	m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
 
 
-	//if (Get_DIKeyState(DIK_UP) & 0x80)
-	//{
-	//	_vec3	vPos, vDir;
-	//	m_pTransformCom->Get_Info(INFO_POS, &vPos);
-	//	m_pTransformCom->Get_Info(INFO_LOOK, &vDir);
-	//	D3DXVec3Normalize(&vDir, &vDir);
+	if (Get_DIKeyState(DIK_UP) & 0x80)
+	{
+		_vec3	vPos, vDir;
+		m_pTransformCom->Get_Info(INFO_POS, &vPos);
+		m_pTransformCom->Get_Info(INFO_LOOK, &vDir);
+		D3DXVec3Normalize(&vDir, &vDir);
 
-	//	m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimeDelta * 5.f)));
-	//	m_pMeshCom->Set_AnimationIndex(0);
-	//}
-	//
+		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimeDelta * 5.f)));
+		m_pMeshCom->Set_AnimationIndex(0);
+	}
+	
 
-	//if (GetAsyncKeyState(VK_DOWN) & 0x8000)
-	//{
-	//	D3DXVec3Normalize(&m_vDir, &m_vDir);
-	//	m_pTransformCom->Move_Pos(&m_vDir, -10.f, fTimeDelta);
-	//}
+	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+	{
+		D3DXVec3Normalize(&m_vDir, &m_vDir);
+		m_pTransformCom->Move_Pos(&m_vDir, -10.f, fTimeDelta);
+	}
 
-	//if (GetAsyncKeyState(VK_LEFT) & 0x8000)
-	//{
-	//	m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(180) * -fTimeDelta);
-	//}
+	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+	{
+		m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(180) * -fTimeDelta);
+	}
 
-	//if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
-	//{
-	//	m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(180) * fTimeDelta);
-	//}	
+	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+	{
+		m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(180) * fTimeDelta);
+	}	
 
 	if (Get_DIMouseState(DIM_LB) & 0X80)
 	{
