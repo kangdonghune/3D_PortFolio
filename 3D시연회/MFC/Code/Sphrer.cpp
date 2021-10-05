@@ -9,12 +9,11 @@
 
 //#include "../MFC/Include/MainFrm.h"
 
-_int CSphere::m_iShpereCount = 0;
+_int CSphere::m_iShpereCount = -1;
 CSphere::CSphere(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev)
 {
-	m_iID = m_iShpereCount;
-	m_iShpereCount++;
+
 }
 
 CSphere::CSphere(const CSphere& rhs)
@@ -143,6 +142,12 @@ HRESULT CSphere::Add_Component(void)
 
 	return S_OK;
 
+}
+
+void CSphere::Set_ID()
+{
+	m_iShpereCount++;
+	m_iID = m_iShpereCount;
 }
 
 

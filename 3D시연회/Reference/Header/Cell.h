@@ -20,7 +20,7 @@ private:
 public:
 	const _vec3*		Get_Point(POINT eType) const { return &m_vPoint[eType]; }
 	void				Set_Point(POINT eType, _vec3* pPoint) { m_vPoint[eType] = *pPoint; }
-	_byte				Get_Index() { return m_dwIndex; }
+	_ulong				Get_Index() { return m_dwIndex; }
 	CCell*				Get_Neighbor(NEIGHBOR eType) const { return m_pNeighbor[eType]; }
 	const _bool			Get_Dead() { return m_bDead; }
 	void				Set_Dead(_bool isDead) { m_bDead = isDead; }

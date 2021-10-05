@@ -33,10 +33,10 @@ private:
 	HRESULT						Add_Component(void);
 	HRESULT						SetUp_Material(void);
 	HRESULT						SetUp_ConstantTable(LPD3DXEFFECT& pEffect);
-	HRESULT						SetUp_NaviMesh();
 
 	void						Key_Input(const _float& fTimeDelta);
-
+public:
+	HRESULT						SetUp_NaviMesh();
 private:
 	CTerrainTex*				m_pBufferCom = nullptr;
 	CTexture*					m_pTextureCom = nullptr;

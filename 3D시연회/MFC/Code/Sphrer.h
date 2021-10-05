@@ -34,7 +34,7 @@ public:
 	const _float					Get_Radius() { return m_fRadius; }
 	const _float					Get_Height() { return m_fHeight; }
 
-
+	void					Set_ID();
 	void					Set_Height(_float fHeight) { m_fHeight = fHeight; }
 	void					Set_Radius(_float fRadius) { m_fRadius = fRadius; }
 
@@ -54,7 +54,7 @@ private:
 
 public:
 	static	_int			m_iShpereCount;
-	_int					m_iID;
+	_int					m_iID = -2;
 
 public:
 	static CSphere*		Create(LPDIRECT3DDEVICE9 pGraphicDev, _float fRadius = 1);

@@ -13,6 +13,7 @@
 #include "Terrain.h"
 #include "navimesh.h"
 
+
 // CTabTerrain 대화 상자입니다.
 
 IMPLEMENT_DYNAMIC(CTabTerrain, CDialogEx)
@@ -54,6 +55,7 @@ CSphere* CTabTerrain::Create_Sphrer(LPDIRECT3DDEVICE9	pGraphicDev, _vec3 * pPos)
 	m_pShpere = pShpere = CSphere::Create(pGraphicDev, 1.f);
 	CTransform* pTransform = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
 	pTransform->Set_Pos(pPos);
+	pShpere->Set_ID();
 
 	return pShpere;
 
@@ -437,24 +439,233 @@ void CTabTerrain::OnDeltaposZ(NMHDR *pNMHDR, LRESULT *pResult)
 void CTabTerrain::OnBnClickedSaveCell()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CFileDialog Dlg(FALSE, // 다른이름으로 저장. 만약 TRUE 파일 열기. 
+		L"dat",// 디폴트 확장자 
+		L"MFCCell.dat",// 디폴트 파일 이름 
+		OFN_OVERWRITEPROMPT);// 덮어쓸때 경고 메시지 띄어주겠다. 
+	TCHAR szCurDir[MAX_PATH]{};
+	GetCurrentDirectory(MAX_PATH, szCurDir); //현재 디렉토리 반환. ..../3D_시연회//MFC//Include
+	PathRemoveFileSpec(szCurDir); //끝에 경로 제거. //Include 제거
+	PathRemoveFileSpec(szCurDir); //끝에 경로 제거. //MFC 제거
+	lstrcat(szCurDir, L"\\ReSource");
+	lstrcat(szCurDir, L"\\Data");
+	lstrcat(szCurDir, L"\\NaviMesh"); //
+	Dlg.m_ofn.lpstrInitialDir = szCurDir;
+	if (IDOK == Dlg.DoModal()) //저장 시 시작 경로
+	{
+		CString wstrFilePath = Dlg.GetPathName();
+		HANDLE hFile = CreateFile(wstrFilePath.GetString(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (INVALID_HANDLE_VALUE == hFile)
+			return;
+		DWORD dwByte = 0;
+		DWORD dwStringCount = 0;
+		//순회하면서 키와 리스트 아이템들 저장
+		list<CGameObject*> pTerrainlst = Engine::Get_List(L"GameLogic", L"Terrain");
+		CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
+		vector<MFCCELL> vecMFCCell = pTerrain->m_vecCell;
+		//저장요소. pCell(index,포인트 3개 좌표), PointABC 번호
+		for (MFCCELL MCell : vecMFCCell)
+		{
+			_ulong dwIndex = MCell.pCell->Get_Index();
+			const _vec3* SavePointAPos = MCell.pCell->Get_Point(CCell::POINT_A);
+			const _vec3* SavePointBPos = MCell.pCell->Get_Point(CCell::POINT_B);
+			const _vec3* SavePointCPos = MCell.pCell->Get_Point(CCell::POINT_C);
+			WriteFile(hFile, &dwIndex, sizeof(_ulong), &dwByte, nullptr);
+			WriteFile(hFile, SavePointAPos, sizeof(_vec3), &dwByte, nullptr);
+			WriteFile(hFile, SavePointBPos, sizeof(_vec3), &dwByte, nullptr);
+			WriteFile(hFile, SavePointCPos, sizeof(_vec3), &dwByte, nullptr);
+			WriteFile(hFile, &MCell.PointA, sizeof(_int), &dwByte, nullptr);
+			WriteFile(hFile, &MCell.PointB, sizeof(_int), &dwByte, nullptr);
+			WriteFile(hFile, &MCell.PointC, sizeof(_int), &dwByte, nullptr);
+		}
+		CloseHandle(hFile);
+	}
+
 }
 
 
 void CTabTerrain::OnBnClickedLoadCell()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CFileDialog Dlg(TRUE, // 다른이름으로 저장. 만약 TRUE 파일 열기. 
+		L"dat",// 디폴트 확장자 
+		L"MFCCell.dat",// 디폴트 파일 이름 
+		OFN_OVERWRITEPROMPT);// 덮어쓸때 경고 메시지 띄어주겠다. 
+	TCHAR szCurDir[MAX_PATH]{};
+	GetCurrentDirectory(MAX_PATH, szCurDir);
+	PathRemoveFileSpec(szCurDir); //끝에 경로 제거. //Include 제거
+	PathRemoveFileSpec(szCurDir); //끝에 경로 제거. //MFC 제거
+	lstrcat(szCurDir, L"\\ReSource");
+	lstrcat(szCurDir, L"\\Data");
+	lstrcat(szCurDir, L"\\NaviMesh");
+	Dlg.m_ofn.lpstrInitialDir = szCurDir;
+	if (IDOK == Dlg.DoModal())
+	{
+		CString wstrFilePath = Dlg.GetPathName();
+		HANDLE hFile = CreateFile(wstrFilePath.GetString(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (INVALID_HANDLE_VALUE == hFile)
+			return;
+		//리스트 초기화 진행 
+		
+		DWORD dwByte = 0;
+		DWORD dwStringCount = 0;
+		TCHAR* szBuf = nullptr;
+		CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+		CMFCView* pView = dynamic_cast<CMFCView*>(pMain->m_MainSplitter.GetPane(0, 1));
+		list<CGameObject*> pTerrainlst = Engine::Get_List(L"GameLogic", L"Terrain");
+		CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
+		for (int i = 0; i < pTerrain->m_vecCell.size(); i++)
+		{
+			pTerrain->m_vecCell[i].pCell->Set_Dead(true); // Set_Dead하면서 컴퍼넌트에 저장된 것들도 지워주는 예약.
+		}
+		pTerrain->m_vecCell.clear();// 셀 벡터 초기화;
+		CNaviMesh* pNavi = (CNaviMesh*)pTerrain->Get_Component(L"Com_Navi", ID_STATIC);
+		pNavi->Delete_Cell();// 컴퍼넌트에 저장된 셀 정보 초기화;
+
+		_ulong dwIndex = 0;
+
+
+		//로드 순서 1.pCell 정보 불러들여온다. 2.cell 생성 후 MFC Cell에 생성 터레인 셀 벡터에 추가, 3. 컴퍼넌트에 cell만 추가 
+		while (true)
+		{
+			_vec3 SavePointAPos = {};
+			_vec3 SavePointBPos = {};
+			_vec3 SavePointCPos = {};
+			_int  PointA = 0;
+			_int  PointB = 0;
+			_int  PointC = 0;
+			ReadFile(hFile, &dwIndex, sizeof(_ulong), &dwByte, nullptr);
+			if (0 == dwByte)
+				break;//읽어올 게 없으면 종료
+			ReadFile(hFile, &SavePointAPos, sizeof(_vec3), &dwByte, nullptr);
+			ReadFile(hFile, &SavePointBPos, sizeof(_vec3), &dwByte, nullptr);
+			ReadFile(hFile, &SavePointCPos, sizeof(_vec3), &dwByte, nullptr);
+			ReadFile(hFile, &PointA, sizeof(_int), &dwByte, nullptr);
+			ReadFile(hFile, &PointB, sizeof(_int), &dwByte, nullptr);
+			ReadFile(hFile, &PointC, sizeof(_int), &dwByte, nullptr);
+	
+
+			MFCCELL tempMFCCell = {};
+			tempMFCCell.pCell = CCell::Create(pView->m_pGraphicDev, dwIndex++, &SavePointAPos, &SavePointBPos, &SavePointCPos);
+			tempMFCCell.PointA = PointA;
+			tempMFCCell.PointB = PointB;
+			tempMFCCell.PointC = PointC;
+			pTerrain->m_vecCell.push_back(tempMFCCell);
+		}
+		m_dwIndex = dwIndex + 1;
+		pTerrain->SetUp_NaviMesh();// 벡터에 셀 다 추가 되었으면 ㅇㅈㅂㅈㄴㅇㅌ추가
+		CloseHandle(hFile);
+	}
+
 }
 
 
 void CTabTerrain::OnBnClickedSaveSphere()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CFileDialog Dlg(FALSE, // 다른이름으로 저장. 만약 TRUE 파일 열기. 
+		L"dat",// 디폴트 확장자 
+		L"MFCSphere.dat",// 디폴트 파일 이름 
+		OFN_OVERWRITEPROMPT);// 덮어쓸때 경고 메시지 띄어주겠다. 
+	TCHAR szCurDir[MAX_PATH]{};
+	GetCurrentDirectory(MAX_PATH, szCurDir); //현재 디렉토리 반환. ..../3D_시연회//MFC//Include
+	PathRemoveFileSpec(szCurDir); //끝에 경로 제거. //Include 제거
+	PathRemoveFileSpec(szCurDir); //끝에 경로 제거. //MFC 제거
+	lstrcat(szCurDir, L"\\ReSource");
+	lstrcat(szCurDir, L"\\Data");
+	lstrcat(szCurDir, L"\\NaviMesh"); //
+	Dlg.m_ofn.lpstrInitialDir = szCurDir;
+	if (IDOK == Dlg.DoModal()) //저장 시 시작 경로
+	{
+		CString wstrFilePath = Dlg.GetPathName();
+		HANDLE hFile = CreateFile(wstrFilePath.GetString(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (INVALID_HANDLE_VALUE == hFile)
+			return;
+		DWORD dwByte = 0;
+		DWORD dwStringCount = 0;
+		//순회하면서 키와 리스트 아이템들 저장
+		list<CGameObject*> pTerrainlst = Engine::Get_List(L"GameLogic", L"Terrain");
+		CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
+		vector<CSphere*> vecSphere = pTerrain->m_vecShpere;
+		//저장요소. //1. id. 2. 트랜스폼. 3. 라디우스
+		for (CSphere* pSphere : vecSphere)
+		{
+			CTransform*	pTrans = (CTransform*)pSphere->Get_Component(L"Com_Transform", ID_DYNAMIC);
+
+			_int dwId = pSphere->m_iID;
+			_float fRadius = pSphere->Get_Radius();
+			_vec3	tempPos = {};
+			pTrans->Get_Info(INFO_POS, &tempPos);
+			WriteFile(hFile, &dwId, sizeof(_int), &dwByte, nullptr);
+			WriteFile(hFile, &fRadius, sizeof(_float), &dwByte, nullptr);
+			WriteFile(hFile, &tempPos, sizeof(_vec3), &dwByte, nullptr);
+		}
+		CloseHandle(hFile);
+	}
 }
 
 
 void CTabTerrain::OnBnClickedLoadSphrer()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CFileDialog Dlg(TRUE, // 다른이름으로 저장. 만약 TRUE 파일 열기. 
+		L"dat",// 디폴트 확장자 
+		L"MFCSphere.dat",// 디폴트 파일 이름 
+		OFN_OVERWRITEPROMPT);// 덮어쓸때 경고 메시지 띄어주겠다. 
+	TCHAR szCurDir[MAX_PATH]{};
+	GetCurrentDirectory(MAX_PATH, szCurDir);
+	PathRemoveFileSpec(szCurDir); //끝에 경로 제거. //Include 제거
+	PathRemoveFileSpec(szCurDir); //끝에 경로 제거. //MFC 제거
+	lstrcat(szCurDir, L"\\ReSource");
+	lstrcat(szCurDir, L"\\Data");
+	lstrcat(szCurDir, L"\\NaviMesh");
+	Dlg.m_ofn.lpstrInitialDir = szCurDir;
+	if (IDOK == Dlg.DoModal())
+	{
+		CString wstrFilePath = Dlg.GetPathName();
+		HANDLE hFile = CreateFile(wstrFilePath.GetString(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (INVALID_HANDLE_VALUE == hFile)
+			return;
+		//리스트 초기화 진행 
+
+		DWORD dwByte = 0;
+		DWORD dwStringCount = 0;
+		TCHAR* szBuf = nullptr;
+		CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+		CMFCView* pView = dynamic_cast<CMFCView*>(pMain->m_MainSplitter.GetPane(0, 1));
+		list<CGameObject*> pTerrainlst = Engine::Get_List(L"GameLogic", L"Terrain");
+		CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
+		for (int i = 0; i < pTerrain->m_vecShpere.size(); i++)
+		{
+			pTerrain->m_vecShpere[i]->Set_Dead(true); // Set_Dead하면서 컴퍼넌트에 저장된 것들도 지워주는 예약.
+		}
+		pTerrain->m_vecShpere.clear();// 셀 벡터 초기화;
+
+		_int iId = -1;
+
+
+		//로드 순서 1.아이디 2. 반지름 3. 좌표
+		while (true)
+		{
+			
+			_float fRadius = 0.f;
+			_vec3  tempPos = {};
+			CSphere* pSphere;
+			ReadFile(hFile, &iId, sizeof(_int), &dwByte, nullptr);
+			if (0 == dwByte)
+				break;//읽어올 게 없으면 종료
+			ReadFile(hFile, &fRadius, sizeof(_float), &dwByte, nullptr);
+			ReadFile(hFile, &tempPos, sizeof(_vec3), &dwByte, nullptr);
+
+			m_pShpere = pSphere = CSphere::Create(pView->m_pGraphicDev, fRadius);
+			CTransform* pTransform = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
+			pTransform->Set_Pos(&tempPos);
+			pSphere->m_iID = iId;
+			pTerrain->m_vecShpere.push_back(pSphere);
+		}
+		CSphere::m_iShpereCount = iId;
+		CloseHandle(hFile);
+	}
 }
 
 
