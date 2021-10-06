@@ -1,8 +1,10 @@
 
 #include "stdafx.h"
 #include "Player.h"
-
+#include "Sphrer.h"
 #include "Export_Function.h"
+
+#include "Terrain.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev)
@@ -24,6 +26,7 @@ CPlayer::~CPlayer(void)
 HRESULT CPlayer::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
+	FAILED_CHECK_RETURN(Add_Object(), E_FAIL);
 	FAILED_CHECK_RETURN(CGameObject::Ready_Object(), E_FAIL);
 
 	m_pTransformCom->Set_Scale(0.01f, 0.01f, 0.01f);
@@ -31,21 +34,29 @@ HRESULT CPlayer::Ready_Object(void)
 	
 	//m_pNaviCom->Set_CellIndex(1);
 	m_pMeshCom->Set_AnimationIndex(0);
-
+	
 	return S_OK;
 }
 
 Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 {
+	if(m_bDead)
+		return 0;
+	
+
 	CGameObject::Update_Object(fTimeDelta);
 
-	SetUp_OnTerrain();
+	//SetUp_OnTerrain();
 
 	Key_Input(fTimeDelta);
 
-	m_pMeshCom->Play_Animation(fTimeDelta);
+	//m_pMeshCom->Play_Animation(fTimeDelta);
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
+	
+	_vec3	vPos;
+	m_pTransformCom->Get_Info(INFO_POS, &vPos);
+	m_pShprerTransCom->Set_Pos(vPos.x, vPos.y+ m_pShprer->Get_Height(), vPos.z);
 
 	return 0;
 }
@@ -54,29 +65,27 @@ void CPlayer::Render_Object(void)
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
 
-	//m_pNaviCom->Render_NaviMesh();
 
-	m_pMeshCom->Render_Meshes();
+
+	m_pMeshCom->Render_Meshes();;
 }
 
 HRESULT CPlayer::Add_Component(void)
 {
 	CComponent*			pComponent = nullptr;
 
-	// DynamicMesh
-	pComponent = m_pMeshCom = dynamic_cast<CDynamicMesh*>(Clone_Proto(L"Proto_Mesh_Hunter"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].emplace(L"Com_Mesh", pComponent);
 
-	// NaviMesh
-	pComponent = m_pNaviCom = dynamic_cast<CNaviMesh*>(Clone_Proto(L"Proto_Mesh_Navi"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].emplace(L"Com_Navi", pComponent);
+
 
 	// Transform
 	pComponent = m_pTransformCom = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_Transform"));
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Transform", pComponent);
+
+	// Calculator
+	pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
 	// renderer
 	pComponent = m_pRendererCom = Get_Renderer();
@@ -84,13 +93,24 @@ HRESULT CPlayer::Add_Component(void)
 	pComponent->AddRef();
 	m_mapComponent[ID_STATIC].emplace(L"Com_Renderer", pComponent);
 
-	// Calculator
-	pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
+
+	//NaviMap
+	CTerrain* pTerrain = (CTerrain*)Engine::Get_List(L"GameLogic", L"Terrain").front();
+	m_pNaviCom = (CNaviMesh*)pTerrain->Get_Component(L"Com_Navi", ID_STATIC);
+
+
 
 	return S_OK;
 
+}
+
+HRESULT CPlayer::Add_Object(void)
+{
+
+	m_pShprer = CSphere::Create(m_pGraphicDev, 1.f);
+	m_pShprer->Set_Height(1.f);
+	m_pShprerTransCom = (CTransform*)m_pShprer->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	return S_OK;
 }
 
 void CPlayer::Key_Input(const _float& fTimeDelta)
@@ -126,13 +146,8 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(180) * fTimeDelta);
 	}	
 
-	if (Get_DIMouseState(DIM_LB) & 0X80)
-	{
-		_vec3	vPos = PickUp_OnTerrain();
 
-		m_pTransformCom->Move_PickingPos(&vPos, 10.f, fTimeDelta);
-	}
-
+		
 	//if (Get_DIMouseState(DIM_RB) & 0X80)
 	//{
 	//	m_pMeshCom->Set_AnimationIndex(30);
@@ -142,39 +157,24 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 	//	m_pMeshCom->Set_AnimationIndex(57);
 }
 
-void CPlayer::SetUp_OnTerrain(void)
+
+HRESULT CPlayer::Select_ProtoMesh(const _tchar * pObjProtoName)
 {
-	//_vec3	vPos;
-	//m_pTransformCom->Get_Info(INFO_POS, &vPos);
+	CComponent*			pComponent = nullptr;
+	// DynamicMesh
+	pComponent = m_pMeshCom = dynamic_cast<CDynamicMesh*>(Clone_Proto(pObjProtoName));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_STATIC].emplace(L"Com_Mesh", pComponent);
 
-	//CTerrainTex*		pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Buffer", ID_STATIC));
-	//NULL_CHECK(pTerrainBufferCom);
-
-	//const _vec3*	ptPos = pTerrainBufferCom->Get_VtxPos();
-
-
-	//_float		fHeight = m_pCalculatorCom->Compute_HeightOnTerrain(&vPos, pTerrainBufferCom->Get_VtxPos(), VTXCNTX, VTXCNTZ);
-
-	//m_pTransformCom->Set_Pos(vPos.x, fHeight, vPos.z);
+	return S_OK;
 }
 
-Engine::_vec3 CPlayer::PickUp_OnTerrain(void)
-{
-	//CTerrainTex*		pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Buffer", ID_STATIC));
-	//NULL_CHECK_RETURN(pTerrainBufferCom, _vec3());
-
-	//CTransform*		pTerrainTransCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Transform", ID_DYNAMIC));
-	//NULL_CHECK_RETURN(pTerrainTransCom, _vec3());
-
-
-	//return m_pCalculatorCom->Picking_OnTerrain(g_hWnd, pTerrainBufferCom, pTerrainTransCom);
-	return _vec3();
-}
-
-CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pObjProtoName)
 {
 	CPlayer*	pInstance = new CPlayer(pGraphicDev);
-
+	pInstance->Set_NameTag(pObjProtoName);
+	if (FAILED(pInstance->Select_ProtoMesh(pObjProtoName)))
+		Safe_Release(pInstance);
 	if (FAILED(pInstance->Ready_Object()))
 		Safe_Release(pInstance);
 
@@ -184,5 +184,6 @@ CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 void CPlayer::Free(void)
 {
 	CGameObject::Free();
+	m_pShprer->Set_Dead(true);
 }
 

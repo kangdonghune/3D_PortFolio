@@ -33,21 +33,26 @@ HRESULT CDynamicCamera::Ready_Object(const _vec3* pEye, const _vec3* pAt, const 
 
 Engine::_int CDynamicCamera::Update_Object(const _float& fTimeDelta)
 {
-	Key_Input(fTimeDelta, 10.f);
+	Key_Input(fTimeDelta, 20.f);
 
 	if (true == m_bFix)
 	{
-		Mouse_Fix();
-		Mouse_Move(fTimeDelta);
+		//Mouse_Fix();
+		//Mouse_Move(fTimeDelta);
 	}	
 
+	Fallow_Target();
+
 	_int	iExit = CCamera::Update_Object(fTimeDelta);
+
 
 	return iExit;
 }
 
 void CDynamicCamera::Key_Input(const _float& fTimeDelta, const _float& fSpeed)
 {
+	if (m_pTarget != nullptr)
+		return;
 	_matrix		matCamWorld;
 	D3DXMatrixInverse(&matCamWorld, NULL, &m_matView);
 
@@ -96,7 +101,7 @@ void CDynamicCamera::Key_Input(const _float& fTimeDelta, const _float& fSpeed)
 		m_vAt -= vLength;
 	}
 
-	if (Get_DIKeyState(DIK_TAB) & 0x80)
+	if (Get_DIKeyState(DIK_X) & 0x80)
 	{
 		if (true == m_bClick)
 			return;
@@ -121,47 +126,81 @@ void CDynamicCamera::Key_Input(const _float& fTimeDelta, const _float& fSpeed)
 
 void CDynamicCamera::Mouse_Move(const _float& fTimeDelta)
 {
-	_matrix		matCamWorld;
-	D3DXMatrixInverse(&matCamWorld, NULL, &m_matView);
-
-	_long	dwMouseMove = 0;
-
-	if (dwMouseMove = Get_DIMouseMove(DIMS_Y))
+	if (m_pTarget == nullptr)
 	{
-		_vec3		vRight;
-		memcpy(&vRight, &matCamWorld.m[0][0], sizeof(_vec3));
+		_matrix		matCamWorld;
+		D3DXMatrixInverse(&matCamWorld, NULL, &m_matView);
 
-		_vec3		vLook = m_vAt - m_vEye;
+		_long	dwMouseMove = 0;
 
-		_matrix		matRot;
-		D3DXMatrixRotationAxis(&matRot, &vRight, D3DXToRadian(dwMouseMove / 10.f));
-		D3DXVec3TransformNormal(&vLook, &vLook, &matRot);
+		if (dwMouseMove = Get_DIMouseMove(DIMS_Y))
+		{
+			_vec3		vRight;
+			memcpy(&vRight, &matCamWorld.m[0][0], sizeof(_vec3));
 
-		m_vAt = m_vEye + vLook;
+			_vec3		vLook = m_vAt - m_vEye;
+
+			_matrix		matRot;
+			D3DXMatrixRotationAxis(&matRot, &vRight, D3DXToRadian(dwMouseMove / 10.f));
+			D3DXVec3TransformNormal(&vLook, &vLook, &matRot);
+
+			m_vAt = m_vEye + vLook;
+		}
+
+		if (dwMouseMove = Get_DIMouseMove(DIMS_X))
+		{
+			_vec3		vUp = _vec3(0.f, 1.f, 0.f);
+
+			_vec3		vLook = m_vAt - m_vEye;
+
+			_matrix		matRot;
+			D3DXMatrixRotationAxis(&matRot, &vUp, D3DXToRadian(dwMouseMove / 10.f));
+			D3DXVec3TransformNormal(&vLook, &vLook, &matRot);
+
+			m_vAt = m_vEye + vLook;
+		}
 	}
 
-	if (dwMouseMove = Get_DIMouseMove(DIMS_X))
+	else
 	{
-		_vec3		vUp = _vec3(0.f, 1.f, 0.f);
-	
-		_vec3		vLook = m_vAt - m_vEye;
 
-		_matrix		matRot;
-		D3DXMatrixRotationAxis(&matRot, &vUp, D3DXToRadian(dwMouseMove / 10.f));
-		D3DXVec3TransformNormal(&vLook, &vLook, &matRot);
-
-		m_vAt = m_vEye + vLook;
 	}
+
 
 }
 
 void CDynamicCamera::Mouse_Fix(void)
 {
-	POINT		ptMouse{ WINCX >> 1, WINCY >> 1 };
-
+	POINT		ptMouse{ (WINCX >> 1), WINCY >> 1 };
 	ClientToScreen(g_hWnd, &ptMouse);
 	SetCursorPos(ptMouse.x, ptMouse.y);
 
+
+}
+
+void CDynamicCamera::Fallow_Target()
+{
+	
+	if (m_pTarget == nullptr)
+		return;
+
+	_vec3 vTargetLookPos = {};
+	_vec3 vTargetLookDir = {};
+	m_pTargetTransCom->Get_Info(INFO_LOOK, &vTargetLookDir);
+	_vec3 TargetCameraPos = {};
+	m_pTargetTransCom->Get_Info(INFO_POS, &TargetCameraPos);
+
+	m_vEye = TargetCameraPos;
+	m_vEye.z = m_vEye.z;
+	m_vEye.y = m_vEye.y + 1.f;
+
+
+	vTargetLookPos = TargetCameraPos;
+	vTargetLookPos.x = vTargetLookPos.x + vTargetLookDir.x*100.f;
+	vTargetLookPos.y += 1.f;
+	vTargetLookPos.z = vTargetLookPos.z + vTargetLookDir.z*100.f;
+	//D3DXVec3TransformNormal(&vTargetLook, &vTargetLook, &m_matView);
+	m_vAt = vTargetLookPos;
 
 }
 

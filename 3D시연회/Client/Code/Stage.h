@@ -4,18 +4,16 @@
 #include "Scene.h"
 #include "Define.h"
 #include "BackGround.h"
-#include "Player.h"
-#include "Monster.h"
+//#include "Player.h"
 
-#include "Terrain.h"
-#include "DynamicCamera.h"
-#include "SkyBox.h"
-
-#include "Stone.h"
-#include "Sword.h"
-#include "Tree.h"
-#include "Effect.h"
-#include "UI.h"
+//#include "Terrain.h"
+//#include "DynamicCamera.h"
+//#include "SkyBox.h"
+//#include "Stone.h"
+//#include "Sword.h"
+//#include "Tree.h"
+//#include "Effect.h"
+//#include "UI.h"
 
 class CStage : public CScene
 {
@@ -33,14 +31,35 @@ private:
 	HRESULT			Ready_GameLogic_Layer(const _tchar* pLayerTag);
 	HRESULT			Ready_UI_Layer(const _tchar* pLayerTag);
 	HRESULT			Ready_LightInfo(void);
+	HRESULT			Ready_Resource(LPDIRECT3DDEVICE9 pGraphicDev);
+
+
+	HRESULT			Load_Player(const _tchar * pFilePath);
+	HRESULT			Load_Monster(const _tchar * pFilePath);
+	HRESULT			Load_Building(const _tchar * pFilePath);
+	HRESULT			Load_Stuff(const _tchar * pFilePath);
+	HRESULT			Load_NaviMesh(const _tchar *pFilePath);
+
+	HRESULT			Connect_CameraToPlayer();
+	HRESULT			DisConnect_CameraToPlayer();
+
+
+	CGameObject*			Create_Unit(const _tchar* pLayerTag, const _tchar* pParentName, const _tchar* pObjProtoName);
+	CGameObject*			Create_Object(const _tchar* pLayerTag, const _tchar* pParentName, const _tchar* pObjProtoName);
+
+
+public:
+	HRESULT			Load_Data();
 
 private:
 	_ulong			m_dwRenderCnt = 0;
 	_tchar			m_szFPS[256];
 	_float			m_fTime = 0.f;
 
+
 public:
 	static CStage*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
+
 
 private:
 	virtual void Free(void);

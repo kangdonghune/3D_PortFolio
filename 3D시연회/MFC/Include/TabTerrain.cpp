@@ -133,7 +133,7 @@ void CTabTerrain::Clear_Points()
 
 void CTabTerrain::Create_MFCCell()
 {
-	//조건 1. 포인트b의 x가 포인트 a의 x좌표보다 클 것
+	//조건 1. A와 B를 그어줬을 때 C는 B보다 왼쪽에 있어야 한다.
 	//조건 2. 포인트c의 z가 포인트 a의 z좌표보다 작을 것
 	//조건 3. 두 점 이상 같은 점이 아닐 것
 	CTransform* pTransA = (CTransform*)m_pPointA->Get_Component(L"Com_Transform", ID_DYNAMIC);
@@ -146,10 +146,10 @@ void CTabTerrain::Create_MFCCell()
 	_vec3* PosC = nullptr;
 	PosC = (_vec3*)pTransC->Get_InfoRef(INFO_POS);
 
-	if (PosA->x >= PosB->x) //조건 1B
-		return;
-	if (PosA->z <= PosC->z) //조건 2
-		return;
+	//if (PosA->x >= PosB->x) //조건 1
+	//	return;
+	//if (PosA->z <= PosC->z) //조건 2
+	//	return;
 
 	if (m_pPointA->m_iID == m_pPointB->m_iID || m_pPointB->m_iID == m_pPointC->m_iID || m_pPointC->m_iID == m_pPointA->m_iID)
 		return;
@@ -546,7 +546,7 @@ void CTabTerrain::OnBnClickedLoadCell()
 	
 
 			MFCCELL tempMFCCell = {};
-			tempMFCCell.pCell = CCell::Create(pView->m_pGraphicDev, dwIndex++, &SavePointAPos, &SavePointBPos, &SavePointCPos);
+			tempMFCCell.pCell = CCell::Create(pView->m_pGraphicDev, dwIndex, &SavePointAPos, &SavePointBPos, &SavePointCPos);
 			tempMFCCell.PointA = PointA;
 			tempMFCCell.PointB = PointB;
 			tempMFCCell.PointC = PointC;

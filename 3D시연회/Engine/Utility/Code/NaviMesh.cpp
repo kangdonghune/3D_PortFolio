@@ -165,9 +165,21 @@ Engine::_vec3 Engine::CNaviMesh::Move_OnNaviMesh(const _vec3* pTargetPos,
 {
 
 	_vec3	vEndPos = *pTargetPos + *pTargetDir;
-
+	
 	if (CCell::COMPARE_MOVE == m_vecCell[m_dwIndex]->Compare(&vEndPos, &m_dwIndex))
+	{
+		D3DXPLANE		Plane;
+
+		D3DXPlaneFromPoints(&Plane, m_vecCell[m_dwIndex]->Get_Point(CCell::POINT_A),
+									m_vecCell[m_dwIndex]->Get_Point(CCell::POINT_B),
+									m_vecCell[m_dwIndex]->Get_Point(CCell::POINT_C));
+		// ax + by + cz + d = 0->y = ?
+		// by = -ax - cz - d
+		// y =(-ax - cz - d) / b
+
+		vEndPos.y = ((-Plane.a * vEndPos.x - Plane.c * vEndPos.z - Plane.d) / Plane.b);
 		return vEndPos;
+	}
 
 	else if (CCell::COMPARE_STOP == m_vecCell[m_dwIndex]->Compare(&vEndPos, &m_dwIndex))
 		return *pTargetPos;

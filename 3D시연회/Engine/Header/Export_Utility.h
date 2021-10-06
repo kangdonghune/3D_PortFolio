@@ -33,9 +33,9 @@ BEGIN(Engine)
 // management
 inline HRESULT			Create_Management(LPDIRECT3DDEVICE9& pGraphicDev, CManagement** ppManagement);
 inline HRESULT			Set_Scene(CScene* pScene);
+inline CScene* const 	Get_Scene();
 inline _int				Update_Scene(const _float& fTimeDelta);
 inline void				Render_Scene(LPDIRECT3DDEVICE9& pGraphicDev);
-
 
 inline 	list<CGameObject*>		Get_List(const _tchar* pLayerTag, const _tchar* pObjTag);
 inline	void					Clear_List(const _tchar* pLayerTag, const _tchar* pObjTag);

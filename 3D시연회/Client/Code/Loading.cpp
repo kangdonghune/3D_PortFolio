@@ -31,37 +31,34 @@ HRESULT CLoading::Ready_Loading(LOADINGID eID)
 Engine::_uint CLoading::LoadingForStage(void)
 {
 	lstrcpy(m_szLoading, L"Texture Loading.................");
-	// 버퍼
+
+	//버퍼
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Buffer_TerrainTex", CTerrainTex::Create(m_pGraphicDev, VTXCNTX, VTXCNTZ, VTXITV)), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Buffer_CubeTex", CCubeTex::Create(m_pGraphicDev)), E_FAIL);
-	
-	// 텍스쳐
-	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_Terrain", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Terrain/Grass_%d.tga", TYPE_NORMAL, 2)), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_Terrain2", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Terrain/Terrain0.png", TYPE_NORMAL, 1)), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_SkyBox", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SkyBox/burger%d.dds", TYPE_CUBE, 5)), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_Effect", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Explosion/Explosion%d.png", TYPE_NORMAL, 90)), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_UI", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/hpbar.png", TYPE_NORMAL, 1)), E_FAIL);
 
+	// 텍스쳐
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_Terrain", CTexture::Create(m_pGraphicDev, L"../../Resource/Texture/Terrain/Terrain.dds", TYPE_NORMAL, 2)), E_FAIL);
+	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_Effect", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Explosion/Explosion%d.png", TYPE_NORMAL, 90)), E_FAIL);
+	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_UI", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/hpbar.png", TYPE_NORMAL, 1)), E_FAIL);
 
 	// 메쉬
-	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Tree", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource/Mesh/StaticMesh/Tree/", L"Tree01.X")), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Stone",CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource/Mesh/StaticMesh/TombStone/", L"TombStone.X")), E_FAIL);
-
-
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Navi", CNaviMesh::Create(m_pGraphicDev)), E_FAIL);
+	//플레이어
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Hunter", CDynamicMesh::Create(m_pGraphicDev, L"../../Resource/Dynamicmesh/Player/Hunter/", L"Hunter.X")), E_FAIL);
 
-	//
-#pragma region PLAYER
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Sword", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource/Mesh/StaticMesh/Sword/", L"Sword.X")), E_FAIL);
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Player", CDynamicMesh::Create(m_pGraphicDev, L"../Bin/Resource/Mesh/DynamicMesh/PlayerXfile/", L"Player.X")), E_FAIL);
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Player", CDynamicMesh::Create(m_pGraphicDev, L"../Bin/Resource/", L"test.X")), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Hunter", CDynamicMesh::Create(m_pGraphicDev, L"../Bin/Resource/Hunter/", L"Hunter.X")), E_FAIL);
+	//몬스터
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Goblin", CDynamicMesh::Create(m_pGraphicDev, L"../../Resource/Dynamicmesh/Monster/Goblin/", L"Goblin.X")), E_FAIL);
 
-#pragma endregion PLAYER
-		
+	//오브젝트
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Train", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Train/", L"Train.X")), E_FAIL);
+
 	// 기타 등등
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Calculator", CCalculator::Create(m_pGraphicDev)), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Optimization", COptimization::Create(m_pGraphicDev, true, VTXCNTX, VTXCNTZ)), E_FAIL);
+
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_SkyBox", CTexture::Create(m_pGraphicDev, L"../../Resource/Texture/SkyBox/burger0.dds", TYPE_CUBE, 1)), E_FAIL);
+
+
 
 	m_bFinish = true;
 

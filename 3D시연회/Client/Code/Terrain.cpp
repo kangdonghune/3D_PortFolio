@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "Terrain.h"
 
+#include "Sphrer.h"
+
+
 #include "Export_Function.h"
 
 CTerrain::CTerrain(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -23,6 +26,7 @@ CTerrain::~CTerrain(void)
 HRESULT CTerrain::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
+//	FAILED_CHECK_RETURN(SetUp_NaviMesh(), E_FAIL);
 	FAILED_CHECK_RETURN(CGameObject::Ready_Object(), E_FAIL);
 
 	//m_pIndex = new INDEX32[m_pBufferCom->Get_TriCnt()];
@@ -41,6 +45,7 @@ Engine::_int CTerrain::Update_Object(const _float& fTimeDelta)
 												&m_dwTriCnt);*/
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
+
 
 	return 0;
 }
@@ -68,6 +73,10 @@ void CTerrain::Render_Object(void)
 	pEffect->End();
 
 	Safe_Release(pEffect);
+
+	m_pNaviCom->Render_NaviMesh();
+	//m_pNaviCom->Delete_Cell();
+
 
 }
 
@@ -105,7 +114,18 @@ HRESULT CTerrain::Add_Component(void)
 	pComponent = m_pShaderCom = dynamic_cast<CShader*>(Clone_Proto(L"Proto_Shader_Terrain"));
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_Shader", pComponent);
-	
+
+
+	// NaviMesh
+	pComponent = m_pNaviCom = dynamic_cast<CNaviMesh*>(Clone_Proto(L"Proto_Mesh_Navi"));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_STATIC].emplace(L"Com_Navi", pComponent);
+
+	// Calculator
+	pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
+
 	return S_OK;
 }
 
@@ -162,6 +182,17 @@ HRESULT CTerrain::SetUp_ConstantTable(LPD3DXEFFECT& pEffect)
 	return S_OK;
 }
 
+HRESULT CTerrain::SetUp_NaviMesh()
+{
+	for (CCell* Cell : m_vecCell)
+	{
+		m_pNaviCom->Add_Cell(Cell);
+	}
+
+	return S_OK;
+}
+
+
 CTerrain* CTerrain::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	CTerrain*	pInstance = new CTerrain(pGraphicDev);
@@ -177,7 +208,9 @@ void CTerrain::Free(void)
 
 	//Safe_Delete_Array(m_pIndex);
 
-
 	CGameObject::Free();
+
+	m_vecCell.clear();
+	m_vecShpere.clear();
 }
 

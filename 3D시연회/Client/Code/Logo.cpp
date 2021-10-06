@@ -44,7 +44,7 @@ Engine::_int CLogo::Update_Scene(const _float& fTimeDelta)
 			NULL_CHECK_RETURN(pScene, E_FAIL);
 
 			FAILED_CHECK_RETURN(Set_Scene(pScene), E_FAIL);
-
+			FAILED_CHECK_RETURN(dynamic_cast<CStage*>(pScene)->Load_Data(), E_FAIL);
 			return iExit;
 		}
 	}

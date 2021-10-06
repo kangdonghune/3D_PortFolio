@@ -1,12 +1,18 @@
-#ifndef Monster_h__
-#define Monster_h__
+#pragma once
 
 #include "GameObject.h"
+#include "Define.h"
 
+class CSphere;
 BEGIN(Engine)
 
-class CTriCol;
+class CDynamicMesh;
 class CTransform;
+class CRenderer;
+class CCalculator;
+class CCollider;
+class CNaviMesh;
+class CSphrerMeshs;
 
 END
 class CMonster : public CGameObject
@@ -22,19 +28,26 @@ public:
 	virtual void Render_Object(void) override;
 
 private:
+	void					Key_Input(const _float& fTimeDelta);
 	HRESULT					Add_Component(void);
+	HRESULT					Add_Object(void);
+	HRESULT					Select_ProtoMesh(const _tchar* pObjProtoName);
 
 private:
-	CTriCol*				m_pBufferCom = nullptr;
+	CDynamicMesh*			m_pMeshCom = nullptr;
+	CNaviMesh*				m_pNaviCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
+	CRenderer*				m_pRendererCom = nullptr;
+	CCalculator*			m_pCalculatorCom = nullptr;
 	_vec3					m_vDir;
+	CSphere*				m_pShprer;
+	CTransform*				m_pShprerTransCom = nullptr;
 
 public:
-	static CMonster*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CMonster*		Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pObjProtoName);
 
 private:
 	virtual void		Free(void);
 };
 
 
-#endif // Monster_h__

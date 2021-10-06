@@ -1,28 +1,28 @@
 
 #include "stdafx.h"
-#include "Monster.h"
+#include "Object.h"
 #include "Export_Function.h"
 #include "Sphrer.h"
 
 
-CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphicDev)
+C_Object::C_Object(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev)
 {
 
 }
 
-CMonster::CMonster(const CMonster& rhs)
+C_Object::C_Object(const C_Object& rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-CMonster::~CMonster(void)
+C_Object::~C_Object(void)
 {
 
 }
 
-HRESULT CMonster::Ready_Object(void)
+HRESULT C_Object::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 	FAILED_CHECK_RETURN(Add_Object(), E_FAIL);
@@ -32,14 +32,12 @@ HRESULT CMonster::Ready_Object(void)
 	m_pTransformCom->Set_Pos(0.f, 0.f, 0.f);
 	
 	//m_pNaviCom->Set_CellIndex(1);
-	m_pMeshCom->Set_AnimationIndex(0);
-
 
 
 	return S_OK;
 }
 
-Engine::_int CMonster::Update_Object(const _float& fTimeDelta)
+Engine::_int C_Object::Update_Object(const _float& fTimeDelta)
 {
 	if (m_bDead)
 		return 0;
@@ -48,9 +46,6 @@ Engine::_int CMonster::Update_Object(const _float& fTimeDelta)
 
 	//SetUp_OnTerrain();
 
-	//Key_Input(fTimeDelta);
-
-	m_pMeshCom->Play_Animation(fTimeDelta);
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 	m_pShprer->Update_Object(fTimeDelta);
@@ -62,7 +57,7 @@ Engine::_int CMonster::Update_Object(const _float& fTimeDelta)
 	return 0;
 }
 
-void CMonster::Render_Object(void)
+void C_Object::Render_Object(void)
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
 
@@ -72,12 +67,9 @@ void CMonster::Render_Object(void)
 
 }
 
-void CMonster::Key_Input(const _float& fTimeDelta)
-{
 
-}
 
-HRESULT CMonster::Add_Component(void)
+HRESULT C_Object::Add_Component(void)
 {
 	CComponent*			pComponent = nullptr;
 
@@ -111,31 +103,32 @@ HRESULT CMonster::Add_Component(void)
 
 }
 
-HRESULT CMonster::Add_Object(void)
+HRESULT C_Object::Add_Object(void)
 {
 
-	m_pShprer = CSphere::Create(m_pGraphicDev, 1.f);
-	m_pShprer->Set_Height(1.f);
+	m_pShprer = CSphere::Create(m_pGraphicDev, 2.f);
+	m_pShprer->Set_Height(1.5f);
 	m_pShprerTransCom = (CTransform*)m_pShprer->Get_Component(L"Com_Transform", ID_DYNAMIC);
 	return S_OK;	
 }
 
 
 
-HRESULT CMonster::Select_ProtoMesh(const _tchar * pObjProtoName)
+
+HRESULT C_Object::Select_ProtoMesh(const _tchar * pObjProtoName)
 {
 	CComponent*			pComponent = nullptr;
 	// DynamicMesh
-	pComponent = m_pMeshCom = dynamic_cast<CDynamicMesh*>(Clone_Proto(pObjProtoName));
+	pComponent = m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(pObjProtoName));
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_Mesh", pComponent);
 
 	return S_OK;
 }
 
-CMonster* CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pObjProtoName)
+C_Object* C_Object::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pObjProtoName)
 {
-	CMonster*	pInstance = new CMonster(pGraphicDev);
+	C_Object*	pInstance = new C_Object(pGraphicDev);
 	pInstance->Set_NameTag(pObjProtoName);
 	if (FAILED(pInstance->Select_ProtoMesh(pObjProtoName)))
 		Safe_Release(pInstance);
@@ -145,7 +138,7 @@ CMonster* CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pObjProt
 	return pInstance;
 }
 
-void CMonster::Free(void)
+void C_Object::Free(void)
 {
 	CGameObject::Free();
 	m_pShprer->Set_Dead(true);
