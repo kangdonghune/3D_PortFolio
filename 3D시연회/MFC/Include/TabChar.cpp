@@ -278,7 +278,7 @@ void CTabChar::OnNMDblclkTree1(NMHDR *pNMHDR, LRESULT *pResult)
 	CMFCView* pView = dynamic_cast<CMFCView*>(pMain->m_MainSplitter.GetPane(0, 1));
 	CForm* pForm = dynamic_cast<CForm*>(pMain->m_MainSplitter.GetPane(0, 0));
 	pForm->m_ptabObject->Set_Object(nullptr);
-	m_pObject = pView->CreateCharictor(L"GameLogic", m_TreeTask.GetItemText(hItem_parent), m_TreeTask.GetItemText(hItem_dc));
+	m_pObject = pView->CreateCharictor(GAMELOGIC, m_TreeTask.GetItemText(hItem_parent), m_TreeTask.GetItemText(hItem_dc));
 	Get_Transform();
 	Get_Rotate();
 	Get_Scale();
@@ -648,7 +648,7 @@ void CTabChar::OnBnClickedUnitSave()
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		//순회하면서 키와 리스트 아이템들 저장
-		list<CGameObject*> pPlayerlst = Engine::Get_List(L"GameLogic", L"Player");
+		list<CGameObject*> pPlayerlst = Engine::Get_List(GAMELOGIC, L"Player");
 	
 		//저장요소. 오브젝트 태그명(proto type name), pos, rotate, scale 
 		for (CGameObject* pObj : pPlayerlst)
@@ -697,7 +697,7 @@ void CTabChar::OnBnClickedMonsterSave()
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		//순회하면서 키와 리스트 아이템들 저장
-		list<CGameObject*> pMonsterlst = Engine::Get_List(L"GameLogic", L"Monster");
+		list<CGameObject*> pMonsterlst = Engine::Get_List(GAMELOGIC, L"Monster");
 
 		//저장요소. 오브젝트 태그명(proto type name), pos, rotate, scale 
 		for (CGameObject* pObj : pMonsterlst)
@@ -741,7 +741,7 @@ void CTabChar::OnBnClickedLoad()
 		if (INVALID_HANDLE_VALUE == hFile)
 			return;
 		//리스트 초기화 진행 
-		Clear_List(L"GameLogic", L"Player");
+		Clear_List(GAMELOGIC, L"Player");
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		TCHAR* szBuf = nullptr;
@@ -766,7 +766,7 @@ void CTabChar::OnBnClickedLoad()
 			ReadFile(hFile, &LoadPos, sizeof(_vec3), &dwByte, nullptr);
 			ReadFile(hFile, &LoadRot, sizeof(_vec3), &dwByte, nullptr);
 			ReadFile(hFile, &LoadScale, sizeof(_vec3), &dwByte, nullptr);
-			pObj = pView->CreateCharictor(L"GameLogic", L"Player", wstrNametag.c_str());
+			pObj = pView->CreateCharictor(GAMELOGIC, L"Player", wstrNametag.c_str());
 			CTransform* pTransCom = (CTransform*)pObj->Get_Component(L"Com_Transform", ID_DYNAMIC);
 			pTransCom->Set_Pos(&LoadPos);
 			pTransCom->Rotation2(ROT_X, LoadRot.x);
@@ -804,7 +804,7 @@ void CTabChar::OnBnClickedLoadMonster()
 		if (INVALID_HANDLE_VALUE == hFile)
 			return;
 		//리스트 초기화 진행 
-		Clear_List(L"GameLogic", L"Monster");
+		Clear_List(GAMELOGIC, L"Monster");
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		TCHAR* szBuf = nullptr;
@@ -829,7 +829,7 @@ void CTabChar::OnBnClickedLoadMonster()
 			ReadFile(hFile, &LoadPos, sizeof(_vec3), &dwByte, nullptr);
 			ReadFile(hFile, &LoadRot, sizeof(_vec3), &dwByte, nullptr);
 			ReadFile(hFile, &LoadScale, sizeof(_vec3), &dwByte, nullptr);
-			pObj = pView->CreateCharictor(L"GameLogic", L"Monster", wstrNametag.c_str());
+			pObj = pView->CreateCharictor(GAMELOGIC, L"Monster", wstrNametag.c_str());
 			CTransform* pTransCom = (CTransform*)pObj->Get_Component(L"Com_Transform", ID_DYNAMIC);
 			pTransCom->Set_Pos(&LoadPos);
 			pTransCom->Rotation2(ROT_X, LoadRot.x);

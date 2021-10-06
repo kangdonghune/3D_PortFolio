@@ -14,14 +14,19 @@ Engine::CManagement::~CManagement(void)
 	Free();
 }
 
-list<CGameObject*> CManagement::Get_List(const _tchar * pLayerTag, const _tchar * pObjTag)
+list<CGameObject*> CManagement::Get_List(Layer type, const _tchar * pObjTag)
 {
-	return m_pScene->Get_List(pLayerTag, pObjTag);
+	return m_pScene->Get_List(type, pObjTag);
 }
 
-void CManagement::Clear_List(const _tchar * pLayerTag, const _tchar * pObjTag)
+void CManagement::Clear_List(Layer type, const _tchar * pObjTag)
 {
-	return m_pScene->Clear_List(pLayerTag, pObjTag);
+	return m_pScene->Clear_List(type, pObjTag);
+}
+
+HRESULT CManagement::Add_GameObject(Layer type, const _tchar * pObjTag, CGameObject * pInstance)
+{
+	return m_pScene->Add_GameObject(type, pObjTag, pInstance);
 }
 
 HRESULT Engine::CManagement::Ready_Shader(LPDIRECT3DDEVICE9& pGraphicDev)

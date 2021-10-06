@@ -27,9 +27,10 @@ public:
 	virtual void Render_Scene(void) override;
 
 private:
-	HRESULT			Ready_Environment_Layer(const _tchar* pLayerTag);
-	HRESULT			Ready_GameLogic_Layer(const _tchar* pLayerTag);
-	HRESULT			Ready_UI_Layer(const _tchar* pLayerTag);
+	HRESULT			Ready_Environment_Layer();
+	HRESULT			Ready_GameLogic_Layer();
+	HRESULT			Ready_UI_Layer();
+	HRESULT			Ready_Camera_Layer();
 	HRESULT			Ready_LightInfo(void);
 	HRESULT			Ready_Resource(LPDIRECT3DDEVICE9 pGraphicDev);
 
@@ -44,8 +45,8 @@ private:
 	HRESULT			DisConnect_CameraToPlayer();
 
 
-	CGameObject*			Create_Unit(const _tchar* pLayerTag, const _tchar* pParentName, const _tchar* pObjProtoName);
-	CGameObject*			Create_Object(const _tchar* pLayerTag, const _tchar* pParentName, const _tchar* pObjProtoName);
+	CGameObject*			Create_Unit(Layer type, const _tchar* pParentName, const _tchar* pObjProtoName);
+	CGameObject*			Create_Object(Layer type, const _tchar* pParentName, const _tchar* pObjProtoName);
 
 
 public:

@@ -165,7 +165,7 @@ void CTabTerrain::Create_MFCCell()
 	tempMFCCell.PointB = m_pPointB->m_iID;
 	tempMFCCell.PointC = m_pPointC->m_iID;
 
-	list<CGameObject*> pTerrainlst = Engine::Get_List(L"GameLogic", L"Terrain");
+	list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
 	CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
 	pTerrain->m_vecCell.push_back(tempMFCCell);
 	CNaviMesh* pNavi = dynamic_cast<CNaviMesh*>(pTerrain->Get_Component(L"Com_Navi", ID_STATIC));
@@ -186,7 +186,7 @@ void CTabTerrain::Send_Info(_vec3* pPos)
 void CTabTerrain::Update_VecCell()
 {
 	UpdateData(true);
-	list<CGameObject*> pTerrainlst = Engine::Get_List(L"GameLogic", L"Terrain");
+	list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
 	CTerrain*	pTerrain = (CTerrain*)pTerrainlst.front();
 	for (int i = 0; i < pTerrain->m_vecCell.size(); i++)
 	{
@@ -215,7 +215,7 @@ void CTabTerrain::Delete_Cell()
 	if (m_pShpere == nullptr)
 		return;
 
-	list<CGameObject*> pTerrainlst = Engine::Get_List(L"GameLogic", L"Terrain");
+	list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
 	CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
 	for (int i = 0; i < pTerrain->m_vecCell.size(); i++)
 	{
@@ -460,7 +460,7 @@ void CTabTerrain::OnBnClickedSaveCell()
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		//순회하면서 키와 리스트 아이템들 저장
-		list<CGameObject*> pTerrainlst = Engine::Get_List(L"GameLogic", L"Terrain");
+		list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
 		CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
 		vector<MFCCELL> vecMFCCell = pTerrain->m_vecCell;
 		//저장요소. pCell(index,포인트 3개 좌표), PointABC 번호
@@ -512,7 +512,7 @@ void CTabTerrain::OnBnClickedLoadCell()
 		TCHAR* szBuf = nullptr;
 		CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 		CMFCView* pView = dynamic_cast<CMFCView*>(pMain->m_MainSplitter.GetPane(0, 1));
-		list<CGameObject*> pTerrainlst = Engine::Get_List(L"GameLogic", L"Terrain");
+		list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
 		CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
 		for (int i = 0; i < pTerrain->m_vecCell.size(); i++)
 		{
@@ -584,7 +584,7 @@ void CTabTerrain::OnBnClickedSaveSphere()
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		//순회하면서 키와 리스트 아이템들 저장
-		list<CGameObject*> pTerrainlst = Engine::Get_List(L"GameLogic", L"Terrain");
+		list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
 		CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
 		vector<CSphere*> vecSphere = pTerrain->m_vecShpere;
 		//저장요소. //1. id. 2. 트랜스폼. 3. 라디우스
@@ -633,7 +633,7 @@ void CTabTerrain::OnBnClickedLoadSphrer()
 		TCHAR* szBuf = nullptr;
 		CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 		CMFCView* pView = dynamic_cast<CMFCView*>(pMain->m_MainSplitter.GetPane(0, 1));
-		list<CGameObject*> pTerrainlst = Engine::Get_List(L"GameLogic", L"Terrain");
+		list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
 		CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
 		for (int i = 0; i < pTerrain->m_vecShpere.size(); i++)
 		{
@@ -689,7 +689,7 @@ void CTabTerrain::OnBnClickedDeleteSphere()
 	if (m_pShpere != nullptr)
 	{
 		Delete_Cell();
-		list<CGameObject*> pTerrainlst = Engine::Get_List(L"GameLogic", L"Terrain");
+		list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
 		CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
 		for (int i = 0; i < pTerrain->m_vecShpere.size(); i++)
 		{
@@ -706,7 +706,7 @@ void CTabTerrain::OnBnClickedDeleteSphere()
 void CTabTerrain::OnBnClickedDeleteCell()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	list<CGameObject*> pTerrainlst = Engine::Get_List(L"GameLogic", L"Terrain");
+	list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
 	CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
 	pTerrain->m_vecCell.back().pCell->Set_Dead(true);
 	pTerrain->m_vecCell.pop_back();

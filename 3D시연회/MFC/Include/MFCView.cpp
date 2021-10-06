@@ -229,13 +229,13 @@ void CMFCView::OnInitialUpdate()
 	//m_pManagementClass->Get_Scene()->Add_GameObject(L"GameLogic", L"Proto_Mesh_Hunter", pGameObject);
 }
 
-CGameObject* CMFCView::CreateCharictor(const _tchar * pLayerTag, const _tchar * pParentName, const _tchar * pObjProtoName)
+CGameObject* CMFCView::CreateCharictor(Layer type, const _tchar * pParentName, const _tchar * pObjProtoName)
 {
 	CGameObject* pGameObject = nullptr;
 	if (!lstrcmp(L"Player", pParentName))
 	{
 		pGameObject = CPlayer::Create(m_pGraphicDev, pObjProtoName);
-		m_pManagementClass->Get_Scene()->Add_GameObject(pLayerTag, L"Player", pGameObject);
+		m_pManagementClass->Get_Scene()->Add_GameObject(type, L"Player", pGameObject);
 		m_pForm->m_ptabObject->Set_Object(nullptr);
 		return pGameObject;
 	}
@@ -243,7 +243,7 @@ CGameObject* CMFCView::CreateCharictor(const _tchar * pLayerTag, const _tchar * 
 	if (!lstrcmp(L"Monster", pParentName))
 	{
 		pGameObject = CMonster::Create(m_pGraphicDev, pObjProtoName);
-		m_pManagementClass->Get_Scene()->Add_GameObject(pLayerTag, L"Monster", pGameObject);
+		m_pManagementClass->Get_Scene()->Add_GameObject(type, L"Monster", pGameObject);
 		m_pForm->m_ptabObject->Set_Object(nullptr);
 		return pGameObject;
 	}
@@ -256,13 +256,13 @@ CGameObject* CMFCView::CreateCharictor(const _tchar * pLayerTag, const _tchar * 
 	
 }
 
-CGameObject * CMFCView::CreateObject(const _tchar * pLayerTag, const _tchar * pParentName, const _tchar * pObjProtoName)
+CGameObject * CMFCView::CreateObject(Layer type, const _tchar * pParentName, const _tchar * pObjProtoName)
 {
 	CGameObject* pGameObject = nullptr;
 	if (!lstrcmp(L"Building", pParentName))
 	{
 		pGameObject = C_Object::Create(m_pGraphicDev, pObjProtoName);
-		m_pManagementClass->Get_Scene()->Add_GameObject(pLayerTag, L"Building", pGameObject);
+		m_pManagementClass->Get_Scene()->Add_GameObject(type, L"Building", pGameObject);
 		m_pForm->m_ptabObject->Set_Object(nullptr);
 		return pGameObject;
 	}
@@ -270,14 +270,14 @@ CGameObject * CMFCView::CreateObject(const _tchar * pLayerTag, const _tchar * pP
 	if (!lstrcmp(L"Stuff", pParentName))
 	{
 		pGameObject = C_Object::Create(m_pGraphicDev, pObjProtoName);
-		m_pManagementClass->Get_Scene()->Add_GameObject(pLayerTag, L"Stuff", pGameObject);
+		m_pManagementClass->Get_Scene()->Add_GameObject(type, L"Stuff", pGameObject);
 		m_pForm->m_ptabObject->Set_Object(nullptr);
 		return pGameObject;
 	}
 	if (pGameObject == nullptr)
 		return nullptr;
 
-	m_pManagementClass->Get_Scene()->Add_GameObject(pLayerTag, pObjProtoName, pGameObject);
+	m_pManagementClass->Get_Scene()->Add_GameObject(type, pObjProtoName, pGameObject);
 	m_pForm->m_ptabChar->Set_Object(nullptr);
 	return pGameObject;
 }

@@ -28,14 +28,19 @@ void				Render_Scene(LPDIRECT3DDEVICE9& pGraphicDev)
 	CManagement::GetInstance()->Render_Scene(pGraphicDev);
 }
 
-list<CGameObject*>		Get_List(const _tchar* pLayerTag, const _tchar* pObjTag)
+list<CGameObject*>		Get_List(Layer type, const _tchar* pObjTag)
 {
-	return CManagement::GetInstance()->Get_List(pLayerTag, pObjTag);
+	return CManagement::GetInstance()->Get_List(type, pObjTag);
 }
 
-void					Clear_List(const _tchar* pLayerTag, const _tchar* pObjTag)
+void					Clear_List(Layer type, const _tchar* pObjTag)
 {
-	return CManagement::GetInstance()->Clear_List(pLayerTag, pObjTag);
+	return CManagement::GetInstance()->Clear_List(type, pObjTag);
+}
+
+HRESULT					Add_GameObject(Layer type, const _tchar* pObjTag, CGameObject* pInstance)
+{
+	return CManagement::GetInstance()->Add_GameObject(type, pObjTag, pInstance);
 }
 
 HRESULT			Ready_Proto(const _tchar* pProtoTag, CComponent* pComponent)

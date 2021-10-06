@@ -16,6 +16,7 @@ public:
 	void					Set_Pos(const _float& fX, const _float& fY, const _float& fZ);
 	const	void*			Get_InfoRef(INFO eType);
 	void					Set_Pos(_vec3* pPos);
+	void					Set_Look(_vec3* pLook);
 	const	_matrix*		Get_WorldMatrix(void);
 	const	 _matrix*		Get_NRotWorldMatrix(void);
 	void					Get_WorldMatrix(_matrix* pWorld) const;

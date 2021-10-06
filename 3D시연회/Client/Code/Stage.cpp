@@ -30,9 +30,10 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(CScene::Ready_Scene(), E_FAIL);
 	//FAILED_CHECK_RETURN(Ready_Resource(m_pGraphicDev), E_FAIL);
 
-	FAILED_CHECK_RETURN(Ready_Environment_Layer(L"Environment"), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_GameLogic_Layer(L"GameLogic"), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_UI_Layer(L"UI"), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Environment_Layer(), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_GameLogic_Layer(), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_UI_Layer(), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Camera_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_LightInfo(), E_FAIL);
 
 	
@@ -69,38 +70,24 @@ void CStage::Render_Scene(void)
 
 }
 
-HRESULT CStage::Ready_Environment_Layer(const _tchar * pLayerTag)
+HRESULT CStage::Ready_Environment_Layer()
 {
 	CLayer*		pLayer = CLayer::Create();
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
-	
+
 	CGameObject*			pGameObject = nullptr;
-
-	//// DynamicCamera
-	pGameObject = CDynamicCamera::Create(m_pGraphicDev, 
-										&_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 1.f), &_vec3(0.f, 1.f, 0.f), 
-										D3DXToRadian(60.f), (_float)WINCX / (_float)WINCY, 0.1f, 1000.f);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"DynamicCamera", pGameObject), E_FAIL);
-
-	
 
 	// SkyBox
 	pGameObject = CSkyBox::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"SkyBox", pGameObject), E_FAIL);
 
-
-
-	
-
-	
-	m_mapLayer.emplace(pLayerTag, pLayer);
+	m_mapLayer[ENVIRONMENT] = pLayer;
 
 	return S_OK;
 }
 
-HRESULT CStage::Ready_GameLogic_Layer(const _tchar * pLayerTag)
+HRESULT CStage::Ready_GameLogic_Layer()
 {
 	CLayer*		pLayer = CLayer::Create();
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
@@ -112,14 +99,11 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar * pLayerTag)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
 
-	m_mapLayer.emplace(pLayerTag, pLayer);
-
-
-
+	m_mapLayer[GAMELOGIC] = pLayer;
 	return S_OK;
 }
 
-HRESULT CStage::Ready_UI_Layer(const _tchar * pLayerTag)
+HRESULT CStage::Ready_UI_Layer()
 {
 	CLayer*		pLayer = CLayer::Create();
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
@@ -132,9 +116,24 @@ HRESULT CStage::Ready_UI_Layer(const _tchar * pLayerTag)
 	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI", pGameObject), E_FAIL);
 
+	m_mapLayer[UI_LAYER] = pLayer;
+	return S_OK;
+}
 
-	m_mapLayer.emplace(pLayerTag, pLayer);
+HRESULT CStage::Ready_Camera_Layer()
+{
+	CLayer*		pLayer = CLayer::Create();
+	NULL_CHECK_RETURN(pLayer, E_FAIL);
 
+	CGameObject*			pGameObject = nullptr;
+	//// DynamicCamera
+	pGameObject = CDynamicCamera::Create(m_pGraphicDev,
+		&_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 1.f), &_vec3(0.f, 1.f, 0.f),
+		D3DXToRadian(60.f), (_float)WINCX / (_float)WINCY, 0.1f, 1000.f);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"DynamicCamera", pGameObject), E_FAIL);
+
+	m_mapLayer[CAMERA] = pLayer;
 	return S_OK;
 }
 
@@ -180,7 +179,7 @@ HRESULT CStage::Load_Player(const _tchar * pFilePath)
 	if (INVALID_HANDLE_VALUE == hFile)
 		return E_FAIL;
 	//리스트 초기화 진행 
-	Clear_List(L"GameLogic", L"Player");
+	Clear_List(GAMELOGIC, L"Player");
 	DWORD dwByte = 0;
 	DWORD dwStringCount = 0;
 	TCHAR* szBuf = nullptr;
@@ -203,7 +202,7 @@ HRESULT CStage::Load_Player(const _tchar * pFilePath)
 		ReadFile(hFile, &LoadPos, sizeof(_vec3), &dwByte, nullptr);
 		ReadFile(hFile, &LoadRot, sizeof(_vec3), &dwByte, nullptr);
 		ReadFile(hFile, &LoadScale, sizeof(_vec3), &dwByte, nullptr);
-		pObj = Create_Unit(L"GameLogic", L"Player", wstrNametag.c_str());
+		pObj = Create_Unit(GAMELOGIC, L"Player", wstrNametag.c_str());
 		CTransform* pTransCom = (CTransform*)pObj->Get_Component(L"Com_Transform", ID_DYNAMIC);
 		pTransCom->Set_Pos(&LoadPos);
 		pTransCom->Rotation2(ROT_X, LoadRot.x);
@@ -221,7 +220,7 @@ HRESULT CStage::Load_Monster(const _tchar * pFilePath)
 	if (INVALID_HANDLE_VALUE == hFile)
 		return E_FAIL;
 	//리스트 초기화 진행 
-	Clear_List(L"GameLogic", L"Monster");
+	Clear_List(GAMELOGIC, L"Monster");
 	DWORD dwByte = 0;
 	DWORD dwStringCount = 0;
 	TCHAR* szBuf = nullptr;
@@ -245,7 +244,7 @@ HRESULT CStage::Load_Monster(const _tchar * pFilePath)
 		ReadFile(hFile, &LoadPos, sizeof(_vec3), &dwByte, nullptr);
 		ReadFile(hFile, &LoadRot, sizeof(_vec3), &dwByte, nullptr);
 		ReadFile(hFile, &LoadScale, sizeof(_vec3), &dwByte, nullptr);
-		pObj = Create_Unit(L"GameLogic", L"Monster", wstrNametag.c_str());
+		pObj = Create_Unit(GAMELOGIC, L"Monster", wstrNametag.c_str());
 		CTransform* pTransCom = (CTransform*)pObj->Get_Component(L"Com_Transform", ID_DYNAMIC);
 		pTransCom->Set_Pos(&LoadPos);
 		pTransCom->Rotation2(ROT_X, LoadRot.x);
@@ -263,7 +262,7 @@ HRESULT CStage::Load_Building(const _tchar * pFilePath)
 	if (INVALID_HANDLE_VALUE == hFile)
 		return E_FAIL;
 	//리스트 초기화 진행 
-	Clear_List(L"GameLogic", L"Building");
+	Clear_List(GAMELOGIC, L"Building");
 	DWORD dwByte = 0;
 	DWORD dwStringCount = 0;
 	TCHAR* szBuf = nullptr;
@@ -286,7 +285,7 @@ HRESULT CStage::Load_Building(const _tchar * pFilePath)
 		ReadFile(hFile, &LoadPos, sizeof(_vec3), &dwByte, nullptr);
 		ReadFile(hFile, &LoadRot, sizeof(_vec3), &dwByte, nullptr);
 		ReadFile(hFile, &LoadScale, sizeof(_vec3), &dwByte, nullptr);
-		pObj = Create_Object(L"GameLogic", L"Building", wstrNametag.c_str());
+		pObj = Create_Object(GAMELOGIC, L"Building", wstrNametag.c_str());
 		CTransform* pTransCom = (CTransform*)pObj->Get_Component(L"Com_Transform", ID_DYNAMIC);
 		pTransCom->Set_Pos(&LoadPos);
 		pTransCom->Rotation2(ROT_X, LoadRot.x);
@@ -304,7 +303,7 @@ HRESULT CStage::Load_Stuff(const _tchar * pFilePath)
 	if (INVALID_HANDLE_VALUE == hFile)
 		return E_FAIL;
 	//리스트 초기화 진행 
-	Clear_List(L"GameLogic", L"Building");
+	Clear_List(GAMELOGIC, L"Building");
 	DWORD dwByte = 0;
 	DWORD dwStringCount = 0;
 	TCHAR* szBuf = nullptr;
@@ -327,7 +326,7 @@ HRESULT CStage::Load_Stuff(const _tchar * pFilePath)
 		ReadFile(hFile, &LoadPos, sizeof(_vec3), &dwByte, nullptr);
 		ReadFile(hFile, &LoadRot, sizeof(_vec3), &dwByte, nullptr);
 		ReadFile(hFile, &LoadScale, sizeof(_vec3), &dwByte, nullptr);
-		pObj = Create_Object(L"GameLogic", L"Building", wstrNametag.c_str());
+		pObj = Create_Object(GAMELOGIC, L"Building", wstrNametag.c_str());
 		CTransform* pTransCom = (CTransform*)pObj->Get_Component(L"Com_Transform", ID_DYNAMIC);
 		pTransCom->Set_Pos(&LoadPos);
 		pTransCom->Rotation2(ROT_X, LoadRot.x);
@@ -349,7 +348,7 @@ HRESULT CStage::Load_NaviMesh(const _tchar * pFilePath)
 	DWORD dwByte = 0;
 	DWORD dwStringCount = 0;
 	TCHAR* szBuf = nullptr;
-	list<CGameObject*> pTerrainlst = Engine::Get_List(L"GameLogic", L"Terrain");
+	list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
 	CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
 	for (int i = 0; i < pTerrain->Get_vecCell().size(); i++)
 	{
@@ -393,33 +392,33 @@ HRESULT CStage::Load_NaviMesh(const _tchar * pFilePath)
 
 HRESULT CStage::Connect_CameraToPlayer()
 {
-	CDynamicCamera* pCamera =  (CDynamicCamera*)Get_List(L"Environment", L"DynamicCamera").front();
-	CPlayer* pPlayer = (CPlayer*)Get_List(L"GameLogic", L"Player").front();
+	CDynamicCamera* pCamera =  (CDynamicCamera*)Get_List(CAMERA, L"DynamicCamera").front();
+	CPlayer* pPlayer = (CPlayer*)Get_List(GAMELOGIC, L"Player").front();
 	pCamera->Set_Target(pPlayer);
 	return S_OK;
 }
 
 HRESULT CStage::DisConnect_CameraToPlayer()
 {
-	CDynamicCamera* pCamera = (CDynamicCamera*)Get_List(L"Environment", L"DynamicCamera").front();
+	CDynamicCamera* pCamera = (CDynamicCamera*)Get_List(CAMERA, L"DynamicCamera").front();
 	pCamera->Release_Target();
 	return S_OK;
 }
 
-CGameObject* CStage::Create_Unit(const _tchar * pLayerTag, const _tchar * pParentName, const _tchar * pObjProtoName)
+CGameObject* CStage::Create_Unit(Layer type, const _tchar * pParentName, const _tchar * pObjProtoName)
 {
 	CGameObject* pGameObject = nullptr;
 	if (!lstrcmp(L"Player", pParentName))
 	{
 		pGameObject = CPlayer::Create(m_pGraphicDev, pObjProtoName);
-		Engine::Get_Scene()->Add_GameObject(pLayerTag, L"Player", pGameObject);
+		Engine::Get_Scene()->Add_GameObject(type, L"Player", pGameObject);
 		return pGameObject;
 	}
 
 	if (!lstrcmp(L"Monster", pParentName))
 	{
 		pGameObject = CMonster::Create(m_pGraphicDev, pObjProtoName);
-		Engine::Get_Scene()->Add_GameObject(pLayerTag, L"Monster", pGameObject);
+		Engine::Get_Scene()->Add_GameObject(type, L"Monster", pGameObject);
 		return pGameObject;
 	}
 
@@ -430,20 +429,20 @@ CGameObject* CStage::Create_Unit(const _tchar * pLayerTag, const _tchar * pParen
 	return nullptr;
 }
 
-CGameObject* CStage::Create_Object(const _tchar * pLayerTag, const _tchar * pParentName, const _tchar * pObjProtoName)
+CGameObject* CStage::Create_Object(Layer type, const _tchar * pParentName, const _tchar * pObjProtoName)
 {
 	CGameObject* pGameObject = nullptr;
 	if (!lstrcmp(L"Building", pParentName))
 	{
 		pGameObject = C_Object::Create(m_pGraphicDev, pObjProtoName);
-		Engine::Get_Scene()->Add_GameObject(pLayerTag, L"Building", pGameObject);
+		Engine::Get_Scene()->Add_GameObject(type, L"Building", pGameObject);
 		return pGameObject;
 	}
 
 	if (!lstrcmp(L"Stuff", pParentName))
 	{
 		pGameObject = C_Object::Create(m_pGraphicDev, pObjProtoName);
-		Engine::Get_Scene()->Add_GameObject(pLayerTag, L"Stuff", pGameObject);
+		Engine::Get_Scene()->Add_GameObject(type, L"Stuff", pGameObject);
 		return pGameObject;
 	}
 	if (pGameObject == nullptr)

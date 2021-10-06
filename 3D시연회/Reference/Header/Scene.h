@@ -12,9 +12,9 @@ protected:
 	virtual ~CScene(void);
 
 public:
-	list<CGameObject*>		Get_List(const _tchar* pLayerTag, const _tchar* pObjTag);
-	void					Clear_List(const _tchar* pLayerTag, const _tchar* pObjTag);
-	HRESULT					Add_GameObject(const _tchar* pLayerTag, const _tchar* pObjTag, CGameObject* pInstance);
+	list<CGameObject*>		Get_List(Layer type, const _tchar* pObjTag);
+	void					Clear_List(Layer type, const _tchar* pObjTag);
+	HRESULT					Add_GameObject(Layer type, const _tchar* pObjTag, CGameObject* pInstance);
 
 public:
 	virtual HRESULT		Ready_Scene(void);
@@ -23,7 +23,7 @@ public:
 
 protected:
 	LPDIRECT3DDEVICE9				m_pGraphicDev;
-	map<const _tchar*, CLayer*>		m_mapLayer;
+	CLayer*							m_mapLayer[Layer::LAYER_END];
 
 public:
 	virtual void Free(void);

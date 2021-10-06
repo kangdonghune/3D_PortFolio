@@ -45,6 +45,11 @@ void CTransform::Set_Pos(_vec3 * pPos)
 	m_vInfo[INFO_POS] = *pPos;
 }
 
+void CTransform::Set_Look(_vec3 * pLook)
+{
+	m_vInfo[INFO_LOOK] = *pLook;
+}
+
 const _matrix* Engine::CTransform::Get_NRotWorldMatrix(void)
 {
 	return &m_matNRotWorld;

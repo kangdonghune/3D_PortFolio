@@ -15,33 +15,21 @@ Engine::CScene::~CScene(void)
 
 
 
-list<CGameObject*> CScene::Get_List(const _tchar * pLayerTag, const _tchar * pObjTag)
+list<CGameObject*> CScene::Get_List(Layer type, const _tchar * pObjTag)
 {
-	auto		iter = find_if(m_mapLayer.begin(), m_mapLayer.end(), CTag_Finder(pLayerTag));
-
-	return iter->second->Get_List(pObjTag);
-
+	return m_mapLayer[type]->Get_List(pObjTag);
 }
 
-void CScene::Clear_List(const _tchar * pLayerTag, const _tchar * pObjTag)
+void CScene::Clear_List(Layer type, const _tchar * pObjTag)
 {
-	auto		iter = find_if(m_mapLayer.begin(), m_mapLayer.end(), CTag_Finder(pLayerTag));
-	
-	if (iter == m_mapLayer.end())
-		return;
-
-	iter->second->Clear_List(pObjTag);
+	m_mapLayer[type]->Clear_List(pObjTag);
 }
 
-HRESULT CScene::Add_GameObject(const _tchar * pLayerTag, const _tchar * pObjTag, CGameObject * pInstance)
+HRESULT CScene::Add_GameObject(Layer type, const _tchar * pObjTag, CGameObject * pInstance)
 {
-	auto		iter = find_if(m_mapLayer.begin(), m_mapLayer.end(), CTag_Finder(pLayerTag));
-
-	if (iter == m_mapLayer.end())
+	if (pInstance == nullptr)
 		return E_FAIL;
-
-
-	return iter->second->Add_GameObject(pObjTag, pInstance);
+	return m_mapLayer[type]->Add_GameObject(pObjTag, pInstance);
 }
 
 HRESULT Engine::CScene::Ready_Scene(void)
@@ -53,9 +41,9 @@ Engine::_int Engine::CScene::Update_Scene(const _float& fTimeDelta)
 {
 	_int iResult = 0;
 
-	for (auto& iter : m_mapLayer)
+	for (CLayer* pLayer : m_mapLayer)
 	{
-		iResult = iter.second->Update_Layer(fTimeDelta);
+		iResult = pLayer->Update_Layer(fTimeDelta);
 
 		if (iResult & 0x80000000)
 			return iResult;
@@ -71,9 +59,10 @@ void Engine::CScene::Render_Scene(void)
 
 void Engine::CScene::Free(void)
 {
-	for_each(m_mapLayer.begin(), m_mapLayer.end(), CDeleteMap());
-	m_mapLayer.clear();
-
+	for (CLayer* pLayer : m_mapLayer)
+	{
+		Safe_Release(pLayer);
+	}
 	Safe_Release(m_pGraphicDev);
 }
 

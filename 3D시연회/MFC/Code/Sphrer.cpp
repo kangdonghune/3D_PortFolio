@@ -51,7 +51,7 @@ HRESULT CSphere::Ready_Object(void)
 
 	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	CMFCView* pView = dynamic_cast<CMFCView*>(pMain->m_MainSplitter.GetPane(0, 1));
-	FAILED_CHECK_RETURN(pView->m_pManagementClass->Get_Scene()->Add_GameObject(L"GameLogic", L"Sphrer", this), E_FAIL);
+	FAILED_CHECK_RETURN(pView->m_pManagementClass->Get_Scene()->Add_GameObject(GAMELOGIC, L"Sphrer", this), E_FAIL);
 
 	return S_OK;
 }

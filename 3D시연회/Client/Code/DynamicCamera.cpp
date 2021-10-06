@@ -35,11 +35,12 @@ Engine::_int CDynamicCamera::Update_Object(const _float& fTimeDelta)
 {
 	Key_Input(fTimeDelta, 20.f);
 
-	if (true == m_bFix)
+	if (m_bFix)
 	{
-		//Mouse_Fix();
-		//Mouse_Move(fTimeDelta);
-	}	
+		Mouse_Fix();
+		Mouse_Move(fTimeDelta);
+	}
+
 
 	Fallow_Target();
 
@@ -53,7 +54,7 @@ void CDynamicCamera::Key_Input(const _float& fTimeDelta, const _float& fSpeed)
 {
 	if (m_pTarget != nullptr)
 		return;
-	_matrix		matCamWorld;
+	/*_matrix		matCamWorld;
 	D3DXMatrixInverse(&matCamWorld, NULL, &m_matView);
 
 	if (Get_DIKeyState(DIK_W) & 0x80)
@@ -99,9 +100,9 @@ void CDynamicCamera::Key_Input(const _float& fTimeDelta, const _float& fSpeed)
 
 		m_vEye -= vLength;
 		m_vAt -= vLength;
-	}
+	}*/
 
-	if (Get_DIKeyState(DIK_X) & 0x80)
+	if (Get_DIKeyState(DIK_BACKSPACE) & 0x80)
 	{
 		if (true == m_bClick)
 			return;
@@ -126,38 +127,22 @@ void CDynamicCamera::Key_Input(const _float& fTimeDelta, const _float& fSpeed)
 
 void CDynamicCamera::Mouse_Move(const _float& fTimeDelta)
 {
-	if (m_pTarget == nullptr)
+	if (m_pTarget != nullptr)
 	{
+
 		_matrix		matCamWorld;
 		D3DXMatrixInverse(&matCamWorld, NULL, &m_matView);
 
 		_long	dwMouseMove = 0;
 
-		if (dwMouseMove = Get_DIMouseMove(DIMS_Y))
+		if (dwMouseMove = Get_DIMouseMove(DIMS_Y)) //플레이어의 룩만 회전
 		{
-			_vec3		vRight;
-			memcpy(&vRight, &matCamWorld.m[0][0], sizeof(_vec3));
-
-			_vec3		vLook = m_vAt - m_vEye;
-
-			_matrix		matRot;
-			D3DXMatrixRotationAxis(&matRot, &vRight, D3DXToRadian(dwMouseMove / 10.f));
-			D3DXVec3TransformNormal(&vLook, &vLook, &matRot);
-
-			m_vAt = m_vEye + vLook;
+			//m_pTargetTransCom->Rotation(ROT_X, D3DXToRadian(dwMouseMove / 10.f));
 		}
 
-		if (dwMouseMove = Get_DIMouseMove(DIMS_X))
+		if (dwMouseMove = Get_DIMouseMove(DIMS_X)) //플레이어 자체를 회전
 		{
-			_vec3		vUp = _vec3(0.f, 1.f, 0.f);
-
-			_vec3		vLook = m_vAt - m_vEye;
-
-			_matrix		matRot;
-			D3DXMatrixRotationAxis(&matRot, &vUp, D3DXToRadian(dwMouseMove / 10.f));
-			D3DXVec3TransformNormal(&vLook, &vLook, &matRot);
-
-			m_vAt = m_vEye + vLook;
+			m_pTargetTransCom->Rotation(ROT_Y, D3DXToRadian(dwMouseMove / 10.f));
 		}
 	}
 
@@ -184,23 +169,28 @@ void CDynamicCamera::Fallow_Target()
 	if (m_pTarget == nullptr)
 		return;
 
-	_vec3 vTargetLookPos = {};
 	_vec3 vTargetLookDir = {};
 	m_pTargetTransCom->Get_Info(INFO_LOOK, &vTargetLookDir);
+	_vec3 TargetPos = {};
 	_vec3 TargetCameraPos = {};
-	m_pTargetTransCom->Get_Info(INFO_POS, &TargetCameraPos);
+	m_pTargetTransCom->Get_Info(INFO_POS, &TargetPos);
+	_matrix	matWorld, matInverseWorld;
+	m_pTargetTransCom->Get_WorldMatrix(&matWorld);
+	D3DXMatrixInverse(&matInverseWorld, NULL, &matWorld);
+	
+	D3DXVec3TransformCoord(&TargetPos, &TargetPos, &matInverseWorld);// 타겟 좌표 로컬로 내린 후
+
+	TargetCameraPos.x = TargetPos.x + 40.f;
+	TargetCameraPos.y = TargetPos.y + 130.f;
+	TargetCameraPos.z = TargetPos.z - 220.f; // 타겟 로컬 기준으로 위치를 잡아준 후
+
+	D3DXVec3TransformCoord(&TargetCameraPos, &TargetCameraPos, &matWorld); //해당 로컬 위치를 타겟 월드 행렬로 변환
 
 	m_vEye = TargetCameraPos;
-	m_vEye.z = m_vEye.z;
-	m_vEye.y = m_vEye.y + 1.f;
+	m_vAt.x = TargetCameraPos.x + vTargetLookDir.x*100.f;
+	m_vAt.y = TargetCameraPos.y;
+	m_vAt.z = TargetCameraPos.z + vTargetLookDir.z*100.f;
 
-
-	vTargetLookPos = TargetCameraPos;
-	vTargetLookPos.x = vTargetLookPos.x + vTargetLookDir.x*100.f;
-	vTargetLookPos.y += 1.f;
-	vTargetLookPos.z = vTargetLookPos.z + vTargetLookDir.z*100.f;
-	//D3DXVec3TransformNormal(&vTargetLook, &vTargetLook, &m_matView);
-	m_vAt = vTargetLookPos;
 
 }
 

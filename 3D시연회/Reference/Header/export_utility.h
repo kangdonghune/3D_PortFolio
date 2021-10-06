@@ -37,8 +37,11 @@ inline CScene* const 	Get_Scene();
 inline _int				Update_Scene(const _float& fTimeDelta);
 inline void				Render_Scene(LPDIRECT3DDEVICE9& pGraphicDev);
 
-inline 	list<CGameObject*>		Get_List(const _tchar* pLayerTag, const _tchar* pObjTag);
-inline	void					Clear_List(const _tchar* pLayerTag, const _tchar* pObjTag);
+inline 	list<CGameObject*>		Get_List(Layer type, const _tchar* pObjTag);
+inline	void					Clear_List(Layer type, const _tchar* pObjTag);
+HRESULT							Add_GameObject(Layer type, const _tchar* pObjTag, CGameObject* pInstance);
+
+
 
 // protomgr
 inline HRESULT			Ready_Proto(const _tchar* pProtoTag, CComponent* pComponent);

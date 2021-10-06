@@ -104,7 +104,7 @@ HRESULT CPlayer::Add_Component(void)
 
 
 	//NaviMap
-	CTerrain* pTerrain = (CTerrain*)Engine::Get_List(L"GameLogic", L"Terrain").front();
+	CTerrain* pTerrain = (CTerrain*)Engine::Get_List(GAMELOGIC, L"Terrain").front();
 	m_pNaviCom = (CNaviMesh*)pTerrain->Get_Component(L"Com_Navi", ID_STATIC);
 
 
@@ -172,7 +172,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		if (m_pForm->m_ptabChar->m_pObject == nullptr)
 			return;
 
-		list<CGameObject*> pTerrainTexlst = Engine::Get_List(L"GameLogic", L"Terrain");
+		list<CGameObject*> pTerrainTexlst = Engine::Get_List(GAMELOGIC, L"Terrain");
 		  
 		CTerrainTex*	pTerrainBufferCom = dynamic_cast<CTerrainTex*>((*pTerrainTexlst.begin())->Get_Component(L"Com_Buffer", ID_STATIC));
 		CTransform*		pTerrainTransCom = dynamic_cast<CTransform*>((*pTerrainTexlst.begin())->Get_Component(L"Com_Transform", ID_DYNAMIC));
@@ -197,7 +197,7 @@ void CPlayer::SetUp_OnTerrain(void)
 	m_pTransformCom->Get_Info(INFO_POS, &vPos);
 
 
-	list<CGameObject*> pTerrainTexlst = Engine::Get_List(L"GameLogic", L"Terrain");
+	list<CGameObject*> pTerrainTexlst = Engine::Get_List(GAMELOGIC, L"Terrain");
 
 	CTerrainTex*	pTerrainBufferCom = dynamic_cast<CTerrainTex*>((*pTerrainTexlst.begin())->Get_Component(L"Com_Buffer", ID_STATIC));
 	NULL_CHECK(pTerrainBufferCom);
@@ -214,7 +214,7 @@ Engine::_vec3 CPlayer::PickUp_OnTerrain(void)
 {
 
 
-	list<CGameObject*> pTerrainTexlst = Engine::Get_List(L"GameLogic", L"Terrain");
+	list<CGameObject*> pTerrainTexlst = Engine::Get_List(GAMELOGIC, L"Terrain");
 
 	CTerrainTex*	pTerrainBufferCom = dynamic_cast<CTerrainTex*>((*pTerrainTexlst.begin())->Get_Component(L"Com_Buffer", ID_STATIC));
 	CTransform*		pTerrainTransCom = dynamic_cast<CTransform*>((*pTerrainTexlst.begin())->Get_Component(L"Com_Transform", ID_DYNAMIC));

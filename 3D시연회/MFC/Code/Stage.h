@@ -27,9 +27,10 @@ public:
 	virtual void Render_Scene(void) override;
 
 private:
-	HRESULT			Ready_Environment_Layer(const _tchar* pLayerTag);
-	HRESULT			Ready_GameLogic_Layer(const _tchar* pLayerTag);
-	HRESULT			Ready_UI_Layer(const _tchar* pLayerTag);
+	HRESULT			Ready_Environment_Layer();
+	HRESULT			Ready_GameLogic_Layer();
+	HRESULT			Ready_UI_Layer();
+	HRESULT			Ready_Camera_Layer();
 	HRESULT			Ready_LightInfo(void);
 	HRESULT			Ready_Resource(LPDIRECT3DDEVICE9 pGraphicDev);
 

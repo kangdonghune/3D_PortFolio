@@ -20,8 +20,10 @@ HRESULT CLogo::Ready_Scene(void)
 	FAILED_CHECK_RETURN(CScene::Ready_Scene(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Resource(m_pGraphicDev), E_FAIL);
 
-	FAILED_CHECK_RETURN(Ready_Environment_Layer(L"Environment"), E_FAIL);
-
+	FAILED_CHECK_RETURN(Ready_Environment_Layer(), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_GameLogic_Layer(), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_UI_Layer(), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Camera_Layer(), E_FAIL);
 
 	m_pLoading = CLoading::Create(m_pGraphicDev, CLoading::LOADING_STAGE);
 	NULL_CHECK_RETURN(m_pLoading, E_FAIL);
@@ -59,35 +61,27 @@ void CLogo::Render_Scene(void)
 
 }
 
-HRESULT CLogo::Ready_Environment_Layer(const _tchar * pLayerTag)
+HRESULT CLogo::Ready_Environment_Layer()
 {
+
 	CLayer*		pLayer = CLayer::Create();
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
-	
+
 	CGameObject*			pGameObject = nullptr;
 
 	// background
 	pGameObject = CBackGround::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"BackGround", pGameObject), E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"BackGround" , pGameObject), E_FAIL);
 
-	/*pGameObject = CPlayer::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player", pGameObject), E_FAIL);
-
-	pGameObject = CMonster::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Monster", pGameObject), E_FAIL);*/
-
-	
-	m_mapLayer.emplace(pLayerTag, pLayer);
-
+	m_mapLayer[ENVIRONMENT] = pLayer;
 	return S_OK;
 }
 
-HRESULT CLogo::Ready_GameLogic_Layer(const _tchar * pLayerTag)
+HRESULT CLogo::Ready_GameLogic_Layer()
 {
-
+	CLayer*		pLayer = CLayer::Create();
+	NULL_CHECK_RETURN(pLayer, E_FAIL);
 	/*m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
@@ -109,13 +103,28 @@ HRESULT CLogo::Ready_GameLogic_Layer(const _tchar * pLayerTag)
 	// 이 둘은 직접 지정해주지 않으면 기본값으로 TRUE 상태
 	//m_pGraphicDev->SetRenderState(D3DRS_ZENABLE, TRUE);		// 깊이버퍼에 깊이 값을 무조건 기록은 한다, 하지만 자동 정렬을 수행할 지 말 지 결정
 	//m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, TRUE); // 깊이버퍼에 깊이 값을 저장할 지 말 지 결정
-
+	m_mapLayer[GAMELOGIC] = pLayer;
 
 	return S_OK;
 }
 
-HRESULT CLogo::Ready_UI_Layer(const _tchar * pLayerTag)
+HRESULT CLogo::Ready_UI_Layer()
 {
+
+	CLayer*		pLayer = CLayer::Create();
+	NULL_CHECK_RETURN(pLayer, E_FAIL);
+
+
+	m_mapLayer[UI_LAYER] = pLayer;
+	return S_OK;
+}
+
+HRESULT CLogo::Ready_Camera_Layer()
+{
+	CLayer*		pLayer = CLayer::Create();
+	NULL_CHECK_RETURN(pLayer, E_FAIL);
+
+	m_mapLayer[CAMERA] = pLayer;
 	return S_OK;
 }
 
@@ -135,6 +144,7 @@ void CLogo::Free(void)
 
 	CScene::Free();
 }
+
 HRESULT CLogo::Ready_Resource(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Buffer_TriCol", CTriCol::Create(m_pGraphicDev)), E_FAIL);

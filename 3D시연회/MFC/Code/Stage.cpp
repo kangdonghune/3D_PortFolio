@@ -27,10 +27,10 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(CScene::Ready_Scene(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Resource(m_pGraphicDev), E_FAIL);
 
-	FAILED_CHECK_RETURN(Ready_Environment_Layer(L"Environment"), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_GameLogic_Layer(L"GameLogic"), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_UI_Layer(L"UI"), E_FAIL);
-
+	FAILED_CHECK_RETURN(Ready_Environment_Layer(), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_GameLogic_Layer(), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_UI_Layer(), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Camera_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_LightInfo(), E_FAIL);
 
 
@@ -66,19 +66,19 @@ void CStage::Render_Scene(void)
 
 }
 
-HRESULT CStage::Ready_Environment_Layer(const _tchar * pLayerTag)
+HRESULT CStage::Ready_Environment_Layer()
 {
 	CLayer*		pLayer = CLayer::Create();
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
-	
+
 	CGameObject*			pGameObject = nullptr;
 
-	//// DynamicCamera
-	pGameObject = CDynamicCamera::Create(m_pGraphicDev, 
-										&_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 1.f), &_vec3(0.f, 1.f, 0.f), 
-										D3DXToRadian(60.f), (_float)WINCX / (_float)WINCY, 0.1f, 1000.f);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"DynamicCamera", pGameObject), E_FAIL);
+	////// DynamicCamera
+	//pGameObject = CDynamicCamera::Create(m_pGraphicDev, 
+	//									&_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 1.f), &_vec3(0.f, 1.f, 0.f), 
+	//									D3DXToRadian(60.f), (_float)WINCX / (_float)WINCY, 0.1f, 1000.f);
+	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	//FAILED_CHECK_RETURN(Add_GameObject(ENVIRONMENT,L"DynamicCamera", pGameObject), E_FAIL);
 
 	
 
@@ -87,17 +87,12 @@ HRESULT CStage::Ready_Environment_Layer(const _tchar * pLayerTag)
 	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"SkyBox", pGameObject), E_FAIL);
 
-
-
-	
-
-	
-	m_mapLayer.emplace(pLayerTag, pLayer);
+	m_mapLayer[ENVIRONMENT] = pLayer;
 
 	return S_OK;
 }
 
-HRESULT CStage::Ready_GameLogic_Layer(const _tchar * pLayerTag)
+HRESULT CStage::Ready_GameLogic_Layer()
 {
 	CLayer*		pLayer = CLayer::Create();
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
@@ -109,15 +104,14 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar * pLayerTag)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
 
-	m_mapLayer.emplace(pLayerTag, pLayer);
-
-
+	m_mapLayer[GAMELOGIC] = pLayer;
 
 	return S_OK;
 }
 
-HRESULT CStage::Ready_UI_Layer(const _tchar * pLayerTag)
+HRESULT CStage::Ready_UI_Layer()
 {
+
 	CLayer*		pLayer = CLayer::Create();
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
 
@@ -129,8 +123,26 @@ HRESULT CStage::Ready_UI_Layer(const _tchar * pLayerTag)
 	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI", pGameObject), E_FAIL);
 
+	m_mapLayer[UI_LAYER] = pLayer;
 
-	m_mapLayer.emplace(pLayerTag, pLayer);
+	return S_OK;
+}
+
+HRESULT CStage::Ready_Camera_Layer()
+{
+	CLayer*		pLayer = CLayer::Create();
+	NULL_CHECK_RETURN(pLayer, E_FAIL);
+
+
+	CGameObject*			pGameObject = nullptr;
+	//// DynamicCamera
+	pGameObject = CDynamicCamera::Create(m_pGraphicDev,
+		&_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 1.f), &_vec3(0.f, 1.f, 0.f),
+		D3DXToRadian(60.f), (_float)WINCX / (_float)WINCY, 0.1f, 1000.f);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"DynamicCamera", pGameObject), E_FAIL);
+
+	m_mapLayer[CAMERA] = pLayer;
 
 	return S_OK;
 }

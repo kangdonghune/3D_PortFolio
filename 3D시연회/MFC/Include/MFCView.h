@@ -72,8 +72,8 @@ public:
 
 public:
 
-	CGameObject*			CreateCharictor(const _tchar* pLayerTag, const _tchar* pParentName, const _tchar* pObjProtoName);
-	CGameObject*			CreateObject(const _tchar* pLayerTag, const _tchar* pParentName, const _tchar* pObjProtoName);
+	CGameObject*			CreateCharictor(Layer type, const _tchar* pParentName, const _tchar* pObjProtoName);
+	CGameObject*			CreateObject(Layer type, const _tchar* pParentName, const _tchar* pObjProtoName);
 
 };
 
