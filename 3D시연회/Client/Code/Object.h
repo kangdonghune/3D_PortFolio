@@ -15,7 +15,7 @@ class CCalculator;
 class CCollider;
 class CNaviMesh;
 class CSphrerMeshs;
-
+class CCollider;
 END
 class C_Object : public CGameObject
 {
@@ -44,6 +44,7 @@ private:
 	_vec3					m_vDir;
 	CSphere*				m_pShprer;
 	CTransform*				m_pShprerTransCom = nullptr;
+	CCollider*				m_pColliderCom = nullptr;
 
 public:
 	static C_Object*		Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pObjProtoName);

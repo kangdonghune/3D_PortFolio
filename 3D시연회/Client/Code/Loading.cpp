@@ -51,6 +51,7 @@ Engine::_uint CLoading::LoadingForStage(void)
 
 	//오브젝트
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Train", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Train/", L"Train.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_TrainRightDoor", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Train/", L"TrainRightDoor.X")), E_FAIL);
 
 	// 기타 등등
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Calculator", CCalculator::Create(m_pGraphicDev)), E_FAIL);

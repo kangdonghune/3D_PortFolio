@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Monster.h"
 #include "Object.h"
+#include "Building.h"
 #include "SkyBox.h"
 #include "DynamicCamera.h"
 
@@ -303,7 +304,7 @@ HRESULT CStage::Load_Stuff(const _tchar * pFilePath)
 	if (INVALID_HANDLE_VALUE == hFile)
 		return E_FAIL;
 	//리스트 초기화 진행 
-	Clear_List(GAMELOGIC, L"Building");
+	Clear_List(GAMELOGIC, L"Object");
 	DWORD dwByte = 0;
 	DWORD dwStringCount = 0;
 	TCHAR* szBuf = nullptr;
@@ -326,7 +327,7 @@ HRESULT CStage::Load_Stuff(const _tchar * pFilePath)
 		ReadFile(hFile, &LoadPos, sizeof(_vec3), &dwByte, nullptr);
 		ReadFile(hFile, &LoadRot, sizeof(_vec3), &dwByte, nullptr);
 		ReadFile(hFile, &LoadScale, sizeof(_vec3), &dwByte, nullptr);
-		pObj = Create_Object(GAMELOGIC, L"Building", wstrNametag.c_str());
+		pObj = Create_Object(GAMELOGIC, L"Object", wstrNametag.c_str());
 		CTransform* pTransCom = (CTransform*)pObj->Get_Component(L"Com_Transform", ID_DYNAMIC);
 		pTransCom->Set_Pos(&LoadPos);
 		pTransCom->Rotation2(ROT_X, LoadRot.x);
@@ -434,15 +435,15 @@ CGameObject* CStage::Create_Object(Layer type, const _tchar * pParentName, const
 	CGameObject* pGameObject = nullptr;
 	if (!lstrcmp(L"Building", pParentName))
 	{
-		pGameObject = C_Object::Create(m_pGraphicDev, pObjProtoName);
+		pGameObject = CBuilding::Create(m_pGraphicDev, pObjProtoName);
 		Engine::Get_Scene()->Add_GameObject(type, L"Building", pGameObject);
 		return pGameObject;
 	}
 
-	if (!lstrcmp(L"Stuff", pParentName))
+	if (!lstrcmp(L"Object", pParentName))
 	{
 		pGameObject = C_Object::Create(m_pGraphicDev, pObjProtoName);
-		Engine::Get_Scene()->Add_GameObject(type, L"Stuff", pGameObject);
+		Engine::Get_Scene()->Add_GameObject(type, L"Object", pGameObject);
 		return pGameObject;
 	}
 	if (pGameObject == nullptr)

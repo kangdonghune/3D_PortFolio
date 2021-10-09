@@ -200,10 +200,10 @@ BOOL CTabObject::OnInitDialog()
 	h_Root = m_ObjectTree.InsertItem(cst_Root, NULL, NULL);
 
 	h_entryBuilding = m_ObjectTree.InsertItem(_T("Building"), h_Root, NULL);
-	//m_ObjectTree.InsertItem(_T("Proto_Mesh_Hunter"), h_entryPlayer, NULL);
+	m_ObjectTree.InsertItem(_T("Proto_Mesh_Train"), h_entryBuilding, NULL);
 
-	h_entryStuff = m_ObjectTree.InsertItem(_T("Stuff"), h_Root, NULL);
-	m_ObjectTree.InsertItem(_T("Proto_Mesh_Train"), h_entryStuff, NULL);
+	h_entryStuff = m_ObjectTree.InsertItem(_T("Object"), h_Root, NULL);
+	m_ObjectTree.InsertItem(_T("Proto_Mesh_TrainRightDoor"), h_entryStuff, NULL);
 	//
 
 	//Slider
@@ -685,7 +685,7 @@ void CTabObject::OnBnClickedStuffSave()
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		//순회하면서 키와 리스트 아이템들 저장
-		list<CGameObject*> pPlayerlst = Engine::Get_List(GAMELOGIC, L"Stuff");
+		list<CGameObject*> pPlayerlst = Engine::Get_List(GAMELOGIC, L"Object");
 
 		//저장요소. 오브젝트 태그명(proto type name), pos, rotate, scale 
 		for (CGameObject* pObj : pPlayerlst)
@@ -754,7 +754,7 @@ void CTabObject::OnBnClickedStuffLoad()
 			ReadFile(hFile, &LoadPos, sizeof(_vec3), &dwByte, nullptr);
 			ReadFile(hFile, &LoadRot, sizeof(_vec3), &dwByte, nullptr);
 			ReadFile(hFile, &LoadScale, sizeof(_vec3), &dwByte, nullptr);
-			pObj = pView->CreateObject(GAMELOGIC, L"Stuff", wstrNametag.c_str());
+			pObj = pView->CreateObject(GAMELOGIC, L"Object", wstrNametag.c_str());
 			CTransform* pTransCom = (CTransform*)pObj->Get_Component(L"Com_Transform", ID_DYNAMIC);
 			pTransCom->Set_Pos(&LoadPos);
 			pTransCom->Rotation2(ROT_X, LoadRot.x);

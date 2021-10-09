@@ -103,6 +103,9 @@
     <Filter Include="04. Component\11.SphrerMeshs">
       <UniqueIdentifier>{75675801-4674-4987-ac13-78f91ed80b03}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. Component\07. Collider\00.DynamicCollider">
+      <UniqueIdentifier>{99d48e3c-6651-496b-a85f-88c273432931}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\Management.cpp">
@@ -200,6 +203,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\SphereMeshs.cpp">
       <Filter>04. Component\11.SphrerMeshs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\DynamicCollider.cpp">
+      <Filter>04. Component\07. Collider\00.DynamicCollider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -307,6 +313,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\SphereMeshs.h">
       <Filter>04. Component\11.SphrerMeshs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\DynamicCollider.h">
+      <Filter>04. Component\07. Collider\00.DynamicCollider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

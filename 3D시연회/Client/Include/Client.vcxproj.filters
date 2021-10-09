@@ -61,8 +61,11 @@
     <Filter Include="02. GameObject\06.Object">
       <UniqueIdentifier>{8295e873-2d83-4520-acbe-c1c3d147d607}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\07.Sphere">
+    <Filter Include="02. GameObject\08.Sphere">
       <UniqueIdentifier>{f5d4c64a-e78b-4844-8fe3-431e126c628b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\07.Building">
+      <UniqueIdentifier>{d6ed35d0-62fa-43f3-bb70-6dda65c15584}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -121,13 +124,16 @@
       <Filter>02. GameObject\06.Object</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\Sphrer.h">
-      <Filter>02. GameObject\07.Sphere</Filter>
+      <Filter>02. GameObject\08.Sphere</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\Terrain.h">
       <Filter>02. GameObject\03. Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\Struct.h">
       <Filter>98. 헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Building.h">
+      <Filter>02. GameObject\07.Building</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -174,10 +180,13 @@
       <Filter>02. GameObject\06.Object</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Sphrer.cpp">
-      <Filter>02. GameObject\07.Sphere</Filter>
+      <Filter>02. GameObject\08.Sphere</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Terrain.cpp">
       <Filter>02. GameObject\03. Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Building.cpp">
+      <Filter>02. GameObject\07.Building</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

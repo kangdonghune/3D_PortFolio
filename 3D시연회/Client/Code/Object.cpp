@@ -64,6 +64,7 @@ void C_Object::Render_Object(void)
 	//m_pNaviCom->Render_NaviMesh();
 
 	m_pMeshCom->Render_Meshes();
+	m_pColliderCom->Render_Collider(COLLTYPE(false), m_pTransformCom->Get_WorldMatrix());
 
 }
 
@@ -96,9 +97,10 @@ HRESULT C_Object::Add_Component(void)
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
-
-
-
+	// Collider
+	pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize());
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_STATIC].emplace(L"Com_Collider", pComponent);
 	return S_OK;
 
 }

@@ -315,11 +315,28 @@ Engine::_bool Engine::CCalculator::Collision_AABB(const _vec3* pDestMin,
 	return true;
 }
 
-_bool CCalculator::Collision_OBB(const _vec3 * pDestMin, const _vec3 * pDestMax, 
+_bool CCalculator::Collision_OBB(const _vec3 * pDestMin, const _vec3 * pDestMax, const _vec3 * pDestMaxDir, const _vec3* pDestCenter,
 									const _matrix * pDestWorld, 
-									const _vec3 * pSourMin, const _vec3 * pSourMax, 
-									const _matrix * pSourWorld)
+									const _vec3 * pSourMin, const _vec3 * pSourMax, const _vec3 * pSourCenter ,const _vec3 * pSourMaxDir,
+									const _matrix * pSourWorld, _float* pOut)
 {
+	_vec3 DestWolrdDir = {};
+	_vec3 SourWolrdDir = {};
+	D3DXVec3TransformNormal(&DestWolrdDir, pDestMaxDir, pDestWorld);
+	D3DXVec3TransformNormal(&SourWolrdDir, pSourMaxDir, pSourWorld);
+	_float fDestDist = D3DXVec3Dot(&DestWolrdDir, &DestWolrdDir); // Dest의 최대 거리
+	_float fSourDist = D3DXVec3Dot(&SourWolrdDir, &SourWolrdDir); // Sour의 최대 거리
+
+	_vec3 DestWorldCenter = {};
+	_vec3 SourWorldCenter = {};
+	D3DXVec3TransformCoord(&DestWorldCenter, pDestCenter, pDestWorld);
+	D3DXVec3TransformCoord(&SourWorldCenter, pSourCenter, pSourWorld);
+	_vec3 DestToSourDir = SourWorldCenter - DestWorldCenter;
+	_float fMaxDist = fDestDist + fSourDist;
+	_float DestToSourDist = D3DXVec3Dot(&DestToSourDir, &DestToSourDir);
+	if (fMaxDist < DestToSourDist)
+		return false;
+
 	OBB		tObb[2];
 	ZeroMemory(tObb, sizeof(OBB) * 2);
 
@@ -361,6 +378,8 @@ _bool CCalculator::Collision_OBB(const _vec3 * pDestMin, const _vec3 * pDestMax,
 		}
 	}
 	
+	*pOut = fMaxDist - DestToSourDist;
+		
 	return true;
 }
 

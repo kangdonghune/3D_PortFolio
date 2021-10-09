@@ -17,6 +17,7 @@
 #include "Player.h"
 #include "Monster.h"
 #include "Object.h"
+#include "Building.h"
 #include "Form.h"
 #include "TabChar.h"
 #include "TabObject.h"
@@ -261,16 +262,16 @@ CGameObject * CMFCView::CreateObject(Layer type, const _tchar * pParentName, con
 	CGameObject* pGameObject = nullptr;
 	if (!lstrcmp(L"Building", pParentName))
 	{
-		pGameObject = C_Object::Create(m_pGraphicDev, pObjProtoName);
+		pGameObject = CBuilding::Create(m_pGraphicDev, pObjProtoName);
 		m_pManagementClass->Get_Scene()->Add_GameObject(type, L"Building", pGameObject);
 		m_pForm->m_ptabObject->Set_Object(nullptr);
 		return pGameObject;
 	}
 
-	if (!lstrcmp(L"Stuff", pParentName))
+	if (!lstrcmp(L"Object", pParentName))
 	{
 		pGameObject = C_Object::Create(m_pGraphicDev, pObjProtoName);
-		m_pManagementClass->Get_Scene()->Add_GameObject(type, L"Stuff", pGameObject);
+		m_pManagementClass->Get_Scene()->Add_GameObject(type, L"Object", pGameObject);
 		m_pForm->m_ptabObject->Set_Object(nullptr);
 		return pGameObject;
 	}

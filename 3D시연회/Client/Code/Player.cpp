@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "Sphrer.h"
+#include "Object.h"
 #include "Export_Function.h"
 
 #include "Terrain.h"
@@ -26,13 +27,13 @@ CPlayer::~CPlayer(void)
 HRESULT CPlayer::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
-	FAILED_CHECK_RETURN(Add_Object(), E_FAIL);
+//	FAILED_CHECK_RETURN(Add_Object(), E_FAIL);
 	FAILED_CHECK_RETURN(CGameObject::Ready_Object(), E_FAIL);
 
-	m_pTransformCom->Set_Scale(0.01f, 0.01f, 0.01f);
-	m_pTransformCom->Set_Pos(0.f, 0.f, 0.f);
+	//m_pTransformCom->Set_Scale(0.01f, 0.01f, 0.01f);
+	//m_pTransformCom->Set_Pos(0.f, 0.f, 0.f);
 	
-	//m_pNaviCom->Set_CellIndex(1);
+	FAILED_CHECK_RETURN(LateAdd_Component(), E_FAIL);
 	m_pMeshCom->Set_AnimationIndex(0);
 	
 	return S_OK;
@@ -54,9 +55,10 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 	
-	_vec3	vPos;
-	m_pTransformCom->Get_Info(INFO_POS, &vPos);
-	m_pShprerTransCom->Set_Pos(vPos.x, vPos.y+ m_pShprer->Get_Height(), vPos.z);
+	//_vec3	vPos;
+	//m_pTransformCom->Get_Info(INFO_POS, &vPos);
+	//m_pShprerTransCom->Set_Pos(vPos.x, vPos.y+ m_pShprer->Get_Height(), vPos.z);
+
 
 	return 0;
 }
@@ -64,10 +66,10 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 void CPlayer::Render_Object(void)
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
-
-
-
-	m_pMeshCom->Render_Meshes();;
+	m_pMeshCom->Render_Meshes();
+	_matrix	matWorld;
+	m_pTransformCom->Get_WorldMatrix(&matWorld);
+	m_pDynamicColliderCom->Render_Buffer(&matWorld);
 }
 
 HRESULT CPlayer::Add_Component(void)
@@ -100,8 +102,26 @@ HRESULT CPlayer::Add_Component(void)
 
 
 
+
+
 	return S_OK;
 
+}
+
+HRESULT CPlayer::LateAdd_Component(void)
+{
+	CComponent*			pComponent = nullptr;
+
+	_vec3 PlayerPos = {};
+	m_pTransformCom->Get_Info(INFO_POS, &PlayerPos); //플레이어 월드 좌표
+	_matrix matWorld, matInverseWorld; 
+	m_pTransformCom->Get_WorldMatrix(&matWorld); //플레이어 월드행렬
+	D3DXMatrixInverse(&matInverseWorld, NULL, &matWorld); //플레이어 월드 행렬 역행렬로
+	D3DXVec3TransformCoord(&PlayerPos, &PlayerPos, &matInverseWorld); //플레이어 월드 좌표를 로컬 좌표로
+	pComponent = m_pDynamicColliderCom = CDynamicCollider::Create(m_pGraphicDev, &PlayerPos, 175.f, 20.f, 20.f);
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Transform", pComponent);
+	return S_OK;
 }
 
 HRESULT CPlayer::Add_Object(void)
@@ -118,46 +138,75 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 	m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
 
 
-	if (GetAsyncKeyState('W') & 0x8000)
+	if (Get_DIKeyState(DIK_W) & 0x80)
 	{
-		_vec3	vPos, vDir;
+		_vec3	vPos, vPushPos, vDir;
+		_float  fPushDist;
 		m_pTransformCom->Get_Info(INFO_POS, &vPos);
 		m_pTransformCom->Get_Info(INFO_LOOK, &vDir);
 		D3DXVec3Normalize(&vDir, &vDir);
-
+		
+		
 		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimeDelta * 5.f)));
+		if (fPushDist = Check_ObjectCollision())//0이 아니면 충돌
+		{																				 
+			vPushPos = vPos - vDir *fTimeDelta *5.f;
+			m_pTransformCom->Set_Pos(&vPushPos);
+		}
+			
+
 		m_pMeshCom->Set_AnimationIndex(0);
 	}
 	
-
-	if (GetAsyncKeyState('S') & 0x8000)
+	if (Get_DIKeyState(DIK_S) & 0x80)
 	{
-		_vec3	vPos, vDir;
+		_vec3	vPos, vPushPos, vDir;
+		_float  fPushDist;
 		m_pTransformCom->Get_Info(INFO_POS, &vPos);
 		m_pTransformCom->Get_Info(INFO_LOOK, &vDir);
 		D3DXVec3Normalize(&vDir, &vDir);
 
+
 		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimeDelta * -5.f)));
+		if (fPushDist = Check_ObjectCollision())//0이 아니면 충돌
+		{
+			vPushPos = vPos + vDir *fTimeDelta *5.f;
+			m_pTransformCom->Set_Pos(&vPushPos);
+		}
+		m_pMeshCom->Set_AnimationIndex(0);
 	}
 
-	if (GetAsyncKeyState('A') & 0x8000)
+	if (Get_DIKeyState(DIK_A) & 0x80)
 	{
-		_vec3	vPos, vDir;
+		_vec3	vPos, vPushPos, vDir;
+		_float  fPushDist;
 		m_pTransformCom->Get_Info(INFO_POS, &vPos);
 		m_pTransformCom->Get_Info(INFO_RIGHT, &vDir);
 		D3DXVec3Normalize(&vDir, &vDir);
 
 		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimeDelta * -5.f)));
+		if (fPushDist = Check_ObjectCollision())//0이 아니면 충돌
+		{
+			vPushPos = vPos + vDir *fTimeDelta *5.f;
+			m_pTransformCom->Set_Pos(&vPushPos);
+		}
 	}
 
-	if (GetAsyncKeyState('D') & 0x8000)
+	if (Get_DIKeyState(DIK_D) & 0x80)
 	{
-		_vec3	vPos, vDir;
+		_vec3	vPos, vPushPos, vDir;
+		_float  fPushDist;
 		m_pTransformCom->Get_Info(INFO_POS, &vPos);
 		m_pTransformCom->Get_Info(INFO_RIGHT, &vDir);
 		D3DXVec3Normalize(&vDir, &vDir);
+
 
 		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimeDelta * 5.f)));
+		if (fPushDist = Check_ObjectCollision())//0이 아니면 충돌
+		{
+			vPushPos = vPos - vDir *fTimeDelta *5.f;
+			m_pTransformCom->Set_Pos(&vPushPos);
+		}
 	}	
 
 
@@ -178,9 +227,32 @@ HRESULT CPlayer::Select_ProtoMesh(const _tchar * pObjProtoName)
 	// DynamicMesh
 	pComponent = m_pMeshCom = dynamic_cast<CDynamicMesh*>(Clone_Proto(pObjProtoName));
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].emplace(L"Com_Mesh", pComponent);
+	m_mapComponent[ID_STATIC].emplace(L"Com_DynamicCollider", pComponent);
 
 	return S_OK;
+}
+
+_float CPlayer::Check_ObjectCollision()
+{
+	list<CGameObject*> Objlist = Get_List(GAMELOGIC, L"Object");
+
+	_float fPushDist = 0.f;
+
+	for (CGameObject* pGameObj : Objlist)
+	{
+		C_Object* pObj = dynamic_cast<C_Object*>(pGameObj);
+		NULL_CHECK_RETURN(pObj, false);
+		CCollider* pCollider = (CCollider*)pObj->Get_Component(L"Com_Collider", ID_STATIC);
+
+		if (m_pCalculatorCom->Collision_OBB(m_pDynamicColliderCom->Get_Min(), m_pDynamicColliderCom->Get_Max(),m_pDynamicColliderCom->Get_Center(), m_pDynamicColliderCom->Get_MaxDir(),
+											m_pDynamicColliderCom->Get_ColliderWorld(),
+											pCollider->Get_Min(), pCollider->Get_Max(), pCollider->Get_Center() ,pCollider->Get_MaxDir(),
+											pCollider->Get_CollWorldMatrix(),
+											&fPushDist
+											))
+			return fPushDist;
+	}
+	return 0;
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pObjProtoName)
@@ -198,6 +270,6 @@ CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pObjProtoN
 void CPlayer::Free(void)
 {
 	CGameObject::Free();
-	m_pShprer->Set_Dead(true);
+	//m_pShprer->Set_Dead(true);
 }
 

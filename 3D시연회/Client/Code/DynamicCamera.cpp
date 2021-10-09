@@ -129,28 +129,22 @@ void CDynamicCamera::Mouse_Move(const _float& fTimeDelta)
 {
 	if (m_pTarget != nullptr)
 	{
-
-		_matrix		matCamWorld;
-		D3DXMatrixInverse(&matCamWorld, NULL, &m_matView);
-
 		_long	dwMouseMove = 0;
 
-		if (dwMouseMove = Get_DIMouseMove(DIMS_Y)) //플레이어의 룩만 회전
+		if (dwMouseMove = Get_DIMouseMove(DIMS_Y))
 		{
-			//m_pTargetTransCom->Rotation(ROT_X, D3DXToRadian(dwMouseMove / 10.f));
-		}
+			m_fMouseRotation += (dwMouseMove / 10.f);
+			if (m_fMouseRotation > 55.f)
+				m_fMouseRotation = 55.f;
+			if (m_fMouseRotation < -55.f)
+				m_fMouseRotation = -55.f;
 
+		}
 		if (dwMouseMove = Get_DIMouseMove(DIMS_X)) //플레이어 자체를 회전
 		{
 			m_pTargetTransCom->Rotation(ROT_Y, D3DXToRadian(dwMouseMove / 10.f));
 		}
 	}
-
-	else
-	{
-
-	}
-
 
 }
 
@@ -180,15 +174,37 @@ void CDynamicCamera::Fallow_Target()
 	
 	D3DXVec3TransformCoord(&TargetPos, &TargetPos, &matInverseWorld);// 타겟 좌표 로컬로 내린 후
 
-	TargetCameraPos.x = TargetPos.x + 40.f;
-	TargetCameraPos.y = TargetPos.y + 130.f;
-	TargetCameraPos.z = TargetPos.z - 220.f; // 타겟 로컬 기준으로 위치를 잡아준 후
+	TargetCameraPos.x = TargetPos.x + 50.f;
+	if (m_fMouseRotation > 0)
+	{
+		TargetCameraPos.y = TargetPos.y + 150.f * (2-cosf(D3DXToRadian(m_fMouseRotation))); // 마우스 회전값을 기준으로 거리를 전환
+		//TargetCameraPos.z = TargetPos.z - (220.f *cosf(D3DXToRadian(m_fMouseRotation) - 220.f)); // 타겟 로컬 기준으로 위치를 잡아준 후
+		TargetCameraPos.z = TargetPos.z - 470.f * cosf(D3DXToRadian(m_fMouseRotation)); // 타겟 로컬 기준으로 위치를 잡아준 후
+	}
+	else
+	{
+		TargetCameraPos.y = TargetPos.y + 150.f * cosf(D3DXToRadian(m_fMouseRotation)); // 마우스 회전값을 기준으로 거리를 전환
+		TargetCameraPos.z = TargetPos.z - 470.f * cosf(D3DXToRadian(m_fMouseRotation)); // 타겟 로컬 기준으로 위치를 잡아준 후
 
+	}
+
+	
 	D3DXVec3TransformCoord(&TargetCameraPos, &TargetCameraPos, &matWorld); //해당 로컬 위치를 타겟 월드 행렬로 변환
 
 	m_vEye = TargetCameraPos;
+
+	_matrix		matCamWorld;
+	D3DXMatrixInverse(&matCamWorld, NULL, &m_matView);
+
+	_vec3		vRight;
+	memcpy(&vRight, &matCamWorld.m[0][0], sizeof(_vec3));
+
+	_matrix		matRot;
+	D3DXMatrixRotationAxis(&matRot, &vRight, D3DXToRadian(m_fMouseRotation));
+	D3DXVec3TransformNormal(&vTargetLookDir, &vTargetLookDir, &matRot);
+
 	m_vAt.x = TargetCameraPos.x + vTargetLookDir.x*100.f;
-	m_vAt.y = TargetCameraPos.y;
+	m_vAt.y = TargetCameraPos.y + vTargetLookDir.y*100.f;
 	m_vAt.z = TargetCameraPos.z + vTargetLookDir.z*100.f;
 
 

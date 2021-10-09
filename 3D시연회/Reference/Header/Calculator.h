@@ -41,11 +41,16 @@ public:
 									const _matrix* pSourWorld);
 
 	_bool			Collision_OBB(const _vec3* pDestMin,
-								const _vec3* pDestMax,
-								const _matrix* pDestWorld,
-								const _vec3* pSourMin,
-								const _vec3* pSourMax,
-								const _matrix* pSourWorld);
+									const _vec3* pDestMax,
+									const _vec3* pDestCenter,
+									const _vec3 * pDestMaxDir,
+									const _matrix* pDestWorld,
+									const _vec3* pSourMin,
+									const _vec3* pSourMax,
+									const _vec3 * pSourCenter,
+									const _vec3 * pSourMaxDir,
+									const _matrix* pSourWorld,
+									_float* fOut);
 
 private:
 	void		Set_Point(OBB* pObb, const _vec3* pMin, const _vec3* pMax);

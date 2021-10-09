@@ -76,15 +76,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		{
 			Update_TimeDelta(L"Timer_Immediate");
 			_float fTimeImmediate = Get_TimeDelta(L"Timer_Immediate");
-			
+	/*		
 			if (IsPermit_Call(L"Frame60", fTimeImmediate))
-			{
-				Update_TimeDelta(L"Timer_FPS60");
-				_float fTimeFPS60 = Get_TimeDelta(L"Timer_FPS60");
+			{*/
+	/*			Update_TimeDelta(L"Timer_Immediate");
+				_float fTimeFPS60 = Get_TimeDelta(L"Timer_Immediate");*/
 
-				pMainApp->Update_MainApp(fTimeFPS60);
+				pMainApp->Update_MainApp(fTimeImmediate);
 				pMainApp->Render_MainApp();
-			}
+			//}
 
 			/*pMainApp->Update_MainApp(fTimeImmediate);
 			pMainApp->Render_MainApp();*/

@@ -29,7 +29,7 @@ private:
 	_bool			m_bFix		= true;
 	CGameObject*	m_pTarget = nullptr;
 	CTransform*		m_pTargetTransCom = nullptr;
-
+	_float			m_fMouseRotation = 0.f;
 public:
 	static CDynamicCamera*		Create(LPDIRECT3DDEVICE9 pGraphicDev,
 										const _vec3* pEye, const _vec3* pAt, const _vec3* pUp, 

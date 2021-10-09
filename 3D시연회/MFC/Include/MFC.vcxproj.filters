@@ -62,6 +62,9 @@
     <Filter Include="03.GameObject\06.Object">
       <UniqueIdentifier>{2023d1b8-bc0f-400e-993d-feb83779bcd9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\07.Building">
+      <UniqueIdentifier>{726088e7-a6b0-401f-9b68-ca020ba3c51b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -133,6 +136,9 @@
     <ClInclude Include="..\Code\Struct.h">
       <Filter>99.Default</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\Building.h">
+      <Filter>03.GameObject\07.Building</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFrm.cpp">
@@ -185,6 +191,9 @@
     </ClCompile>
     <ClCompile Include="TabTerrain.cpp">
       <Filter>01.View\00.Form\01.Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Building.cpp">
+      <Filter>03.GameObject\07.Building</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

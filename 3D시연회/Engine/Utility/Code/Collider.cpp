@@ -199,6 +199,9 @@ HRESULT Engine::CCollider::Ready_Collider(const _vec3* pPos, const _ulong& dwNum
 	}
 
 #endif
+
+	m_vCenter = (m_vMax + m_vMin) / 2;
+	m_vMaxDir = m_vMax - m_vCenter;
 	return S_OK;
 }
 
@@ -217,7 +220,7 @@ void Engine::CCollider::Render_Collider(COLLTYPE eType, const _matrix* pCollider
 	m_pGraphicDev->SetIndices(m_pIB);
 	m_pGraphicDev->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 8, 0, 12);
 
-	m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+
 #endif
 }
 

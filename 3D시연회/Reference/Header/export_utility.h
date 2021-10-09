@@ -16,6 +16,7 @@
 #include "Camera.h"
 #include "Calculator.h"
 #include "Collider.h"
+#include "DynamicCollider.h"
 #include "Optimization.h"
 
 #include "StaticMesh.h"

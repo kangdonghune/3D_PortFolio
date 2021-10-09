@@ -16,6 +16,11 @@ public:
 	const _matrix*			Get_CollWorldMatrix(void) { return &m_matCollWorld; }
 	const _vec3*			Get_Min(void) { return &m_vMin; }
 	const _vec3*			Get_Max(void) { return &m_vMax; }
+	const _vec3*			Get_Center(void) { return &m_vCenter; }
+	const _vec3*			Get_MaxDir(void) { return &m_vMaxDir; }
+
+
+
 
 public:
 	HRESULT			Ready_Collider(const _vec3* pPos, const _ulong& dwNumVtx, const _ulong& dwVtxSize);
@@ -23,6 +28,8 @@ public:
 
 private:
 	_vec3						m_vMin, m_vMax;
+	_vec3						m_vCenter;
+	_vec3						m_vMaxDir;
 
 #ifdef _DEBUG
 	LPDIRECT3DVERTEXBUFFER9		m_pVB;

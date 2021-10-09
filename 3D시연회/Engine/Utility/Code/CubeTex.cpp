@@ -2,7 +2,7 @@
 
 USING(Engine)
 
-Engine::CCubeTex::CCubeTex(LPDIRECT3DDEVICE9 pGraphicDev)	
+Engine::CCubeTex::CCubeTex(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CVIBuffer(pGraphicDev)
 {
 
@@ -42,26 +42,26 @@ HRESULT Engine::CCubeTex::Ready_Buffer(void)
 
 	FAILED_CHECK_RETURN(CVIBuffer::Ready_Buffer(), E_FAIL);
 
-	
+
 	VTXCUBE*			pVertex = NULL;
 
 	m_pVB->Lock(0, 0, (void**)&pVertex, 0);
 
-	
-	pVertex[0].vPos		= _vec3(-1.f, 1.f, -1.f);
-	pVertex[0].vTexUV	= pVertex[0].vPos;
 
-	pVertex[1].vPos		= _vec3(1.f, 1.f, -1.f);
-	pVertex[1].vTexUV	= pVertex[1].vPos;
+	pVertex[0].vPos = _vec3(-1.f, 1.f, -1.f);
+	pVertex[0].vTexUV = pVertex[0].vPos;
 
-	pVertex[2].vPos		= _vec3(1.f, -1.f, -1.f);
-	pVertex[2].vTexUV	= pVertex[2].vPos;
+	pVertex[1].vPos = _vec3(1.f, 1.f, -1.f);
+	pVertex[1].vTexUV = pVertex[1].vPos;
 
-	pVertex[3].vPos		= _vec3(-1.f, -1.f, -1.f);
+	pVertex[2].vPos = _vec3(1.f, -1.f, -1.f);
+	pVertex[2].vTexUV = pVertex[2].vPos;
+
+	pVertex[3].vPos = _vec3(-1.f, -1.f, -1.f);
 	pVertex[3].vTexUV = pVertex[3].vPos;
 
-	
-	pVertex[4].vPos		= _vec3(-1.f, 1.f, 1.f);
+
+	pVertex[4].vPos = _vec3(-1.f, 1.f, 1.f);
 	pVertex[4].vTexUV = pVertex[4].vPos;
 
 	pVertex[5].vPos = _vec3(1.f, 1.f, 1.f);
