@@ -56,7 +56,7 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 
 	Key_Input(fTimeDelta);
 
-	//m_pMeshCom->Play_Animation(fTimeDelta);
+	m_pMeshCom->Play_Animation(fTimeDelta);
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 	

@@ -24,7 +24,7 @@ private:
 	// 트랙은 최대 2개 이상만 생성(이 둘은 서로 같은 값이면 안된다)
 	_uint								m_iCurrentTrack;
 	_uint								m_iNewTrack;
-	
+
 	// 애니메이션이 재생되는 시간을 누적시키기 위한 변수
 	_float								m_fAccTime;
 

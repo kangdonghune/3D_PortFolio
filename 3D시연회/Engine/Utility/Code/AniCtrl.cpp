@@ -23,10 +23,10 @@ Engine::CAniCtrl::CAniCtrl(const CAniCtrl& rhs)
 {
 	// 애니메이션 컨트롤러를 복제해주는 함수
 	rhs.m_pAniCtrl->CloneAnimationController(rhs.m_pAniCtrl->GetMaxNumAnimationOutputs(),	// 복제시 원본 객체에서 제공하는 애니메이션의 개수
-										rhs.m_pAniCtrl->GetMaxNumAnimationSets(),		// 구동 가능한 애니메이션의 최대 개수(대부분 첫 번째 인자값과 같은 값)
-										rhs.m_pAniCtrl->GetMaxNumTracks(),				// 최대 트랙의 개수(우리는 진짜 많이 사용해봐야 두 개쓴다)
-										rhs.m_pAniCtrl->GetMaxNumEvents(),				// 애니메이션에 삽입된 이벤트 정보(우리는 사용하지 못한다)
-										&m_pAniCtrl);
+		rhs.m_pAniCtrl->GetMaxNumAnimationSets(),		// 구동 가능한 애니메이션의 최대 개수(대부분 첫 번째 인자값과 같은 값)
+		rhs.m_pAniCtrl->GetMaxNumTracks(),				// 최대 트랙의 개수(우리는 진짜 많이 사용해봐야 두 개쓴다)
+		rhs.m_pAniCtrl->GetMaxNumEvents(),				// 애니메이션에 삽입된 이벤트 정보(우리는 사용하지 못한다)
+		&m_pAniCtrl);
 }
 
 Engine::CAniCtrl::~CAniCtrl(void)
@@ -45,9 +45,9 @@ void Engine::CAniCtrl::Set_AnimationIndex(const _uint& iIndex)
 		return;
 
 	m_iNewTrack = (m_iCurrentTrack == 0 ? 1 : 0);
-	
+
 	LPD3DXANIMATIONSET		pAS = NULL;
-	
+
 	// 인덱스 값에 해당하는 애니메이션 정보를 얻어오는 함수
 	m_pAniCtrl->GetAnimationSet(iIndex, &pAS);
 	// m_pAniCtrl->GetAnimationSetByName(); // 문자열 입력을 통해 원하는 애니메이션 셋을 얻어오는 함수
@@ -99,7 +99,7 @@ _bool CAniCtrl::Is_AnimationsetFinish(void)
 	// 0.1이란 값은 크게 의미가 없음, 본인의 게임의 특성 또는 취향에 맞춰서 값을 변경 가능
 	if (TrackInfo.Position >= m_dPeriod - 0.1)
 		return true;
-	
+
 	return false;
 }
 

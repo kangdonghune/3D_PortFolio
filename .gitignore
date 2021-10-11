@@ -82,6 +82,10 @@ ipch/
 *.cachefile
 *.VC.db
 
+## 폴더 제외1
+Resource/
+
+
 # Visual Studio profiler
 *.psess
 *.vsp

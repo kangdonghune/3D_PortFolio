@@ -159,6 +159,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Code\AnimeEnum.h" />
     <ClInclude Include="..\Code\BackGround.h" />
     <ClInclude Include="..\Code\Building.h" />
     <ClInclude Include="..\Code\Define.h" />

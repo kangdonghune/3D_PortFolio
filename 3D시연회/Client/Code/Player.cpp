@@ -34,7 +34,7 @@ HRESULT CPlayer::Ready_Object(void)
 	//m_pTransformCom->Set_Pos(0.f, 0.f, 0.f);
 	
 	FAILED_CHECK_RETURN(LateAdd_Component(), E_FAIL);
-	m_pMeshCom->Set_AnimationIndex(0);
+	m_pMeshCom->Set_AnimationIndex(AK47_Idle1);
 	
 	return S_OK;
 }
@@ -47,14 +47,16 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 
 	CGameObject::Update_Object(fTimeDelta);
 
-	//SetUp_OnTerrain();
+//	SetUp_OnTerrain();
 
 	Key_Input(fTimeDelta);
 
-	//m_pMeshCom->Play_Animation(fTimeDelta);
+	m_pMeshCom->Play_Animation(fTimeDelta);
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
-	
+
+
+
 	//_vec3	vPos;
 	//m_pTransformCom->Get_Info(INFO_POS, &vPos);
 	//m_pShprerTransCom->Set_Pos(vPos.x, vPos.y+ m_pShprer->Get_Height(), vPos.z);
@@ -154,8 +156,8 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 			m_pTransformCom->Set_Pos(&vPushPos);
 		}
 			
+		m_pMeshCom->Set_AnimationIndex(AK47_Walk_F);
 
-		m_pMeshCom->Set_AnimationIndex(0);
 	}
 	
 	if (Get_DIKeyState(DIK_S) & 0x80)
@@ -173,7 +175,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 			vPushPos = vPos + vDir *fTimeDelta *5.f;
 			m_pTransformCom->Set_Pos(&vPushPos);
 		}
-		m_pMeshCom->Set_AnimationIndex(0);
+		m_pMeshCom->Set_AnimationIndex(AK47_Walk_B);
 	}
 
 	if (Get_DIKeyState(DIK_A) & 0x80)
@@ -190,6 +192,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 			vPushPos = vPos + vDir *fTimeDelta *5.f;
 			m_pTransformCom->Set_Pos(&vPushPos);
 		}
+		m_pMeshCom->Set_AnimationIndex(AK47_Walk_L);
 	}
 
 	if (Get_DIKeyState(DIK_D) & 0x80)
@@ -207,6 +210,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 			vPushPos = vPos - vDir *fTimeDelta *5.f;
 			m_pTransformCom->Set_Pos(&vPushPos);
 		}
+		m_pMeshCom->Set_AnimationIndex(AK47_Walk_R);
 	}	
 
 
@@ -217,7 +221,10 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 	//}
 
 	//if(true == m_pMeshCom->Is_AnimationsetFinish())
-	//	m_pMeshCom->Set_AnimationIndex(57);
+	//	m_pMeshCom->Set_AnimationIndex(57);\
+		
+	if (true == m_pMeshCom->Is_AnimationsetFinish())
+		m_pMeshCom->Set_AnimationIndex(AK47_Idle1);
 }
 
 
@@ -227,7 +234,7 @@ HRESULT CPlayer::Select_ProtoMesh(const _tchar * pObjProtoName)
 	// DynamicMesh
 	pComponent = m_pMeshCom = dynamic_cast<CDynamicMesh*>(Clone_Proto(pObjProtoName));
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].emplace(L"Com_DynamicCollider", pComponent);
+	m_mapComponent[ID_STATIC].emplace(L"Com_Mesh", pComponent);
 
 	return S_OK;
 }
