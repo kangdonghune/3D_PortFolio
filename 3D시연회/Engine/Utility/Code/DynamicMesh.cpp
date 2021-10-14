@@ -30,7 +30,7 @@ void CDynamicMesh::Set_AnimationIndex(const _uint & iIndex)
 
 void CDynamicMesh::Play_Animation(const _float & fTimeDelta)
 {
-//	m_pAniCtrl->Play_Animation(fTimeDelta);
+	m_pAniCtrl->Play_Animation(fTimeDelta);
 
 	_matrix		matTemp;
 	Update_FrameMatrices((D3DXFRAME_DERIVED*)m_pRootFrame, D3DXMatrixRotationY(&matTemp, D3DXToRadian(180.f)));

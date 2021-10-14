@@ -16,6 +16,7 @@
 #include "MainFrm.h"
 #include "Player.h"
 #include "Monster.h"
+#include "Weapon.h"
 #include "Object.h"
 #include "Building.h"
 #include "Form.h"
@@ -249,7 +250,13 @@ CGameObject* CMFCView::CreateCharictor(Layer type, const _tchar * pParentName, c
 		return pGameObject;
 	}
 
-
+	if (!lstrcmp(L"Weapon", pParentName))
+	{
+		pGameObject = CWeapon::Create(m_pGraphicDev, pObjProtoName);
+		m_pManagementClass->Get_Scene()->Add_GameObject(type, L"Weapon", pGameObject);
+		m_pForm->m_ptabObject->Set_Object(nullptr);
+		return pGameObject;
+	}
 
 	if (pGameObject == nullptr)
 		return nullptr;

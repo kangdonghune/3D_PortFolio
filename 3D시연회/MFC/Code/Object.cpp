@@ -75,8 +75,6 @@ void C_Object::Render_Object(void)
 
 void C_Object::Key_Input(const _float& fTimeDelta)
 {
-	m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-
 
 	if (Get_DIMouseState(DIM_LB) & 0X80)
 	{
@@ -146,8 +144,8 @@ HRESULT C_Object::Add_Component(void)
 HRESULT C_Object::Add_Object(void)
 {
 
-	m_pShprer = CSphere::Create(m_pGraphicDev, 2.f);
-	m_pShprer->Set_Height(1.5f);
+	m_pShprer = CSphere::Create(m_pGraphicDev, 1.f);
+	m_pShprer->Set_Height(3.5f);
 	m_pShprerTransCom = (CTransform*)m_pShprer->Get_Component(L"Com_Transform", ID_DYNAMIC);
 	return S_OK;	
 }

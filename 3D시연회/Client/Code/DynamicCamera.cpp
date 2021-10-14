@@ -179,12 +179,12 @@ void CDynamicCamera::Fallow_Target()
 	{
 		TargetCameraPos.y = TargetPos.y + 150.f * (2-cosf(D3DXToRadian(m_fMouseRotation))); // 마우스 회전값을 기준으로 거리를 전환
 		//TargetCameraPos.z = TargetPos.z - (220.f *cosf(D3DXToRadian(m_fMouseRotation) - 220.f)); // 타겟 로컬 기준으로 위치를 잡아준 후
-		TargetCameraPos.z = TargetPos.z - 470.f * cosf(D3DXToRadian(m_fMouseRotation)); // 타겟 로컬 기준으로 위치를 잡아준 후
+		TargetCameraPos.z = TargetPos.z - 220.f * cosf(D3DXToRadian(m_fMouseRotation)); // 타겟 로컬 기준으로 위치를 잡아준 후
 	}
 	else
 	{
 		TargetCameraPos.y = TargetPos.y + 150.f * cosf(D3DXToRadian(m_fMouseRotation)); // 마우스 회전값을 기준으로 거리를 전환
-		TargetCameraPos.z = TargetPos.z - 470.f * cosf(D3DXToRadian(m_fMouseRotation)); // 타겟 로컬 기준으로 위치를 잡아준 후
+		TargetCameraPos.z = TargetPos.z - 220.f * cosf(D3DXToRadian(m_fMouseRotation)); // 타겟 로컬 기준으로 위치를 잡아준 후
 
 	}
 

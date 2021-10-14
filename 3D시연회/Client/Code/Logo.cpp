@@ -22,6 +22,7 @@ HRESULT CLogo::Ready_Scene(void)
 
 	FAILED_CHECK_RETURN(Ready_Environment_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_GameLogic_Layer(), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Weapon_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_UI_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Camera_Layer(), E_FAIL);
 
@@ -109,6 +110,17 @@ HRESULT CLogo::Ready_GameLogic_Layer()
 }
 
 HRESULT CLogo::Ready_UI_Layer()
+{
+
+	CLayer*		pLayer = CLayer::Create();
+	NULL_CHECK_RETURN(pLayer, E_FAIL);
+
+
+	m_mapLayer[WEAPON] = pLayer;
+	return S_OK;
+}
+
+HRESULT CLogo::Ready_Weapon_Layer()
 {
 
 	CLayer*		pLayer = CLayer::Create();

@@ -65,6 +65,9 @@
     <Filter Include="03.GameObject\07.Building">
       <UniqueIdentifier>{726088e7-a6b0-401f-9b68-ca020ba3c51b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\08.Weapon">
+      <UniqueIdentifier>{0a8a28b6-35d9-429d-97ee-215060a21322}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -139,6 +142,9 @@
     <ClInclude Include="..\Code\Building.h">
       <Filter>03.GameObject\07.Building</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\Weapon.h">
+      <Filter>03.GameObject\08.Weapon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFrm.cpp">
@@ -194,6 +200,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Building.cpp">
       <Filter>03.GameObject\07.Building</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Weapon.cpp">
+      <Filter>03.GameObject\08.Weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

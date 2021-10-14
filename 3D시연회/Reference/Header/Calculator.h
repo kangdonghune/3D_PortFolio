@@ -52,6 +52,8 @@ public:
 									const _matrix* pSourWorld,
 									_float* fOut);
 
+	_bool			Collision_Sphere(CTransform * pDestTransform, _float fDestRadius, CTransform * pSourTransform, _float fSourRadius);
+
 private:
 	void		Set_Point(OBB* pObb, const _vec3* pMin, const _vec3* pMax);
 	void		Set_Axis(OBB* pObb);

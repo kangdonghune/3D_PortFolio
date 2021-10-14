@@ -383,6 +383,19 @@ _bool CCalculator::Collision_OBB(const _vec3 * pDestMin, const _vec3 * pDestMax,
 	return true;
 }
 
+_bool CCalculator::Collision_Sphere(CTransform * pDestTransform, _float fDestRadius, CTransform * pSourTransform, _float fSourRadius)
+{
+	_vec3 Dest = {};
+	_vec3 Sour = {};
+	pDestTransform->Get_Info(INFO_POS, &Dest);
+	pSourTransform->Get_Info(INFO_POS, &Sour);
+	_vec3 Dir = Sour - Dest;
+	_float Dist = D3DXVec3Dot(&Dir, &Dir);
+	if (Dist <= (fDestRadius + fSourRadius))
+		return true;
+	return false;
+}
+
 void CCalculator::Set_Point(OBB * pObb, const _vec3 * pMin, const _vec3 * pMax)
 {
 	pObb->vPoint[0] = _vec3(pMin->x, pMax->y, pMin->z);

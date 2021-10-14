@@ -36,7 +36,7 @@ HRESULT CPlayer::Ready_Object(void)
 	m_pTransformCom->Set_Pos(0.f, 0.f, 0.f);
 	
 	//m_pNaviCom->Set_CellIndex(1);
-	m_pMeshCom->Set_AnimationIndex(0);
+	m_pMeshCom->Set_AnimationIndex(38);
 	
 	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	m_pForm = dynamic_cast<CForm*>(pMain->m_MainSplitter.GetPane(0, 0));
@@ -54,7 +54,7 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 
 	//SetUp_OnTerrain();
 
-	Key_Input(fTimeDelta);
+	//Key_Input(fTimeDelta);
 
 	m_pMeshCom->Play_Animation(fTimeDelta);
 

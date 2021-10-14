@@ -25,14 +25,13 @@ CMonster::~CMonster(void)
 HRESULT CMonster::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
-	FAILED_CHECK_RETURN(Add_Object(), E_FAIL);
+	FAILED_CHECK_RETURN(Add_Collider(), E_FAIL);
 	FAILED_CHECK_RETURN(CGameObject::Ready_Object(), E_FAIL);
 
 	m_pTransformCom->Set_Scale(0.01f, 0.01f, 0.01f);
 	m_pTransformCom->Set_Pos(0.f, 0.f, 0.f);
 	
-	//m_pNaviCom->Set_CellIndex(1);
-	m_pMeshCom->Set_AnimationIndex(0);
+	m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
 
 
 
@@ -46,18 +45,27 @@ Engine::_int CMonster::Update_Object(const _float& fTimeDelta)
 
 	CGameObject::Update_Object(fTimeDelta);
 
-	//SetUp_OnTerrain();
-
-	//Key_Input(fTimeDelta);
-
+	StateCheck();
 	m_pMeshCom->Play_Animation(fTimeDelta);
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
-	m_pShprer->Update_Object(fTimeDelta);
+	m_pSphere->Update_Object(fTimeDelta);
 
-	_vec3	vPos;
-	m_pTransformCom->Get_Info(INFO_POS, &vPos);
-	m_pShprerTransCom->Set_Pos(vPos.x, vPos.y + m_pShprer->Get_Height(), vPos.z);
+	if (nullptr == m_pSphere->Get_ParentBoneMartrix())
+	{
+
+		const D3DXFRAME_DERIVED*		pFrame = m_pMeshCom->Get_FrameByName("Bone_GB_Skirt_Fr_01");
+
+		m_pSphere->Set_ParentBoneMartrix(&pFrame->CombinedTransformMatrix);
+		m_pSphere->Set_ParentWorldMartrix(m_pTransformCom->Get_WorldMatrix());
+	}
+
+
+	CGameObject::Update_Object(fTimeDelta);
+
+	m_pSphere->Update_Object(fTimeDelta);
+
+	m_pShprerTransCom->Set_ParentMatrix(&(*m_pSphere->Get_ParentBoneMartrix() * *m_pSphere->Get_ParentWorldMartrix()));
 
 	return 0;
 }
@@ -75,6 +83,30 @@ void CMonster::Render_Object(void)
 void CMonster::Key_Input(const _float& fTimeDelta)
 {
 
+}
+
+void CMonster::StateCheck()
+{
+	switch (type)
+	{
+	case MonsterState::IDLE:
+		if (true == m_pMeshCom->Is_AnimationsetFinish())
+			m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
+		break;
+	case MonsterState::IMPACT:
+		m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Impact_F_FromL);
+		if (true == m_pMeshCom->Is_AnimationsetFinish())
+			m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
+		break;
+	case MonsterState::Enum_END:
+		if (true == m_pMeshCom->Is_AnimationsetFinish())
+			m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
+		break;
+	default:
+		if (true == m_pMeshCom->Is_AnimationsetFinish())
+			m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
+		break;
+	}
 }
 
 HRESULT CMonster::Add_Component(void)
@@ -111,13 +143,13 @@ HRESULT CMonster::Add_Component(void)
 
 }
 
-HRESULT CMonster::Add_Object(void)
+HRESULT CMonster::Add_Collider(void)
 {
-
-	m_pShprer = CSphere::Create(m_pGraphicDev, 1.f);
-	m_pShprer->Set_Height(1.f);
-	m_pShprerTransCom = (CTransform*)m_pShprer->Get_Component(L"Com_Transform", ID_DYNAMIC);
-	return S_OK;	
+	m_pSphere = CSphere::Create(m_pGraphicDev, 30.2f);
+	m_pSphere->Set_Height(0.f);
+	m_pShprerTransCom = (CTransform*)m_pSphere->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	m_pShprerTransCom->Set_Pos(&_vec3{ 0.f, 0.f, 0.f });
+	return S_OK;
 }
 
 
@@ -148,6 +180,6 @@ CMonster* CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pObjProt
 void CMonster::Free(void)
 {
 	CGameObject::Free();
-	m_pShprer->Set_Dead(true);
+	m_pSphere->Set_Dead(true);
 }
 

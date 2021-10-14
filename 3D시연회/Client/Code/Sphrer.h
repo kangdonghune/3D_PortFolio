@@ -33,7 +33,10 @@ private:
 public:
 	const _float					Get_Radius() { return m_fRadius; }
 	const _float					Get_Height() { return m_fHeight; }
-
+	const _matrix*					Get_ParentBoneMartrix() { return m_pParentBoneMatrix; }
+	const _matrix*					Get_ParentWorldMartrix() { return m_pParentWorldMatrix; }
+	void							Set_ParentBoneMartrix(const _matrix* pParentBone) {m_pParentBoneMatrix = pParentBone; }
+	void							Set_ParentWorldMartrix(const _matrix*	pParentWolrd) { m_pParentWorldMatrix = pParentWolrd; }
 	void					Set_ID();
 	void					Set_Height(_float fHeight) { m_fHeight = fHeight; }
 	void					Set_Radius(_float fRadius) { m_fRadius = fRadius; }
@@ -51,6 +54,9 @@ private:
 	LPDIRECT3DVERTEXBUFFER9			m_pVB = nullptr;	// 정점들을 보관하는 컴 객체
 	LPD3DXMESH						m_pSphereMesh;
 	_ulong							m_dwFVF;	// FVF의종류
+
+	const _matrix*			m_pParentBoneMatrix = nullptr;
+	const _matrix*			m_pParentWorldMatrix = nullptr;
 
 public:
 	static	_int			m_iShpereCount;

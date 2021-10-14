@@ -34,7 +34,7 @@ HRESULT CPlayer::Ready_Object(void)
 	//m_pTransformCom->Set_Pos(0.f, 0.f, 0.f);
 	
 	FAILED_CHECK_RETURN(LateAdd_Component(), E_FAIL);
-	m_pMeshCom->Set_AnimationIndex(AK47_Idle1);
+	m_pMeshCom->Set_AnimationIndex(Player_Move_Idle_01);
 	
 	return S_OK;
 }
@@ -86,17 +86,16 @@ HRESULT CPlayer::Add_Component(void)
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Transform", pComponent);
 
-	// Calculator
-	pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
-
 	// renderer
 	pComponent = m_pRendererCom = Get_Renderer();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	pComponent->AddRef();
 	m_mapComponent[ID_STATIC].emplace(L"Com_Renderer", pComponent);
 
+	// Calculator
+	pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
 	//NaviMap
 	CTerrain* pTerrain = (CTerrain*)Engine::Get_List(GAMELOGIC, L"Terrain").front();
@@ -152,11 +151,11 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimeDelta * 5.f)));
 		if (fPushDist = Check_ObjectCollision())//0이 아니면 충돌
 		{																				 
-			vPushPos = vPos - vDir *fTimeDelta *5.f;
+			vPushPos = vPos - vDir *fTimeDelta *10.f;
 			m_pTransformCom->Set_Pos(&vPushPos);
 		}
 			
-		m_pMeshCom->Set_AnimationIndex(AK47_Walk_F);
+		m_pMeshCom->Set_AnimationIndex(Player_Move_Walk_F);
 
 	}
 	
@@ -172,10 +171,10 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimeDelta * -5.f)));
 		if (fPushDist = Check_ObjectCollision())//0이 아니면 충돌
 		{
-			vPushPos = vPos + vDir *fTimeDelta *5.f;
+			vPushPos = vPos + vDir *fTimeDelta *10.f;
 			m_pTransformCom->Set_Pos(&vPushPos);
 		}
-		m_pMeshCom->Set_AnimationIndex(AK47_Walk_B);
+		m_pMeshCom->Set_AnimationIndex(Player_Move_Walk_B);
 	}
 
 	if (Get_DIKeyState(DIK_A) & 0x80)
@@ -189,10 +188,10 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimeDelta * -5.f)));
 		if (fPushDist = Check_ObjectCollision())//0이 아니면 충돌
 		{
-			vPushPos = vPos + vDir *fTimeDelta *5.f;
+			vPushPos = vPos + vDir *fTimeDelta *10.f;
 			m_pTransformCom->Set_Pos(&vPushPos);
 		}
-		m_pMeshCom->Set_AnimationIndex(AK47_Walk_L);
+		m_pMeshCom->Set_AnimationIndex(Player_Move_Walk_L);
 	}
 
 	if (Get_DIKeyState(DIK_D) & 0x80)
@@ -207,24 +206,24 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimeDelta * 5.f)));
 		if (fPushDist = Check_ObjectCollision())//0이 아니면 충돌
 		{
-			vPushPos = vPos - vDir *fTimeDelta *5.f;
+			vPushPos = vPos - vDir *fTimeDelta *10.f;
 			m_pTransformCom->Set_Pos(&vPushPos);
 		}
-		m_pMeshCom->Set_AnimationIndex(AK47_Walk_R);
+		m_pMeshCom->Set_AnimationIndex(Player_Move_Walk_R);
 	}	
 
 
 		
-	//if (Get_DIMouseState(DIM_RB) & 0X80)
-	//{
-	//	m_pMeshCom->Set_AnimationIndex(30);
-	//}
+	if (Get_DIMouseState(DIM_LB) & 0X80)
+	{
+		m_pMeshCom->Set_AnimationIndex(Player_Atk_Power_01_NoPower);
+	}
 
 	//if(true == m_pMeshCom->Is_AnimationsetFinish())
 	//	m_pMeshCom->Set_AnimationIndex(57);\
 		
 	if (true == m_pMeshCom->Is_AnimationsetFinish())
-		m_pMeshCom->Set_AnimationIndex(AK47_Idle1);
+		m_pMeshCom->Set_AnimationIndex(Player_Move_Idle_01);
 }
 
 
@@ -235,6 +234,8 @@ HRESULT CPlayer::Select_ProtoMesh(const _tchar * pObjProtoName)
 	pComponent = m_pMeshCom = dynamic_cast<CDynamicMesh*>(Clone_Proto(pObjProtoName));
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_Mesh", pComponent);
+
+
 
 	return S_OK;
 }

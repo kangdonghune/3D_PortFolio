@@ -67,6 +67,9 @@
     <Filter Include="02. GameObject\07.Building">
       <UniqueIdentifier>{d6ed35d0-62fa-43f3-bb70-6dda65c15584}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\11.Weapon">
+      <UniqueIdentifier>{ad74f39c-fbad-495c-8e2b-a1f0c3a3239a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -135,7 +138,10 @@
     <ClInclude Include="..\Code\Building.h">
       <Filter>02. GameObject\07.Building</Filter>
     </ClInclude>
-    <ClInclude Include="..\Code\AnimeEnum.h">
+    <ClInclude Include="..\Code\Weapon.h">
+      <Filter>02. GameObject\11.Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Enum.h">
       <Filter>98. 헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -190,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Building.cpp">
       <Filter>02. GameObject\07.Building</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Weapon.cpp">
+      <Filter>02. GameObject\11.Weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

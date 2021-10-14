@@ -25,7 +25,7 @@ private:
 	HRESULT			Ready_GameLogic_Layer();
 	HRESULT			Ready_UI_Layer();
 	HRESULT			Ready_Camera_Layer();
-
+	HRESULT			Ready_Weapon_Layer();
 
 	HRESULT			Ready_Resource(LPDIRECT3DDEVICE9 pGraphicDev);
 

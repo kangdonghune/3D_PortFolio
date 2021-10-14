@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Monster.h"
 #include "Object.h"
+#include "Weapon.h"
 #include "Building.h"
 #include "SkyBox.h"
 #include "DynamicCamera.h"
@@ -33,6 +34,7 @@ HRESULT CStage::Ready_Scene(void)
 
 	FAILED_CHECK_RETURN(Ready_Environment_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_GameLogic_Layer(), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Weapon_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_UI_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Camera_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_LightInfo(), E_FAIL);
@@ -121,6 +123,21 @@ HRESULT CStage::Ready_UI_Layer()
 	return S_OK;
 }
 
+HRESULT CStage::Ready_Weapon_Layer()
+{
+	CLayer*		pLayer = CLayer::Create();
+	NULL_CHECK_RETURN(pLayer, E_FAIL);
+
+	CGameObject*			pGameObject = nullptr;
+
+	//pGameObject = CWeapon::Create(m_pGraphicDev);
+	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Weapon", pGameObject), E_FAIL);
+
+	m_mapLayer[WEAPON] = pLayer;
+	return S_OK;
+}
+
 HRESULT CStage::Ready_Camera_Layer()
 {
 	CLayer*		pLayer = CLayer::Create();
@@ -170,7 +187,11 @@ HRESULT CStage::Load_Data()
 	
 	Connect_CameraToPlayer();
 
+	CGameObject*			pGameObject = nullptr;
 
+	pGameObject = CWeapon::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	Engine::Get_Scene()->Add_GameObject(WEAPON, L"Weapon", pGameObject);
 	return S_OK;
 }
 
@@ -212,6 +233,7 @@ HRESULT CStage::Load_Player(const _tchar * pFilePath)
 		pTransCom->Set_Scale(LoadScale.x, LoadScale.y, LoadScale.z);
 	}
 	CloseHandle(hFile);
+
 	return S_OK;
 }
 

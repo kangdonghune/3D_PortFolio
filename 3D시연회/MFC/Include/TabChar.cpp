@@ -115,6 +115,9 @@ BOOL CTabChar::OnInitDialog()
 	m_TreeTask.InsertItem(_T("Proto_Mesh_Goblin"), h_entryMonster, NULL);
 	//
 
+	h_entryMonster = m_TreeTask.InsertItem(_T("Weapon"), h_Root, NULL);
+	m_TreeTask.InsertItem(_T("Proto_Mesh_AK47"), h_entryMonster, NULL);
+
 	//Slider
 
 	m_XCountSlider.SetRange(0, VTXCNTX * 100);
