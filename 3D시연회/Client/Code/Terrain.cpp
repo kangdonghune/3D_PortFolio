@@ -105,10 +105,10 @@ HRESULT CTerrain::Add_Component(void)
 	pComponent->AddRef();
 	m_mapComponent[ID_STATIC].emplace(L"Com_Renderer", pComponent);
 
-	// Optimization
-	pComponent = m_pOptimizationCom = dynamic_cast<COptimization*>(Clone_Proto(L"Proto_Optimization"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].emplace(L"Com_Optimization", pComponent);
+	//// Optimization
+	//pComponent = m_pOptimizationCom = dynamic_cast<COptimization*>(Clone_Proto(L"Proto_Optimization"));
+	//NULL_CHECK_RETURN(pComponent, E_FAIL);
+	//m_mapComponent[ID_STATIC].emplace(L"Com_Optimization", pComponent);
 
 	// Shader
 	pComponent = m_pShaderCom = dynamic_cast<CShader*>(Clone_Proto(L"Proto_Shader_Terrain"));

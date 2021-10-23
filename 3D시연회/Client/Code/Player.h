@@ -20,12 +20,11 @@ END
 class CPlayer : public CGameObject
 {
 	enum animID {
-		Player_Move_Idle_01,                      //0	frame:[180]
-		Player_Move_Walk_F,                       //1	frame:[68]
-		Player_Move_Walk_B,                       //2	frame:[68]
-		Player_Move_Walk_L,                       //3	frame:[68]
-		Player_Move_Walk_R,                       //4	frame:[68]
-		Player_Atk_Power_01_NoPower,              //5	frame:[73]
+		M4_Walk_R,                                //0	frame:[35]
+		M4_Walk_L_Aim,                            //1	frame:[53]
+		M4_Run_F,                                 //2	frame:[44]
+		M4_Run_B_Aim,                             //3	frame:[43]
+		M4_Idle,                                  //4	frame:[460]
 		End
 	};
 

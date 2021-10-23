@@ -30,7 +30,7 @@ HRESULT Engine::CShader::Ready_Shader(const _tchar* pFilePath)
 
 
 	if (FAILED(D3DXCreateEffectFromFile(m_pGraphicDev,
-										pFilePath,
+										pFilePath,	
 										NULL,				// 쉐이더 구동 시 사용할 매크로 파일의 주소
 										NULL,				// 쉐이더 구동 시 사용할 포함 파일의 주소
 										D3DXSHADER_DEBUG,	// 쉐이더를 디버깅하는 외부라이브러리를 사용할 경우를 대비하여 삽입

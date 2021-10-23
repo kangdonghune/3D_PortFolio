@@ -147,6 +147,16 @@ void Engine::CStaticMesh::Render_Meshes(void)
 	}
 }
 
+void CStaticMesh::Render_Meshes(LPD3DXEFFECT & pEffect)
+{
+	for (_ulong i = 0; i < m_dwSubsetCnt; ++i)
+	{
+		pEffect->SetTexture("g_BaseTexture", m_ppTexture[i]);
+		pEffect->CommitChanges();
+		m_pMesh->DrawSubset(i);
+	}
+}
+
 CStaticMesh* Engine::CStaticMesh::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pFilePath, const _tchar* pFileName)
 {
 	CStaticMesh*	pInstance = new CStaticMesh(pGraphicDev);

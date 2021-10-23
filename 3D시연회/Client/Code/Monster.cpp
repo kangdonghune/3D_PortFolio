@@ -31,7 +31,7 @@ HRESULT CMonster::Ready_Object(void)
 	m_pTransformCom->Set_Scale(0.01f, 0.01f, 0.01f);
 	m_pTransformCom->Set_Pos(0.f, 0.f, 0.f);
 	
-	m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
+	m_pMeshCom->Set_AnimationIndex(0);
 
 
 
@@ -54,7 +54,7 @@ Engine::_int CMonster::Update_Object(const _float& fTimeDelta)
 	if (nullptr == m_pSphere->Get_ParentBoneMartrix())
 	{
 
-		const D3DXFRAME_DERIVED*		pFrame = m_pMeshCom->Get_FrameByName("Bone_GB_Skirt_Fr_01");
+		const D3DXFRAME_DERIVED*		pFrame = m_pMeshCom->Get_FrameByName("Goblin_Belly");
 
 		m_pSphere->Set_ParentBoneMartrix(&pFrame->CombinedTransformMatrix);
 		m_pSphere->Set_ParentWorldMartrix(m_pTransformCom->Get_WorldMatrix());
@@ -87,26 +87,26 @@ void CMonster::Key_Input(const _float& fTimeDelta)
 
 void CMonster::StateCheck()
 {
-	switch (type)
-	{
-	case MonsterState::IDLE:
-		if (true == m_pMeshCom->Is_AnimationsetFinish())
-			m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
-		break;
-	case MonsterState::IMPACT:
-		m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Impact_F_FromL);
-		if (true == m_pMeshCom->Is_AnimationsetFinish())
-			m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
-		break;
-	case MonsterState::Enum_END:
-		if (true == m_pMeshCom->Is_AnimationsetFinish())
-			m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
-		break;
-	default:
-		if (true == m_pMeshCom->Is_AnimationsetFinish())
-			m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
-		break;
-	}
+	//switch (type)
+	//{
+	//case MonsterState::IDLE:
+	//	if (true == m_pMeshCom->Is_AnimationsetFinish())
+	//		m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
+	//	break;
+	//case MonsterState::IMPACT:
+	//	m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Impact_F_FromL);
+	//	if (true == m_pMeshCom->Is_AnimationsetFinish())
+	//		m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
+	//	break;
+	//case MonsterState::Enum_END:
+	//	if (true == m_pMeshCom->Is_AnimationsetFinish())
+	//		m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
+	//	break;
+	//default:
+	//	if (true == m_pMeshCom->Is_AnimationsetFinish())
+	//		m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
+	//	break;
+	//}
 }
 
 HRESULT CMonster::Add_Component(void)

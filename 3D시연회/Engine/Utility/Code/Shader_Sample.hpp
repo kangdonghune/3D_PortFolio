@@ -17,10 +17,10 @@ sampler BaseSampler = sampler_state
 struct VS_IN
 {
 	float4		vPosition : POSITION;	// 시멘틱 : 고유 옵션(이해하기 쉽게 표현하면 FVF)
-	float2		vTexUV    : TEXCOORD0; 
+	float2		vTexUV    : TEXCOORD0; //0~8 번까지 사용 가능한 게 dx9
 };
 
-struct VS_OUT
+struct VS_OUT //쉐이더는 들어갈 때의 자료형과 나올 때의 자료형이 바뀔 수도 있다.
 {
 	float4		vPosition : POSITION;	
 	float2		vTexUV : TEXCOORD0;
@@ -31,11 +31,11 @@ struct VS_OUT
 // 버텍스 쉐이더
 VS_OUT		VS_MAIN(VS_IN In)
 {
-	VS_OUT	 Out = (VS_OUT)0;
+	VS_OUT	 Out = (VS_OUT)0; //0으로 초기화 해라 
 
 	matrix	matWV, matWVP;
 
-	matWV  = mul(g_matWorld, g_matView);
+	matWV  = mul(g_matWorld, g_matView); //곱하기 함수
 	matWVP = mul(matWV, g_matProj);
 	
 	Out.vPosition = mul(vector(In.vPosition.xyz, 1.f), matWVP);
@@ -51,7 +51,7 @@ struct PS_IN
 
 struct PS_OUT
 {
-	float4		vColor		: COLOR0;
+	float4		vColor		: COLOR0; //color는 0~3 까지 4개만 사용 가능  
 };
 
 // 픽셀 쉐이더

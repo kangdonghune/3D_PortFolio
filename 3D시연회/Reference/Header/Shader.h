@@ -20,8 +20,8 @@ public:
 	HRESULT			Ready_Shader(const _tchar* pFilePath);
 
 private:
-	LPD3DXEFFECT				m_pEffect;
-	LPD3DXBUFFER				m_pErrMsg;
+	LPD3DXEFFECT				m_pEffect; //쉐이더에서 사용하는 각종 함수를 제공하는 컴객체
+	LPD3DXBUFFER				m_pErrMsg; //
 
 public:
 	static CShader*		Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pFilePath);

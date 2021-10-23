@@ -34,6 +34,8 @@ private:
 
 	void					Setting_ColliderPos();
 
+	void					Setting_Transform();
+
 private:	
 	CStaticMesh*			m_pMeshCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;

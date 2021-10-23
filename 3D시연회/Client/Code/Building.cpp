@@ -47,7 +47,7 @@ Engine::_int CBuilding::Update_Object(const _float& fTimeDelta)
 	//SetUp_OnTerrain();
 
 
-	Add_RenderGroup(RENDER_NONALPHA, this);
+	Add_RenderGroup(RENDER_ALPHA, this);
 	m_pShprer->Update_Object(fTimeDelta);
 
 	_vec3	vPos;
@@ -61,9 +61,31 @@ void CBuilding::Render_Object(void)
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
 
+
+	//카메라 at을 가져와서 카메라보다 뒤에 있으면 그리지마라.(문제는 집이 통짜건물이라는 점, 분별하려면 낮개로 다 뜯어와야함,근데 그건 너무 빡시다.)
+	//카메라 뒤로 하면 집 안에 있다가 집이 사라져버리는 문제 발생 가능(
 	//m_pNaviCom->Render_NaviMesh();
 
-	m_pMeshCom->Render_Meshes();
+	//m_pMeshCom->Render_Meshes();
+
+	LPD3DXEFFECT	pEffect = m_pShaderCom->Get_EffectHandle();
+	NULL_CHECK(pEffect);
+	pEffect->AddRef();
+
+	FAILED_CHECK_RETURN(SetUp_ConstantTable(pEffect), );
+
+	_uint	iMaxPass = 0;
+
+	pEffect->Begin(&iMaxPass, 0);	// 1. 현재 쉐이더 파일이 가진 최대 pass의 개수 반환 2. 시작하는 방식에 대한 flag 값(default 값)
+	pEffect->BeginPass(0);
+
+	m_pMeshCom->Render_Meshes(pEffect);
+
+	pEffect->EndPass();
+	pEffect->End();
+
+	Safe_Release(pEffect);
+
 
 }
 
@@ -97,7 +119,10 @@ HRESULT CBuilding::Add_Component(void)
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
 
-
+	// Shader
+	pComponent = m_pShaderCom = dynamic_cast<CShader*>(Clone_Proto(L"Proto_Shader_Mesh"));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_STATIC].emplace(L"Com_Shader", pComponent);
 
 	return S_OK;
 
@@ -122,6 +147,47 @@ HRESULT CBuilding::Select_ProtoMesh(const _tchar * pObjProtoName)
 	pComponent = m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(pObjProtoName));
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_Mesh", pComponent);
+
+	return S_OK;
+}
+
+HRESULT CBuilding::SetUp_ConstantTable(LPD3DXEFFECT & pEffect)
+{
+	_matrix		matWorld, matView, matProj;
+
+	m_pTransformCom->Get_WorldMatrix(&matWorld);
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
+
+	pEffect->SetMatrix("g_matWorld", &matWorld);
+	pEffect->SetMatrix("g_matView", &matView);
+	pEffect->SetMatrix("g_matProj", &matProj);
+
+	const D3DLIGHT9*	pLight = Get_Light();
+	NULL_CHECK_RETURN(pLight, E_FAIL);
+
+	pEffect->SetVector("g_vLightDir", &_vec4(pLight->Direction, 0.f));
+
+	pEffect->SetVector("g_vLightDiffuse", (_vec4*)&pLight->Diffuse);
+	pEffect->SetVector("g_vLightAmbient", (_vec4*)&pLight->Ambient);
+	pEffect->SetVector("g_vLightSpecular", (_vec4*)&pLight->Specular);
+
+	D3DMATERIAL9		tMtrl;
+	ZeroMemory(&tMtrl, sizeof(D3DMATERIAL9));
+
+	tMtrl.Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	tMtrl.Specular = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	tMtrl.Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	tMtrl.Emissive = D3DXCOLOR(0.f, 0.f, 0.f, 0.f);
+	tMtrl.Power = 20.f;
+
+	pEffect->SetVector("g_vMtrlDiffuse", (_vec4*)&tMtrl.Diffuse);
+	pEffect->SetVector("g_vMtrlAmbient", (_vec4*)&tMtrl.Ambient);
+	pEffect->SetVector("g_vMtrlSpecular", (_vec4*)&tMtrl.Specular);
+	pEffect->SetFloat("g_fPower", tMtrl.Power);
+
+	D3DXMatrixInverse(&matView, NULL, &matView);
+	pEffect->SetVector("g_vCamPos", (_vec4*)&matView._41);
 
 	return S_OK;
 }

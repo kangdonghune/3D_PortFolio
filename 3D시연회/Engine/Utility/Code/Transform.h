@@ -27,6 +27,7 @@ public:
 	void					Rotation(ROTATION eType, const _float& fAngle);
 	void					Rotation2(ROTATION eType, const _float& fAngle);
 	const	_float			Get_Rotate(ROTATION eType);
+	_vec3					Get_RotationVec() { return m_vAngle; }
 
 	void					Chase_Target(const _vec3* pTargetPos, const _float& fSpeed, const _float& fTimeDelta);
 	const	_matrix*		Compute_LookAtTarget(const _vec3* pTargetPos);

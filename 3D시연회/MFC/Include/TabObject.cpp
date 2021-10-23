@@ -200,7 +200,8 @@ BOOL CTabObject::OnInitDialog()
 	h_Root = m_ObjectTree.InsertItem(cst_Root, NULL, NULL);
 
 	h_entryBuilding = m_ObjectTree.InsertItem(_T("Building"), h_Root, NULL);
-	m_ObjectTree.InsertItem(_T("Proto_Mesh_Train"), h_entryBuilding, NULL);
+	m_ObjectTree.InsertItem(_T("Proto_Mesh_House"), h_entryBuilding, NULL);
+	m_ObjectTree.InsertItem(_T("Proto_Mesh_Church"), h_entryBuilding, NULL);
 
 	h_entryStuff = m_ObjectTree.InsertItem(_T("Object"), h_Root, NULL);
 	m_ObjectTree.InsertItem(_T("Proto_Mesh_TrainRightDoor"), h_entryStuff, NULL);

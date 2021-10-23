@@ -34,7 +34,7 @@ HRESULT CPlayer::Ready_Object(void)
 	//m_pTransformCom->Set_Pos(0.f, 0.f, 0.f);
 	
 	FAILED_CHECK_RETURN(LateAdd_Component(), E_FAIL);
-	m_pMeshCom->Set_AnimationIndex(Player_Move_Idle_01);
+	m_pMeshCom->Set_AnimationIndex(M4_Idle);
 	
 	return S_OK;
 }
@@ -155,7 +155,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 			m_pTransformCom->Set_Pos(&vPushPos);
 		}
 			
-		m_pMeshCom->Set_AnimationIndex(Player_Move_Walk_F);
+		m_pMeshCom->Set_AnimationIndex(M4_Run_F);
 
 	}
 	
@@ -174,7 +174,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 			vPushPos = vPos + vDir *fTimeDelta *10.f;
 			m_pTransformCom->Set_Pos(&vPushPos);
 		}
-		m_pMeshCom->Set_AnimationIndex(Player_Move_Walk_B);
+		m_pMeshCom->Set_AnimationIndex(M4_Run_B_Aim);
 	}
 
 	if (Get_DIKeyState(DIK_A) & 0x80)
@@ -191,7 +191,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 			vPushPos = vPos + vDir *fTimeDelta *10.f;
 			m_pTransformCom->Set_Pos(&vPushPos);
 		}
-		m_pMeshCom->Set_AnimationIndex(Player_Move_Walk_L);
+		m_pMeshCom->Set_AnimationIndex(M4_Walk_L_Aim);
 	}
 
 	if (Get_DIKeyState(DIK_D) & 0x80)
@@ -209,21 +209,21 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 			vPushPos = vPos - vDir *fTimeDelta *10.f;
 			m_pTransformCom->Set_Pos(&vPushPos);
 		}
-		m_pMeshCom->Set_AnimationIndex(Player_Move_Walk_R);
+		m_pMeshCom->Set_AnimationIndex(M4_Walk_R);
 	}	
 
 
-		
-	if (Get_DIMouseState(DIM_LB) & 0X80)
-	{
-		m_pMeshCom->Set_AnimationIndex(Player_Atk_Power_01_NoPower);
-	}
+	//	
+	//if (Get_DIMouseState(DIM_LB) & 0X80)
+	//{
+	//	m_pMeshCom->Set_AnimationIndex(Player_Atk_Power_01_NoPower);
+	//}
 
 	//if(true == m_pMeshCom->Is_AnimationsetFinish())
 	//	m_pMeshCom->Set_AnimationIndex(57);\
 		
 	if (true == m_pMeshCom->Is_AnimationsetFinish())
-		m_pMeshCom->Set_AnimationIndex(Player_Move_Idle_01);
+		m_pMeshCom->Set_AnimationIndex(M4_Idle);
 }
 
 

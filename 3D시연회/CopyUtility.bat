@@ -1,4 +1,5 @@
 copy		.\Engine\Utility\Code\*.h			.\Reference\Header\
+copy		.\Engine\Utility\Code\*.hpp			.\Reference\Header\
 
 copy		.\Engine\Utility\Bin\Utility.dll	.\Client\Bin\		
 copy		.\Engine\Utility\Bin\Utility.dll	.\MFC\Bin\		

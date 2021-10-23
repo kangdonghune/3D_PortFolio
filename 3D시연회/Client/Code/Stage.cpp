@@ -147,7 +147,7 @@ HRESULT CStage::Ready_Camera_Layer()
 	//// DynamicCamera
 	pGameObject = CDynamicCamera::Create(m_pGraphicDev,
 		&_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 1.f), &_vec3(0.f, 1.f, 0.f),
-		D3DXToRadian(60.f), (_float)WINCX / (_float)WINCY, 0.1f, 1000.f);
+		D3DXToRadian(45.f), (_float)WINCX / (_float)WINCY, 0.1f, 1000.f);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"DynamicCamera", pGameObject), E_FAIL);
 

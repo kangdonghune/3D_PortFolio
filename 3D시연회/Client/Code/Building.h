@@ -12,6 +12,7 @@ class CStaticMesh;
 class CTransform;
 class CRenderer;
 class CCalculator;
+class CShader;
 class CCollider;
 class CNaviMesh;
 class CSphrerMeshs;
@@ -34,7 +35,7 @@ private:
 	HRESULT					Add_Object(void);
 
 	HRESULT					Select_ProtoMesh(const _tchar* pObjProtoName);
-
+	HRESULT					SetUp_ConstantTable(LPD3DXEFFECT& pEffect);
 private:
 	CStaticMesh*			m_pMeshCom = nullptr;
 	CNaviMesh*				m_pNaviCom = nullptr;
@@ -42,6 +43,7 @@ private:
 	CRenderer*				m_pRendererCom = nullptr;
 	CCalculator*			m_pCalculatorCom = nullptr;
 	_vec3					m_vDir;
+	CShader*				m_pShaderCom = nullptr;
 	CSphere*				m_pShprer;
 	CTransform*				m_pShprerTransCom = nullptr;
 

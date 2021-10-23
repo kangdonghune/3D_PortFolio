@@ -46,7 +46,7 @@ private:
 	CTexture*					m_pTextureCom = nullptr;
 	CTransform*					m_pTransformCom = nullptr;
 	CRenderer*					m_pRendererCom = nullptr;
-	COptimization*				m_pOptimizationCom = nullptr;
+	//COptimization*				m_pOptimizationCom = nullptr;
 	CShader*					m_pShaderCom = nullptr;
 	CNaviMesh*					m_pNaviCom = nullptr;
 	CCalculator*				m_pCalculatorCom = nullptr;

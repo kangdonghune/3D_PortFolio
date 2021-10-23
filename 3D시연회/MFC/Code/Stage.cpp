@@ -188,14 +188,16 @@ HRESULT CStage::Ready_Resource(LPDIRECT3DDEVICE9 pGraphicDev)
 	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Sphrer", CSphrerMeshs::Create(m_pGraphicDev)), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Navi", CNaviMesh::Create(m_pGraphicDev)), E_FAIL);
 	//플레이어
-	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Hunter", CDynamicMesh::Create(m_pGraphicDev, L"../../Resource/Dynamicmesh/Player/Hunter/", L"HunterAnime.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Hunter", CDynamicMesh::Create(m_pGraphicDev, L"../../Resource/Dynamicmesh/Player/Hunter/", L"Hunter.X")), E_FAIL);
 	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_AK47", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Weapon/", L"Revolverx.X")), E_FAIL);
 	
 	//몬스터
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Goblin", CDynamicMesh::Create(m_pGraphicDev, L"../../Resource/Dynamicmesh/Monster/Goblin/", L"Goblin.X")), E_FAIL);
 
 	//오브젝트
-	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Train", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Train/", L"Train.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_House", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/House/HouseDefault/", L"HouseDefault.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Church", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/Church/", L"Church.X")), E_FAIL);
+
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_TrainRightDoor", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Train/", L"TrainRightDoor.X")), E_FAIL);
 
 	// 기타 등등

@@ -36,7 +36,7 @@ HRESULT CPlayer::Ready_Object(void)
 	m_pTransformCom->Set_Pos(0.f, 0.f, 0.f);
 	
 	//m_pNaviCom->Set_CellIndex(1);
-	m_pMeshCom->Set_AnimationIndex(38);
+	m_pMeshCom->Set_AnimationIndex(0);
 	
 	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	m_pForm = dynamic_cast<CForm*>(pMain->m_MainSplitter.GetPane(0, 0));

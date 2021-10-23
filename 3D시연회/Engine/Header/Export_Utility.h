@@ -57,7 +57,7 @@ inline void			Render_GameObject(LPDIRECT3DDEVICE9 pGraphicDev);
 inline void			Clear_RenderGroup(void);
 
 // light
-inline HRESULT		Ready_Light(LPDIRECT3DDEVICE9 pGraphicDev, const D3DLIGHT9* pLightInfo, const _uint& iIndex);
+inline HRESULT				Ready_Light(LPDIRECT3DDEVICE9 pGraphicDev, const D3DLIGHT9* pLightInfo, const _uint& iIndex);
 inline const D3DLIGHT9*		Get_Light(const _ulong& iIndex = 0);
 
 inline void				Release_Utility(void);

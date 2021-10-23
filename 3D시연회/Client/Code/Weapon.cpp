@@ -25,8 +25,7 @@ HRESULT CWeapon::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 	FAILED_CHECK_RETURN(Add_Collider(), E_FAIL);
-	//m_pTransformCom->Rotation(ROT_X, D3DXToRadian(90.f));
-
+	Setting_Transform();
 	return S_OK;
 }
 
@@ -39,7 +38,7 @@ Engine::_int CWeapon::Update_Object(const _float& fTimeDelta)
 		CDynamicMesh*		pPlayerMeshCom = dynamic_cast<CDynamicMesh*>(pPlayer->Get_Component(L"Com_Mesh", ID_STATIC));
 		NULL_CHECK_RETURN(pPlayerMeshCom, -1);
 
-		const D3DXFRAME_DERIVED*		pFrame = pPlayerMeshCom->Get_FrameByName("Bone_M_Weapon_Sword");
+		const D3DXFRAME_DERIVED*		pFrame = pPlayerMeshCom->Get_FrameByName("Hunter_RightHandIndex1");
 
 		m_pParentBoneMatrix = &pFrame->CombinedTransformMatrix;
 
@@ -60,10 +59,7 @@ Engine::_int CWeapon::Update_Object(const _float& fTimeDelta)
 	m_pSphrerTransformCom->Set_ParentMatrix(m_pTransformCom->Get_WorldMatrix());
 
 
-	if (Collision_ToObject())
-	{
-		MSG_BOX("충돌");
-	}
+
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
@@ -117,7 +113,7 @@ HRESULT CWeapon::Add_Collider(void)
 	m_pSphere = CSphere::Create(m_pGraphicDev, 15.2f);
 	m_pSphere->Set_Height(0.f);
 	m_pSphrerTransformCom = (CTransform*)m_pSphere->Get_Component(L"Com_Transform", ID_DYNAMIC);
-	m_pSphrerTransformCom->Set_Pos(&_vec3{ 0.0f, 0.0f, 75.f });
+	m_pSphrerTransformCom->Set_Pos(&_vec3{ 0.0f, 0.0f, 0.f });
 	return S_OK;
 }
 
@@ -128,7 +124,10 @@ _bool CWeapon::Collision_ToObject()
 	{
 		CMonster* pMon = dynamic_cast<CMonster*>(pobj);
 		if (m_pCalculatorCom->Collision_Sphere(m_pSphrerTransformCom, m_pSphere->Get_Radius() / 100.f, pMon->Get_SphereTransform(), pMon->Get_Sphere()->Get_Radius() / 100.f))
+		{
+			pMon->Set_State(MonsterState::IMPACT);
 			return true;
+		}
 	}
 
 
@@ -141,6 +140,32 @@ void CWeapon::Setting_ColliderPos()
 	_vec3	vPos;
 	m_pTransformCom->Get_Info(INFO_POS, &vPos);
 	m_pSphrerTransformCom->Set_Pos(vPos.x, vPos.y+ m_pSphere->Get_Height(), vPos.z);
+}
+
+void CWeapon::Setting_Transform()
+{
+	//일단 로컬로 내린다음에 뭘 해줘야지 월드 기준으로 돌려버리면 문제가 되는 듯?
+	_vec3 GunPos,GunRotate;
+	m_pTransformCom->Get_Info(INFO_POS, &GunPos);
+	GunRotate = m_pTransformCom->Get_RotationVec();
+	//총 위치하고 회전 벡터를 구해옴
+	_matrix matWorld,matInverseWorld;
+	m_pTransformCom->Get_WorldMatrix(&matWorld);
+	D3DXMatrixInverse(&matInverseWorld, NULL, &matWorld);
+
+	D3DXVec3TransformCoord(&GunRotate, &GunRotate, &matInverseWorld);
+	D3DXVec3TransformCoord(&GunRotate, &GunRotate, &matInverseWorld);
+	//로컬 단계의 각도로 전환 후 회전
+	GunRotate.z -= 1.f;
+	GunPos.z += 9.f;
+	GunPos.x -= 10.f;
+	GunPos.y -= 8.f;
+
+	D3DXVec3TransformCoord(&GunPos, &GunPos, &matWorld);
+	D3DXVec3TransformCoord(&GunRotate, &GunRotate, &matWorld);
+	m_pTransformCom->Rotation2(ROT_Z, GunRotate.z);
+	m_pTransformCom->Set_Pos(&GunPos);
+
 }
 
 
