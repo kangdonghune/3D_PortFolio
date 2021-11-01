@@ -31,11 +31,11 @@ private:
 	_vec3						m_vCenter;
 	_vec3						m_vMaxDir;
 
-#ifdef _DEBUG
+
 	LPDIRECT3DVERTEXBUFFER9		m_pVB;
 	LPDIRECT3DINDEXBUFFER9		m_pIB;
 	LPDIRECT3DTEXTURE9			m_pTexture[COL_END];
-#endif
+
 
 	_matrix						m_matCollWorld;
 

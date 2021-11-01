@@ -61,6 +61,21 @@ CSphere* CTabTerrain::Create_Sphrer(LPDIRECT3DDEVICE9	pGraphicDev, _vec3 * pPos)
 
 }
 
+CTrigger * CTabTerrain::Create_Triger(LPDIRECT3DDEVICE9 pGraphicDev, _vec3 * pPos)
+{
+	if (!IsDlgButtonChecked(IDC_RADIO4))
+		return nullptr;
+
+	CTrigger* pTrigger = nullptr;
+
+	m_pTrigger = pTrigger = CTrigger::Create(pGraphicDev, 1.f);
+	CTransform* pTransform = (CTransform*)m_pTrigger->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	pTransform->Set_Pos(pPos);
+
+
+	return pTrigger;
+}
+
 void CTabTerrain::Set_Sphere(CSphere * pShphere)
 {
 	m_pShpere = pShphere;
@@ -68,13 +83,31 @@ void CTabTerrain::Set_Sphere(CSphere * pShphere)
 	Get_SphereInfo();
 }
 
+void CTabTerrain::Set_Trigger(CTrigger * pTrigger)
+{
+	m_pTrigger = pTrigger;
+
+	Get_SphereInfo();
+}
+
 void CTabTerrain::Get_SphereInfo()
 {
-	if (m_pShpere == nullptr)
+	if (m_pShpere == nullptr && m_pTrigger == nullptr)
 		return;
 	UpdateData(true);
-
-	CTransform* pTrans = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	CTransform* pTrans = nullptr;
+	if (eType == TerrainTool::SPHERE)
+	{
+		if (m_pShpere == nullptr)
+			return;
+		pTrans = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	}
+	if (eType == TerrainTool::TRIGGER)
+	{
+		if (m_pTrigger == nullptr)
+			return;
+		pTrans = (CTransform*)m_pTrigger->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	}
 	_vec3	Pos = {};
 	pTrans->Get_Info(INFO_POS, &Pos);
 	m_fXCount = Pos.x;
@@ -165,7 +198,7 @@ void CTabTerrain::Create_MFCCell()
 	tempMFCCell.PointB = m_pPointB->m_iID;
 	tempMFCCell.PointC = m_pPointC->m_iID;
 
-	list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
+	list<CGameObject*> pTerrainlst = *Engine::Get_List(GAMELOGIC, L"Terrain");
 	CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
 	pTerrain->m_vecCell.push_back(tempMFCCell);
 	CNaviMesh* pNavi = dynamic_cast<CNaviMesh*>(pTerrain->Get_Component(L"Com_Navi", ID_STATIC));
@@ -175,10 +208,22 @@ void CTabTerrain::Create_MFCCell()
 
 void CTabTerrain::Send_Info(_vec3* pPos)
 {
-	if (m_pShpere == nullptr)
+	if (m_pShpere == nullptr && m_pTrigger == nullptr)
 		return;
 
-	CTransform* pTrans = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	CTransform* pTrans = nullptr;
+	if (eType == TerrainTool::SPHERE)
+	{
+		if (m_pShpere == nullptr)
+			return;
+		pTrans = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	}
+	if (eType == TerrainTool::TRIGGER)
+	{
+		if (m_pTrigger == nullptr)
+			return;
+		pTrans = (CTransform*)m_pTrigger->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	}
 	pTrans->Set_Pos(pPos);
 	Get_SphereInfo();
 }
@@ -186,7 +231,7 @@ void CTabTerrain::Send_Info(_vec3* pPos)
 void CTabTerrain::Update_VecCell()
 {
 	UpdateData(true);
-	list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
+	list<CGameObject*> pTerrainlst = *Engine::Get_List(GAMELOGIC, L"Terrain");
 	CTerrain*	pTerrain = (CTerrain*)pTerrainlst.front();
 	for (int i = 0; i < pTerrain->m_vecCell.size(); i++)
 	{
@@ -215,7 +260,7 @@ void CTabTerrain::Delete_Cell()
 	if (m_pShpere == nullptr)
 		return;
 
-	list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
+	list<CGameObject*> pTerrainlst = *Engine::Get_List(GAMELOGIC, L"Terrain");
 	CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
 	for (int i = 0; i < pTerrain->m_vecCell.size(); i++)
 	{
@@ -224,6 +269,7 @@ void CTabTerrain::Delete_Cell()
 			Safe_Release(pTerrain->m_vecCell[i].pCell);
 			pTerrain->m_vecCell.erase(pTerrain->m_vecCell.begin()+i);
 			i--;
+			m_dwIndex--;
 			continue;
 		}
 		if (pTerrain->m_vecCell[i].PointB == m_pShpere->m_iID)
@@ -231,6 +277,7 @@ void CTabTerrain::Delete_Cell()
 			Safe_Release(pTerrain->m_vecCell[i].pCell);
 			pTerrain->m_vecCell.erase(pTerrain->m_vecCell.begin() + i);
 			i--;
+			m_dwIndex--;
 			continue;
 		}
 		if (pTerrain->m_vecCell[i].PointC == m_pShpere->m_iID)
@@ -238,6 +285,7 @@ void CTabTerrain::Delete_Cell()
 			Safe_Release(pTerrain->m_vecCell[i].pCell);
 			pTerrain->m_vecCell.erase(pTerrain->m_vecCell.begin() + i);
 			i--;
+			m_dwIndex--;
 			continue;
 		}
 	}
@@ -271,6 +319,10 @@ BEGIN_MESSAGE_MAP(CTabTerrain, CDialogEx)
 	ON_BN_CLICKED(IDC_RADIO3, &CTabTerrain::OnBnClickedRadio3)
 	ON_BN_CLICKED(IDC_BUTTON10, &CTabTerrain::OnBnClickedDeleteSphere)
 	ON_BN_CLICKED(IDC_BUTTON11, &CTabTerrain::OnBnClickedDeleteCell)
+	ON_BN_CLICKED(IDC_RADIO4, &CTabTerrain::OnBnClickedRadio4)
+	ON_BN_CLICKED(IDC_BUTTON8, &CTabTerrain::OnBnClickedSaveTrigger)
+	ON_BN_CLICKED(IDC_BUTTON12, &CTabTerrain::OnBnClickedLoadTrigger)
+	ON_BN_CLICKED(IDC_BUTTON13, &CTabTerrain::OnBnClickedDeleteTrigger)
 END_MESSAGE_MAP()
 
 
@@ -315,11 +367,25 @@ void CTabTerrain::OnDestroy()
 
 void CTabTerrain::OnEnChangeMoveX()
 {
-	if (m_pShpere == nullptr)
+	if (m_pShpere == nullptr && m_pTrigger == nullptr)
 		return;
 
+	CTransform* pTrans = nullptr;
+	if (eType == TerrainTool::SPHERE)
+	{
+		if (m_pShpere == nullptr)
+			return;
+		pTrans = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	}
+	if (eType == TerrainTool::TRIGGER)
+	{
+		if (m_pTrigger == nullptr)
+			return;
+		pTrans = (CTransform*)m_pTrigger->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	}
+
 	UpdateData(true);
-	CTransform* pTrans = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
+
 	_vec3 InputPos = { m_fXCount, m_fYCount, m_fZCount };
 	pTrans->Set_Pos(&InputPos);
 
@@ -330,11 +396,23 @@ void CTabTerrain::OnEnChangeMoveX()
 
 void CTabTerrain::OnEnChangeMoveY()
 {
-	if (m_pShpere == nullptr)
+	if (m_pShpere == nullptr && m_pTrigger == nullptr)
 		return;
 
+	CTransform* pTrans = nullptr;
+	if (eType == TerrainTool::SPHERE)
+	{
+		if (m_pShpere == nullptr)
+			return;
+		pTrans = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	}
+	if (eType == TerrainTool::TRIGGER)
+	{
+		if (m_pTrigger == nullptr)
+			return;
+		pTrans = (CTransform*)m_pTrigger->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	}
 	UpdateData(true);
-	CTransform* pTrans = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
 	_vec3 InputPos = { m_fXCount, m_fYCount, m_fZCount };
 	pTrans->Set_Pos(&InputPos);
 	Update_VecCell();
@@ -344,11 +422,24 @@ void CTabTerrain::OnEnChangeMoveY()
 
 void CTabTerrain::OnEnChangeMoveZ()
 {
-	if (m_pShpere == nullptr)
+	if (m_pShpere == nullptr && m_pTrigger == nullptr)
 		return;
 
+	CTransform* pTrans = nullptr;
+	if (eType == TerrainTool::SPHERE)
+	{
+		if (m_pShpere == nullptr)
+			return;
+		pTrans = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	}
+	if (eType == TerrainTool::TRIGGER)
+	{
+		if (m_pTrigger == nullptr)
+			return;
+		pTrans = (CTransform*)m_pTrigger->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	}
 	UpdateData(true);
-	CTransform* pTrans = (CTransform*)m_pShpere->Get_Component(L"Com_Transform", ID_DYNAMIC);
+
 	_vec3 InputPos = { m_fXCount, m_fYCount, m_fZCount };
 	pTrans->Set_Pos(&InputPos);
 	UpdateData(false);
@@ -358,7 +449,7 @@ void CTabTerrain::OnEnChangeMoveZ()
 void CTabTerrain::OnDeltaposX(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	UpdateData(true);
-	if (m_pShpere == nullptr)
+	if (m_pShpere == nullptr && m_pTrigger == nullptr)
 		return;
 
 
@@ -385,7 +476,7 @@ void CTabTerrain::OnDeltaposX(NMHDR *pNMHDR, LRESULT *pResult)
 void CTabTerrain::OnDeltaposY(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	UpdateData(true);
-	if (m_pShpere == nullptr)
+	if (m_pShpere == nullptr  && m_pTrigger == nullptr)
 		return;
 
 
@@ -413,7 +504,7 @@ void CTabTerrain::OnDeltaposY(NMHDR *pNMHDR, LRESULT *pResult)
 void CTabTerrain::OnDeltaposZ(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	UpdateData(true);
-	if (m_pShpere == nullptr)
+	if (m_pShpere == nullptr && m_pTrigger == nullptr)
 		return;
 
 
@@ -460,7 +551,7 @@ void CTabTerrain::OnBnClickedSaveCell()
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		//순회하면서 키와 리스트 아이템들 저장
-		list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
+		list<CGameObject*> pTerrainlst = *Engine::Get_List(GAMELOGIC, L"Terrain");
 		CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
 		vector<MFCCELL> vecMFCCell = pTerrain->m_vecCell;
 		//저장요소. pCell(index,포인트 3개 좌표), PointABC 번호
@@ -512,7 +603,7 @@ void CTabTerrain::OnBnClickedLoadCell()
 		TCHAR* szBuf = nullptr;
 		CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 		CMFCView* pView = dynamic_cast<CMFCView*>(pMain->m_MainSplitter.GetPane(0, 1));
-		list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
+		list<CGameObject*> pTerrainlst = *Engine::Get_List(GAMELOGIC, L"Terrain");
 		CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
 		for (int i = 0; i < pTerrain->m_vecCell.size(); i++)
 		{
@@ -584,7 +675,7 @@ void CTabTerrain::OnBnClickedSaveSphere()
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		//순회하면서 키와 리스트 아이템들 저장
-		list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
+		list<CGameObject*> pTerrainlst = *Engine::Get_List(GAMELOGIC, L"Terrain");
 		CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
 		vector<CSphere*> vecSphere = pTerrain->m_vecShpere;
 		//저장요소. //1. id. 2. 트랜스폼. 3. 라디우스
@@ -633,7 +724,7 @@ void CTabTerrain::OnBnClickedLoadSphrer()
 		TCHAR* szBuf = nullptr;
 		CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 		CMFCView* pView = dynamic_cast<CMFCView*>(pMain->m_MainSplitter.GetPane(0, 1));
-		list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
+		list<CGameObject*> pTerrainlst = *Engine::Get_List(GAMELOGIC, L"Terrain");
 		CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
 		for (int i = 0; i < pTerrain->m_vecShpere.size(); i++)
 		{
@@ -689,7 +780,7 @@ void CTabTerrain::OnBnClickedDeleteSphere()
 	if (m_pShpere != nullptr)
 	{
 		Delete_Cell();
-		list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
+		list<CGameObject*> pTerrainlst = *Engine::Get_List(GAMELOGIC, L"Terrain");
 		CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
 		for (int i = 0; i < pTerrain->m_vecShpere.size(); i++)
 		{
@@ -706,8 +797,146 @@ void CTabTerrain::OnBnClickedDeleteSphere()
 void CTabTerrain::OnBnClickedDeleteCell()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
+	list<CGameObject*> pTerrainlst = *Engine::Get_List(GAMELOGIC, L"Terrain");
 	CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
 	pTerrain->m_vecCell.back().pCell->Set_Dead(true);
+	m_dwIndex--;
 	pTerrain->m_vecCell.pop_back();
+}
+
+
+void CTabTerrain::OnBnClickedRadio4()
+{
+	eType = TerrainTool::TRIGGER;
+	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+	CForm* pForm = dynamic_cast<CForm*>(pMain->m_MainSplitter.GetPane(0, 0));
+	pForm->m_ptabObject->Set_Object(nullptr);
+	pForm->m_ptabChar->Set_Object(nullptr);
+}
+
+
+void CTabTerrain::OnBnClickedSaveTrigger()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CFileDialog Dlg(FALSE, // 다른이름으로 저장. 만약 TRUE 파일 열기. 
+		L"dat",// 디폴트 확장자 
+		L"MFCTrigger.dat",// 디폴트 파일 이름 
+		OFN_OVERWRITEPROMPT);// 덮어쓸때 경고 메시지 띄어주겠다. 
+	TCHAR szCurDir[MAX_PATH]{};
+	GetCurrentDirectory(MAX_PATH, szCurDir); //현재 디렉토리 반환. ..../3D_시연회//MFC//Include
+	PathRemoveFileSpec(szCurDir); //끝에 경로 제거. //Include 제거
+	PathRemoveFileSpec(szCurDir); //끝에 경로 제거. //MFC 제거
+	lstrcat(szCurDir, L"\\ReSource");
+	lstrcat(szCurDir, L"\\Data");
+	lstrcat(szCurDir, L"\\NaviMesh"); //
+	Dlg.m_ofn.lpstrInitialDir = szCurDir;
+	if (IDOK == Dlg.DoModal()) //저장 시 시작 경로
+	{
+		CString wstrFilePath = Dlg.GetPathName();
+		HANDLE hFile = CreateFile(wstrFilePath.GetString(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (INVALID_HANDLE_VALUE == hFile)
+			return;
+		DWORD dwByte = 0;
+		DWORD dwStringCount = 0;
+		//순회하면서 키와 리스트 아이템들 저장
+		list<CGameObject*> pTerrainlst = *Engine::Get_List(GAMELOGIC, L"Terrain");
+		CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
+		vector<CTrigger*> vecTrigger = pTerrain->m_vecTrigger;
+		//저장요소. //1. id. 2. 트랜스폼. 3. 라디우스
+		for (CTrigger* pTrigger : vecTrigger)
+		{
+			CTransform*	pTrans = (CTransform*)pTrigger->Get_Component(L"Com_Transform", ID_DYNAMIC);
+
+			_int dwTriggerNum = pTrigger->m_iTriggetNum;
+			_float fRadius = pTrigger->Get_Radius();
+			_vec3	tempPos = {};
+			pTrans->Get_Info(INFO_POS, &tempPos);
+			WriteFile(hFile, &dwTriggerNum, sizeof(_int), &dwByte, nullptr);
+			WriteFile(hFile, &fRadius, sizeof(_float), &dwByte, nullptr);
+			WriteFile(hFile, &tempPos, sizeof(_vec3), &dwByte, nullptr);
+		}
+		CloseHandle(hFile);
+	}
+}
+  
+
+void CTabTerrain::OnBnClickedLoadTrigger()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CFileDialog Dlg(TRUE, // 다른이름으로 저장. 만약 TRUE 파일 열기. 
+		L"dat",// 디폴트 확장자 
+		L"MFCTrigger.dat",// 디폴트 파일 이름 
+		OFN_OVERWRITEPROMPT);// 덮어쓸때 경고 메시지 띄어주겠다. 
+	TCHAR szCurDir[MAX_PATH]{};
+	GetCurrentDirectory(MAX_PATH, szCurDir);
+	PathRemoveFileSpec(szCurDir); //끝에 경로 제거. //Include 제거
+	PathRemoveFileSpec(szCurDir); //끝에 경로 제거. //MFC 제거
+	lstrcat(szCurDir, L"\\ReSource");
+	lstrcat(szCurDir, L"\\Data");
+	lstrcat(szCurDir, L"\\NaviMesh");
+	Dlg.m_ofn.lpstrInitialDir = szCurDir;
+	if (IDOK == Dlg.DoModal())
+	{
+		CString wstrFilePath = Dlg.GetPathName();
+		HANDLE hFile = CreateFile(wstrFilePath.GetString(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (INVALID_HANDLE_VALUE == hFile)
+			return;
+		//리스트 초기화 진행 
+
+		DWORD dwByte = 0;
+		DWORD dwStringCount = 0;
+		TCHAR* szBuf = nullptr;
+		CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+		CMFCView* pView = dynamic_cast<CMFCView*>(pMain->m_MainSplitter.GetPane(0, 1));
+		list<CGameObject*> pTerrainlst = *Engine::Get_List(GAMELOGIC, L"Terrain");
+		CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
+		for (int i = 0; i < pTerrain->m_vecTrigger.size(); i++)
+		{
+			pTerrain->m_vecTrigger[i]->Set_Dead(true); // Set_Dead하면서 컴퍼넌트에 저장된 것들도 지워주는 예약.
+		}
+		pTerrain->m_vecTrigger.clear();
+
+		_int iNum = -1;
+
+
+		//로드 순서 1.트리거넘버 2. 트리거카운트 3. 반지름 4, 좌표
+		while (true)
+		{
+
+			_float fRadius = 0.f;
+			_vec3  tempPos = {};
+			CTrigger* pTrigger;
+			ReadFile(hFile, &iNum, sizeof(_int), &dwByte, nullptr);
+			if (0 == dwByte)
+				break;//읽어올 게 없으면 종료
+			ReadFile(hFile, &fRadius, sizeof(_float), &dwByte, nullptr);
+			ReadFile(hFile, &tempPos, sizeof(_vec3), &dwByte, nullptr);
+
+			m_pTrigger = pTrigger = CTrigger::Create(pView->m_pGraphicDev, fRadius);
+			CTransform* pTransform = (CTransform*)m_pTrigger->Get_Component(L"Com_Transform", ID_DYNAMIC);
+			pTransform->Set_Pos(&tempPos);
+			pTrigger->m_iTriggetNum = iNum;
+			pTerrain->m_vecTrigger.push_back(pTrigger);
+		}
+		CTrigger::m_iTriggerCount = iNum;
+		CloseHandle(hFile);
+	}
+}
+
+
+void CTabTerrain::OnBnClickedDeleteTrigger()
+{
+	if (m_pTrigger != nullptr)
+	{
+		list<CGameObject*> pTerrainlst = *Engine::Get_List(GAMELOGIC, L"Terrain");
+		CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
+		for (int i = 0; i < pTerrain->m_vecTrigger.size(); i++)
+		{
+			if (pTerrain->m_vecTrigger[i]->m_iTriggetNum == m_pTrigger->m_iTriggetNum)
+			{
+				pTerrain->m_vecTrigger[i]->Set_Dead(true);
+				pTerrain->m_vecTrigger.erase(pTerrain->m_vecTrigger.begin() + i);
+			}
+		}
+	}
 }

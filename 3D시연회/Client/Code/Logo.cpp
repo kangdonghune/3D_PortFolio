@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Logo.h"
 #include "Stage.h"
-
+#include "SoundMgr.h"
 #include "Export_Function.h"
 
 CLogo::CLogo(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -25,7 +25,9 @@ HRESULT CLogo::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Weapon_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_UI_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Camera_Layer(), E_FAIL);
-
+	FAILED_CHECK_RETURN(Ready_Sphere_Layer(), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Effect_Layer(), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Trigger_Layer(), E_FAIL);
 	m_pLoading = CLoading::Create(m_pGraphicDev, CLoading::LOADING_STAGE);
 	NULL_CHECK_RETURN(m_pLoading, E_FAIL);
 
@@ -48,6 +50,8 @@ Engine::_int CLogo::Update_Scene(const _float& fTimeDelta)
 
 			FAILED_CHECK_RETURN(Set_Scene(pScene), E_FAIL);
 			FAILED_CHECK_RETURN(dynamic_cast<CStage*>(pScene)->Load_Data(), E_FAIL);
+			CSoundMgr::Get_Instance()->StopAll();
+			CSoundMgr::Get_Instance()->PlayBGM(L"AITDmaintheme.ogg");
 			return iExit;
 		}
 	}
@@ -128,6 +132,36 @@ HRESULT CLogo::Ready_Weapon_Layer()
 
 
 	m_mapLayer[UI_LAYER] = pLayer;
+	return S_OK;
+}
+
+HRESULT CLogo::Ready_Sphere_Layer()
+{
+	CLayer*		pLayer = CLayer::Create();
+	NULL_CHECK_RETURN(pLayer, E_FAIL);
+
+
+	m_mapLayer[SPHERE] = pLayer;
+	return S_OK;
+}
+
+HRESULT CLogo::Ready_Effect_Layer()
+{
+	CLayer*		pLayer = CLayer::Create();
+	NULL_CHECK_RETURN(pLayer, E_FAIL);
+
+
+	m_mapLayer[EFFECT] = pLayer;
+	return S_OK;
+}
+
+HRESULT CLogo::Ready_Trigger_Layer()
+{
+	CLayer*		pLayer = CLayer::Create();
+	NULL_CHECK_RETURN(pLayer, E_FAIL);
+
+
+	m_mapLayer[TRIGGER] = pLayer;
 	return S_OK;
 }
 

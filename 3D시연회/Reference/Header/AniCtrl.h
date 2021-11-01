@@ -16,6 +16,7 @@ private:
 public:
 	HRESULT			Ready_AniCtrl(void);
 	void			Set_AnimationIndex(const _uint& iIndex);		// 내가 원하는 애니메이션으로 교체하기 위한 함수
+	void			Set_AnimationIndexRepeat(const _uint& iIndex);  // 같은 애니메이션을 도중에 끊고 반복하기 위한 목적 함수
 	void			Play_Animation(const _float& fTimeDelta);		// 실제적으로 애니메이션 재생을 명령하는 함수
 	_bool			Is_AnimationsetFinish(void);
 private:

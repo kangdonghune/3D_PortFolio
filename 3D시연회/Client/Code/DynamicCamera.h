@@ -17,11 +17,16 @@ public:
 
 	void			Set_Target(CGameObject* pTarget) { m_pTarget = pTarget; m_pTargetTransCom = (CTransform*)m_pTarget->Get_Component(L"Com_Transform", ID_DYNAMIC); }
 	void			Release_Target() { m_pTarget = nullptr; m_pTargetTransCom = nullptr; }
+	_vec3			Get_At() { return m_vAt; }
+	_vec3			Get_Eye() { return m_vEye; }
+
 private:
 	void			Key_Input(const _float& fTimeDelta, const _float& fSpeed);
 	void			Mouse_Move(const _float& fTimeDelta);
 	void			Mouse_Fix(void);
+	void			Check_TargetState();
 	void			Fallow_Target();
+	void			Move_Camera(const _float& fTimeDelta);
 	
 
 private:
@@ -30,6 +35,9 @@ private:
 	CGameObject*	m_pTarget = nullptr;
 	CTransform*		m_pTargetTransCom = nullptr;
 	_float			m_fMouseRotation = 0.f;
+	Player3State::State	m_TargetState;
+	_vec4			m_CameraSetting;
+
 public:
 	static CDynamicCamera*		Create(LPDIRECT3DDEVICE9 pGraphicDev,
 										const _vec3* pEye, const _vec3* pAt, const _vec3* pUp, 

@@ -70,6 +70,9 @@
     <Filter Include="02. GameObject\11.Weapon">
       <UniqueIdentifier>{ad74f39c-fbad-495c-8e2b-a1f0c3a3239a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.SoundMgr">
+      <UniqueIdentifier>{90f5224d-e2c5-472b-b3a9-923f96b387bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -144,6 +147,9 @@
     <ClInclude Include="..\Code\Enum.h">
       <Filter>98. 헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\SoundMgr.h">
+      <Filter>03.SoundMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -199,6 +205,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Weapon.cpp">
       <Filter>02. GameObject\11.Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SoundMgr.cpp">
+      <Filter>03.SoundMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

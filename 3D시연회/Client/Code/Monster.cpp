@@ -30,8 +30,8 @@ HRESULT CMonster::Ready_Object(void)
 
 	m_pTransformCom->Set_Scale(0.01f, 0.01f, 0.01f);
 	m_pTransformCom->Set_Pos(0.f, 0.f, 0.f);
-	
-	m_pMeshCom->Set_AnimationIndex(0);
+
+	m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
 
 
 
@@ -43,27 +43,29 @@ Engine::_int CMonster::Update_Object(const _float& fTimeDelta)
 	if (m_bDead)
 		return 0;
 
+	if (m_iHp <= 0)
+	{
+		Set_Dead(true);
+		return 0 ;
+	}
+
 	CGameObject::Update_Object(fTimeDelta);
 
 	StateCheck();
 	m_pMeshCom->Play_Animation(fTimeDelta);
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
-	m_pSphere->Update_Object(fTimeDelta);
+
 
 	if (nullptr == m_pSphere->Get_ParentBoneMartrix())
 	{
 
-		const D3DXFRAME_DERIVED*		pFrame = m_pMeshCom->Get_FrameByName("Goblin_Belly");
+		const D3DXFRAME_DERIVED*		pFrame = m_pMeshCom->Get_FrameByName("Goblin_Spine");
 
 		m_pSphere->Set_ParentBoneMartrix(&pFrame->CombinedTransformMatrix);
 		m_pSphere->Set_ParentWorldMartrix(m_pTransformCom->Get_WorldMatrix());
 	}
 
-
-	CGameObject::Update_Object(fTimeDelta);
-
-	m_pSphere->Update_Object(fTimeDelta);
 
 	m_pShprerTransCom->Set_ParentMatrix(&(*m_pSphere->Get_ParentBoneMartrix() * *m_pSphere->Get_ParentWorldMartrix()));
 
@@ -87,12 +89,12 @@ void CMonster::Key_Input(const _float& fTimeDelta)
 
 void CMonster::StateCheck()
 {
-	//switch (type)
-	//{
-	//case MonsterState::IDLE:
-	//	if (true == m_pMeshCom->Is_AnimationsetFinish())
-	//		m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
-	//	break;
+	switch (type)
+	{
+	case MonsterState::IDLE:
+		if (true == m_pMeshCom->Is_AnimationsetFinish())
+			m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
+		break;
 	//case MonsterState::IMPACT:
 	//	m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Impact_F_FromL);
 	//	if (true == m_pMeshCom->Is_AnimationsetFinish())
@@ -106,7 +108,7 @@ void CMonster::StateCheck()
 	//	if (true == m_pMeshCom->Is_AnimationsetFinish())
 	//		m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
 	//	break;
-	//}
+	}
 }
 
 HRESULT CMonster::Add_Component(void)
@@ -145,7 +147,7 @@ HRESULT CMonster::Add_Component(void)
 
 HRESULT CMonster::Add_Collider(void)
 {
-	m_pSphere = CSphere::Create(m_pGraphicDev, 30.2f);
+	m_pSphere = CSphere::Create(m_pGraphicDev, 50.2f);
 	m_pSphere->Set_Height(0.f);
 	m_pShprerTransCom = (CTransform*)m_pSphere->Get_Component(L"Com_Transform", ID_DYNAMIC);
 	m_pShprerTransCom->Set_Pos(&_vec3{ 0.f, 0.f, 0.f });

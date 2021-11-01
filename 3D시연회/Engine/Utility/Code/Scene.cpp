@@ -15,7 +15,7 @@ Engine::CScene::~CScene(void)
 
 
 
-list<CGameObject*> CScene::Get_List(Layer type, const _tchar * pObjTag)
+list<CGameObject*>* CScene::Get_List(Layer type, const _tchar * pObjTag)
 {
 	return m_mapLayer[type]->Get_List(pObjTag);
 }

@@ -17,6 +17,7 @@ private:
 public:
 	HRESULT				Ready_Optimization(_bool bChoice, const _ulong& dwCntX, const _ulong& dwCntZ);
 	_bool				Isin_FrustumForObject(const _vec3* pWorldPos, const _float& fRadius = 0.f);
+	void				Isin_FrustumForOBuilding(list<CGameObject*> pBuildinglist, const _float& fRadius = 0.f);
 	void				Isin_FrustumForTerrain(const _vec3* pVtxPos, const _ulong& dwCntX, const _ulong& dwCntZ, INDEX32* pIndex, _ulong* pTriCnt);
 private:
 	CFrustum*			m_pFrustum;

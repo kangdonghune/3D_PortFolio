@@ -15,7 +15,7 @@ private:
 	virtual ~CManagement(void);
 
 public:
-	list<CGameObject*>		Get_List(Layer type, const _tchar* pObjTag);
+	list<CGameObject*>*		Get_List(Layer type, const _tchar* pObjTag);
 	void					Clear_List(Layer type, const _tchar* pObjTag);
 	HRESULT					Add_GameObject(Layer type, const _tchar* pObjTag, CGameObject* pInstance);
 

@@ -20,11 +20,13 @@ CEffect::~CEffect(void)
 
 }
 
-HRESULT CEffect::Ready_Object(void)
+HRESULT CEffect::Ready_Object(_vec3* pPos)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
-	m_pTransformCom->Set_Pos(&_vec3(rand() % 50, 0.f, rand() % 50));
+	m_pTransformCom->Set_Pos(pPos);
+	m_pTransformCom->Set_Scale(0.3f, 0.3f, 0.3f);
+	Get_Scene()->Add_GameObject(EFFECT, L"Effect", this);
 
 	return S_OK;
 }
@@ -35,7 +37,10 @@ Engine::_int CEffect::Update_Object(const _float& fTimeDelta)
 	m_fFrame += 90.f * fTimeDelta;
 
 	if (m_fFrame > 90.f)
-		m_fFrame = 0.f;
+	{
+		Set_Dead(true);
+		return 0;
+	}
 
 
 	CGameObject::Update_Object(fTimeDelta);
@@ -59,6 +64,7 @@ Engine::_int CEffect::Update_Object(const _float& fTimeDelta)
 	// ¿ù = ºô * ¿ù(½º(I)) -> ºô(ÀÚ^-1) * ½º * ÀÚ 
 
 	m_pTransformCom->Set_WorldMatrix(&(matBill * matWorld));
+	
 
 	_vec3 vPos;
 	m_pTransformCom->Get_Info(INFO_POS, &vPos);
@@ -74,7 +80,7 @@ void CEffect::Render_Object(void)
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
 
-	m_pTextureCom->Render_Texture(_ulong(m_fFrame));
+	m_pTextureCom->Render_Texture(0);
 	m_pBufferCom->Render_Buffer();
 
 
@@ -109,11 +115,11 @@ HRESULT CEffect::Add_Component(void)
 
 }
 
-CEffect* CEffect::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CEffect* CEffect::Create(LPDIRECT3DDEVICE9 pGraphicDev, _vec3* pPos)
 {
 	CEffect*	pInstance = new CEffect(pGraphicDev);
 
-	if (FAILED(pInstance->Ready_Object()))
+	if (FAILED(pInstance->Ready_Object(pPos)))
 		Safe_Release(pInstance);
 
 	return pInstance;

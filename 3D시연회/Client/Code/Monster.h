@@ -33,14 +33,15 @@ private:
 	explicit CMonster(const CMonster& rhs);
 	virtual ~CMonster(void);
 
-public:
-	virtual HRESULT		Ready_Object(void) override;
-	virtual _int		Update_Object(const _float& fTimeDelta) override;
-	virtual void		Render_Object(void) override;
+public:	
+	virtual HRESULT			Ready_Object(void) override;
+	virtual _int			Update_Object(const _float& fTimeDelta) override;
+	virtual void			Render_Object(void) override;
 
-	void				Set_State(MonsterState::GoblinBlakcSmith eType) { type = eType; }
-	CSphere*		Get_Sphere() { return m_pSphere; } //추후 몬스터 하나에 여러 충돌체가 붙을 거 같으니 이부분은 벡터와 인덱스로 변경할 것
-	CTransform*	Get_SphereTransform() { return m_pShprerTransCom; }
+	void					Set_State(MonsterState::GoblinBlakcSmith eType) { type = eType; }
+	CSphere*				Get_Sphere() { return m_pSphere; } //추후 몬스터 하나에 여러 충돌체가 붙을 거 같으니 이부분은 벡터와 인덱스로 변경할 것
+	CTransform*				Get_SphereTransform() { return m_pShprerTransCom; }
+	void					Damaged() { m_iHp--; }
 protected:
 	void					Key_Input(const _float& fTimeDelta);
 	void					StateCheck();
@@ -58,6 +59,7 @@ protected:
 	CSphere*				m_pSphere;
 	CTransform*				m_pShprerTransCom = nullptr;
 
+	_int					m_iHp = 1200;
 
 	MonsterState::GoblinBlakcSmith  type = MonsterState::GoblinBlakcSmith::IDLE;
 public:

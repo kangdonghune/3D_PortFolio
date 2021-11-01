@@ -48,7 +48,7 @@ HRESULT CSphere::Ready_Object(void)
 	m_pVB->Unlock();
 	m_pVB->Release();
 
-	Get_Scene()->Add_GameObject(GAMELOGIC, L"Sphrer", this);
+	Get_Scene()->Add_GameObject(SPHERE, L"Sphrer", this);
 
 	return S_OK;
 }

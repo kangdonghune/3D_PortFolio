@@ -1,5 +1,3 @@
-#include "..\..\Client\Code\Weapon.h"
-#include "..\..\Client\Code\Weapon.h"
 #include "stdafx.h"
 #include "Weapon.h"
 #include "Player.h"
@@ -50,7 +48,7 @@ Engine::_int CWeapon::Update_Object(const _float& fTimeDelta)
 
 	if (nullptr == m_pParentBoneMatrix)
 	{
-		CPlayer*		pPlayer = dynamic_cast<CPlayer*>(Get_List(GAMELOGIC, L"Player").front());
+		CPlayer*		pPlayer = dynamic_cast<CPlayer*>(Engine::Get_List(GAMELOGIC, L"Player")->front());
 
 		CDynamicMesh*		pPlayerMeshCom = dynamic_cast<CDynamicMesh*>(pPlayer->Get_Component(L"Com_Mesh", ID_STATIC));
 		NULL_CHECK_RETURN(pPlayerMeshCom, -1);
@@ -122,7 +120,7 @@ void CWeapon::Key_Input(const _float & fTimeDelta)
 			return;
 
 
-		list<CGameObject*> pTerrainTexlst = Engine::Get_List(GAMELOGIC, L"Terrain");
+		list<CGameObject*> pTerrainTexlst = *Engine::Get_List(GAMELOGIC, L"Terrain");
 
 		CTerrainTex*	pTerrainBufferCom = dynamic_cast<CTerrainTex*>((*pTerrainTexlst.begin())->Get_Component(L"Com_Buffer", ID_STATIC));
 		CTransform*		pTerrainTransCom = dynamic_cast<CTransform*>((*pTerrainTexlst.begin())->Get_Component(L"Com_Transform", ID_DYNAMIC));

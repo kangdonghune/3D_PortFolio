@@ -42,6 +42,11 @@ Engine::_bool Engine::COptimization::Isin_FrustumForObject(const _vec3* pWorldPo
 	return m_pFrustum->Isin_FrustumForObject(pWorldPos, fRadius);
 }
 
+void COptimization::Isin_FrustumForOBuilding(list<CGameObject*> pBuildinglist, const _float & fRadius)
+{
+	return m_pFrustum->Isin_FrustumForOBuilding(pBuildinglist, fRadius);
+}
+
 COptimization* Engine::COptimization::Create(LPDIRECT3DDEVICE9 pGraphicDev, _bool bChoice, const _ulong& dwCntX, const _ulong& dwCntZ)
 {
 	COptimization*		pInstance = new COptimization(pGraphicDev);

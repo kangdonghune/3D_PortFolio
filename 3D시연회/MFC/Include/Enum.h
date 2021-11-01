@@ -8,5 +8,5 @@ namespace Charictor
 
 namespace TerrainTool
 {
-	enum TYPE { SPHERE, CELL, TERRAIN_END};
+	enum TYPE { SPHERE, CELL, TRIGGER,TERRAIN_END};
 }

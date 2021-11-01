@@ -120,7 +120,7 @@ HRESULT C_Object::Add_Object(void)
 HRESULT C_Object::Select_ProtoMesh(const _tchar * pObjProtoName)
 {
 	CComponent*			pComponent = nullptr;
-	// DynamicMesh
+
 	pComponent = m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(pObjProtoName));
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_Mesh", pComponent);

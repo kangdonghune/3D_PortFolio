@@ -32,6 +32,9 @@ private:
 	HRESULT			Ready_UI_Layer();
 	HRESULT			Ready_Weapon_Layer();
 	HRESULT			Ready_Camera_Layer();
+	HRESULT			Ready_Sphere_Layer();
+	HRESULT			Ready_Effect_Layer();
+	HRESULT			Ready_Trigger_Layer();
 	HRESULT			Ready_LightInfo(void);
 	HRESULT			Ready_Resource(LPDIRECT3DDEVICE9 pGraphicDev);
 
@@ -46,8 +49,8 @@ private:
 	HRESULT			DisConnect_CameraToPlayer();
 
 
-	CGameObject*			Create_Unit(Layer type, const _tchar* pParentName, const _tchar* pObjProtoName);
-	CGameObject*			Create_Object(Layer type, const _tchar* pParentName, const _tchar* pObjProtoName);
+	CGameObject*	Create_Unit(Layer type, const _tchar* pParentName, const _tchar* pObjProtoName);
+	CGameObject*	Create_Object(Layer type, const _tchar* pParentName, const _tchar* pObjProtoName);
 
 
 public:
@@ -57,6 +60,12 @@ private:
 	_ulong			m_dwRenderCnt = 0;
 	_tchar			m_szFPS[256];
 	_float			m_fTime = 0.f;
+	_tchar			m_szHP[8];
+	_tchar			m_szStamina[8];
+	_tchar			m_szLoadedBullet[8];
+	_tchar			m_szResidueBullet[8];
+
+	
 
 
 public:

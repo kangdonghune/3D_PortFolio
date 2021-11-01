@@ -1,5 +1,7 @@
 #include "Frustum.h"
 #include "QuadTree.h"
+#include "GameObject.h"
+#include "Transform.h"
 
 USING(Engine)
 
@@ -69,7 +71,7 @@ Engine::_bool Engine::CFrustum::Isin_FrustumForObject(const _vec3* pWorldPos, co
 	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
 
 	D3DXMatrixInverse(&matProj, NULL, &matProj);
-	D3DXMatrixInverse(&matView, NULL, &matView);
+	D3DXMatrixInverse(&matView, NULL, &matView); 
 	
 	for (_ulong i = 0; i < 8; ++i)
 	{
@@ -96,6 +98,67 @@ Engine::_bool Engine::CFrustum::Isin_FrustumForObject(const _vec3* pWorldPos, co
 	D3DXPlaneFromPoints(&m_Plane[5], &m_vPoint[0], &m_vPoint[1], &m_vPoint[2]);
 
 	return Isin_Frustum(pWorldPos);
+}
+
+void CFrustum::Isin_FrustumForOBuilding(list<CGameObject*> pBuildinglist, const _float & fRadius)
+{
+	FAILED_CHECK_RETURN(Ready_Frustum());
+
+	_matrix		matProj, matView;
+
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+
+	D3DXMatrixInverse(&matProj, NULL, &matProj);
+	D3DXMatrixInverse(&matView, NULL, &matView);
+
+	for (_ulong i = 0; i < 8; ++i)
+	{
+		D3DXVec3TransformCoord(&m_vPoint[i], &m_vPoint[i], &matProj);
+
+	}
+	
+	m_vPoint[0] = _vec3{ m_vPoint[0].x - 15.f,m_vPoint[0].y,m_vPoint[0].z - 15.f };
+	m_vPoint[1] = _vec3{ m_vPoint[1].x + 15.f,m_vPoint[1].y,m_vPoint[1].z - 15.f };
+	m_vPoint[2] = _vec3{ m_vPoint[2].x + 15.f,m_vPoint[2].y,m_vPoint[2].z - 15.f };
+	m_vPoint[3] = _vec3{ m_vPoint[3].x - 15.f,m_vPoint[3].y,m_vPoint[3].z - 15.f };
+	for (_ulong i = 0; i < 8; ++i)
+	{
+
+		D3DXVec3TransformCoord(&m_vPoint[i], &m_vPoint[i], &matView);
+
+	}
+
+	// x+
+	D3DXPlaneFromPoints(&m_Plane[0], &m_vPoint[1], &m_vPoint[5], &m_vPoint[6]);
+
+	// x-
+	D3DXPlaneFromPoints(&m_Plane[1], &m_vPoint[4], &m_vPoint[0], &m_vPoint[3]);
+
+	// y+
+	D3DXPlaneFromPoints(&m_Plane[2], &m_vPoint[4], &m_vPoint[5], &m_vPoint[1]);
+
+	// y-
+	D3DXPlaneFromPoints(&m_Plane[3], &m_vPoint[3], &m_vPoint[2], &m_vPoint[6]);
+
+	// z+	
+	D3DXPlaneFromPoints(&m_Plane[4], &m_vPoint[7], &m_vPoint[6], &m_vPoint[5]);
+
+	// z-
+	D3DXPlaneFromPoints(&m_Plane[5], &m_vPoint[0], &m_vPoint[1], &m_vPoint[2]);
+
+	for (auto& iter : pBuildinglist)
+	{
+		CTransform* pTransform = dynamic_cast<CTransform*>(iter->Get_Component(L"Com_Transform", ID_DYNAMIC));
+		NULL_CHECK_RETURN(pTransform);
+		_vec3 WorldPos = {};
+		pTransform->Get_Info(INFO_POS, &WorldPos);
+		if (!Isin_Frustum(&WorldPos))
+			iter->Set_IsRender(false);
+		else
+			iter->Set_IsRender(true);
+	}
+
 }
 
 CFrustum* Engine::CFrustum::Create(LPDIRECT3DDEVICE9 pGraphicDev)

@@ -1,9 +1,14 @@
 #pragma once
 
 #include "Sphrer.h"
+#include "Trigger.h"
 #include "Export_Function.h"
 // CTabTerrain 대화 상자입니다.
 
+BEGIN(Engine)
+
+
+END
 class CTabTerrain : public CDialogEx
 {
 	DECLARE_DYNAMIC(CTabTerrain)
@@ -24,6 +29,7 @@ protected:
 
 public:
 	CSphere*			m_pShpere = nullptr;
+	CTrigger*			m_pTrigger = nullptr;
 	MFCCELL*			m_pCell = nullptr;
 	CSphere*			m_pPointA = nullptr;
 	CSphere*			m_pPointB = nullptr;
@@ -39,8 +45,10 @@ public:
 
 public:
 	CSphere*		Create_Sphrer(LPDIRECT3DDEVICE9 pGraphicDev,_vec3* pPos);
+	CTrigger*		Create_Triger(LPDIRECT3DDEVICE9 pGraphicDev, _vec3* pPos);
 
 	void			Set_Sphere(CSphere* pShphere);
+	void			Set_Trigger(CTrigger* pTrigger);
 	void			Get_SphereInfo();
 	
 	void			InPut_Point(CSphere* pSphrer);
@@ -68,7 +76,8 @@ public:
 	afx_msg void OnBnClickedLoadCell();
 	afx_msg void OnBnClickedSaveSphere();
 	afx_msg void OnBnClickedLoadSphrer();
-
+	afx_msg void OnBnClickedSaveTrigger();
+	afx_msg void OnBnClickedLoadTrigger();
 
 	afx_msg void OnBnClickedPointClear();
 	int m_iPointANum;
@@ -77,4 +86,7 @@ public:
 
 	afx_msg void OnBnClickedDeleteSphere();
 	afx_msg void OnBnClickedDeleteCell();
+	afx_msg void OnBnClickedRadio4();
+
+	afx_msg void OnBnClickedDeleteTrigger();
 };

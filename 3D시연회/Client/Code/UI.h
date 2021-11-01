@@ -20,12 +20,21 @@ private:
 	virtual ~CUI(void);
 
 public:
-	virtual HRESULT Ready_Object(void) override;
+	HRESULT Ready_Object(_float fX, _float fY, _float fSizeX, _float fSizeY);
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void Render_Object(void) override;
 
+public:
+	void					Set_X(_float fX) { m_fX = fX; }
+	void					Set_Y(_float fY) { m_fY = fY; }
+	void					Set_XSize(_float fXSize) { m_fSizeX = fXSize; }
+	void					Set_YSize(_float fYSize) { m_fSizeY = fYSize; }
+
+	_float					Get_XSize() { return m_fSizeX; }
+
 private:
 	HRESULT					Add_Component(void);
+	HRESULT					Select_ProtoMesh(const _tchar* pUiProtoname);
 
 private:
 	CRcTex*					m_pBufferCom = nullptr;
@@ -39,7 +48,7 @@ private:
 	_float					m_fSizeX, m_fSizeY;
 
 public:
-	static CUI*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CUI*		Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pUiProtoname ,_float fX, _float fY, _float fSizeX, _float fSizeY);
 
 private:
 	virtual void		Free(void);

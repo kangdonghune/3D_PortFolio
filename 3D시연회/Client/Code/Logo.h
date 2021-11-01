@@ -26,7 +26,9 @@ private:
 	HRESULT			Ready_UI_Layer();
 	HRESULT			Ready_Camera_Layer();
 	HRESULT			Ready_Weapon_Layer();
-
+	HRESULT			Ready_Sphere_Layer();
+	HRESULT			Ready_Effect_Layer();
+	HRESULT			Ready_Trigger_Layer();
 	HRESULT			Ready_Resource(LPDIRECT3DDEVICE9 pGraphicDev);
 
 private:

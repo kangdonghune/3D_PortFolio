@@ -96,6 +96,8 @@ void Engine::CTransform::Get_Info(INFO eType, _vec3* pInfo)
 	memcpy(pInfo, &m_matWorld.m[eType][0], sizeof(_vec3));
 }
 
+
+
 HRESULT Engine::CTransform::Ready_Transform(void)
 {
 	D3DXMatrixIdentity(&m_matWorld);

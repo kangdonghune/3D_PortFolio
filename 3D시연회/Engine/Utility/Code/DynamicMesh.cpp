@@ -28,6 +28,11 @@ void CDynamicMesh::Set_AnimationIndex(const _uint & iIndex)
 	m_pAniCtrl->Set_AnimationIndex(iIndex);
 }
 
+void CDynamicMesh::Set_AnimationIndexRepeat(const _uint & iIndex)
+{
+	m_pAniCtrl->Set_AnimationIndexRepeat(iIndex);
+}
+
 void CDynamicMesh::Play_Animation(const _float & fTimeDelta)
 {
 	m_pAniCtrl->Play_Animation(fTimeDelta);

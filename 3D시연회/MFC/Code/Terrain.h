@@ -3,6 +3,7 @@
 
 #include "GameObject.h"
 #include "Sphrer.h"
+#include "Trigger.h"
 class CForm;
 BEGIN(Engine)
 
@@ -58,6 +59,7 @@ private:
 public:
 	vector<MFCCELL>				m_vecCell;
 	vector<CSphere*>			m_vecShpere;
+	vector<CTrigger*>			m_vecTrigger;
 	static CTerrain*			Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
 

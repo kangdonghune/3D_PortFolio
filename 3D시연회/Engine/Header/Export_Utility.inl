@@ -28,7 +28,7 @@ void				Render_Scene(LPDIRECT3DDEVICE9& pGraphicDev)
 	CManagement::GetInstance()->Render_Scene(pGraphicDev);
 }
 
-list<CGameObject*>		Get_List(Layer type, const _tchar* pObjTag)
+list<CGameObject*>*		Get_List(Layer type, const _tchar* pObjTag)
 {
 	return CManagement::GetInstance()->Get_List(type, pObjTag);
 }

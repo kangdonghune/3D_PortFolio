@@ -3,7 +3,7 @@
 
 #include "Terrain.h"
 #include "DynamicCamera.h"
-
+#include "UI.h"
 #include "Player.h"
 #include "Monster.h"
 #include "Object.h"
@@ -33,10 +33,13 @@ HRESULT CStage::Ready_Scene(void)
 	//FAILED_CHECK_RETURN(Ready_Resource(m_pGraphicDev), E_FAIL);
 
 	FAILED_CHECK_RETURN(Ready_Environment_Layer(), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_UI_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_GameLogic_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Weapon_Layer(), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_UI_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Camera_Layer(), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Sphere_Layer(), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Effect_Layer(), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Trigger_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_LightInfo(), E_FAIL);
 
 	
@@ -53,6 +56,8 @@ Engine::_int CStage::Update_Scene(const _float& fTimeDelta)
 {
 	m_fTime += fTimeDelta;
 
+
+
 	return CScene::Update_Scene(fTimeDelta);
 }
 
@@ -68,8 +73,31 @@ void CStage::Render_Scene(void)
 		m_dwRenderCnt = 0;
 	}
 	
-	Render_Font(L"Font_Jinji", m_szFPS, &_vec2(400.f, 20.f), D3DXCOLOR(0.f, 0.f, 0.f, 1.f));
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(Get_List(GAMELOGIC, L"Player")->front());
+	CWeapon* pM4 = dynamic_cast<CWeapon*>(Get_List(WEAPON, L"M4")->front());
 
+	_int HP = pPlayer->Get_HP();
+	_int Stamina = pPlayer->Get_Stamina();
+	_int LoadedBullet = pM4->Get_LoadedBullet();
+	_int ResidueBullet = pM4->Get_ResidueBullet();
+	
+	wsprintf(m_szHP, L"%d", HP);
+	wsprintf(m_szStamina, L"%d", Stamina);
+	wsprintf(m_szLoadedBullet, L"%d ", LoadedBullet);
+	wsprintf(m_szResidueBullet, L"/ %d", ResidueBullet);
+
+
+	Render_Font(L"Font_Jinji", m_szFPS, &_vec2(600.f, 20.f), D3DXCOLOR(0.f, 0.f, 0.f, 1.f));
+	Render_Font(L"Font_UI", m_szHP, &_vec2(315.f, 33.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+	Render_Font(L"Font_UI", m_szStamina, &_vec2(460.f, 33.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+	Render_Font(L"Font_UI", m_szLoadedBullet, &_vec2(370.f, 60.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+	Render_Font(L"Font_UI", m_szResidueBullet, &_vec2(390.f, 60.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+
+	//hp
+
+	//스테미나
+
+	//탄환수
 
 }
 
@@ -114,10 +142,43 @@ HRESULT CStage::Ready_UI_Layer()
 	CGameObject*			pGameObject = nullptr;
 
 
-	//// UI
-	//pGameObject = CUI::Create(m_pGraphicDev);
+
+
+	// UI
+
+	pGameObject = CUI::Create(m_pGraphicDev, L"Proto_Texture_HPBar", 275, 40, 151, 15);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"HPBar", pGameObject), E_FAIL);
+
+	pGameObject = CUI::Create(m_pGraphicDev, L"Proto_Texture_StaminaBar", 525, 40, 151, 15);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"StaminaBar", pGameObject), E_FAIL);
+
+
+	pGameObject = CUI::Create(m_pGraphicDev, L"Proto_Texture_CrossHead", 400, 300, 70, 70);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI", pGameObject), E_FAIL);
+
+	//pGameObject = CUI::Create(m_pGraphicDev, L"Proto_Texture_SkillLock", 500, 110, 21, 21);
 	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI", pGameObject), E_FAIL);
+
+
+	
+
+	pGameObject = CUI::Create(m_pGraphicDev, L"Proto_Texture_HpIcon", 360, 40, 21, 21);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI", pGameObject), E_FAIL);
+
+	pGameObject = CUI::Create(m_pGraphicDev, L"Proto_Texture_Stamina", 440, 40, 21, 21);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI", pGameObject), E_FAIL);
+
+	pGameObject = CUI::Create(m_pGraphicDev, L"Proto_Texture_M4Icon", 400, 40, 49, 25);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI", pGameObject), E_FAIL);
+
+
 
 	m_mapLayer[UI_LAYER] = pLayer;
 	return S_OK;
@@ -146,7 +207,7 @@ HRESULT CStage::Ready_Camera_Layer()
 	CGameObject*			pGameObject = nullptr;
 	//// DynamicCamera
 	pGameObject = CDynamicCamera::Create(m_pGraphicDev,
-		&_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 1.f), &_vec3(0.f, 1.f, 0.f),
+		&_vec3(0.f, 1.f, -10.f), &_vec3(0.f, 0.f, 1.f), &_vec3(0.f, 1.f, 0.f),
 		D3DXToRadian(45.f), (_float)WINCX / (_float)WINCY, 0.1f, 1000.f);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"DynamicCamera", pGameObject), E_FAIL);
@@ -154,6 +215,39 @@ HRESULT CStage::Ready_Camera_Layer()
 	m_mapLayer[CAMERA] = pLayer;
 	return S_OK;
 }
+
+HRESULT CStage::Ready_Sphere_Layer()
+{
+	CLayer*		pLayer = CLayer::Create();
+	NULL_CHECK_RETURN(pLayer, E_FAIL);
+
+	CGameObject*			pGameObject = nullptr;
+
+	m_mapLayer[SPHERE] = pLayer;
+	return S_OK;
+}
+
+HRESULT CStage::Ready_Effect_Layer()
+{
+	CLayer*		pLayer = CLayer::Create();
+	NULL_CHECK_RETURN(pLayer, E_FAIL);
+
+	CGameObject*			pGameObject = nullptr;
+
+	m_mapLayer[EFFECT] = pLayer;
+	return S_OK;
+}
+
+HRESULT CStage::Ready_Trigger_Layer()
+{
+	CLayer*		pLayer = CLayer::Create();
+	NULL_CHECK_RETURN(pLayer, E_FAIL);
+
+
+	m_mapLayer[TRIGGER] = pLayer;
+	return S_OK;
+}
+
 
 HRESULT CStage::Ready_LightInfo(void)
 {
@@ -182,16 +276,13 @@ HRESULT CStage::Load_Data()
 	FAILED_CHECK_RETURN(Load_NaviMesh(L"../../Resource/Data/NaviMesh/MFCCell.dat"), E_FAIL);
 	FAILED_CHECK_RETURN(Load_Player(L"../../Resource/Data/Unit/Player.dat"),E_FAIL);
 	FAILED_CHECK_RETURN(Load_Monster(L"../../Resource/Data/Unit/Monster.dat"), E_FAIL);
-	FAILED_CHECK_RETURN(Load_Building(L"../../Resource/Data/Object/Building.dat"), E_FAIL);
-	FAILED_CHECK_RETURN(Load_Stuff(L"../../Resource/Data/Object/Stuff.dat"), E_FAIL);
+	//FAILED_CHECK_RETURN(Load_Building(L"../../Resource/Data/Object/Building.dat"), E_FAIL);
+	//FAILED_CHECK_RETURN(Load_Stuff(L"../../Resource/Data/Object/Stuff.dat"), E_FAIL);
 	
 	Connect_CameraToPlayer();
 
 	CGameObject*			pGameObject = nullptr;
 
-	pGameObject = CWeapon::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	Engine::Get_Scene()->Add_GameObject(WEAPON, L"Weapon", pGameObject);
 	return S_OK;
 }
 
@@ -371,7 +462,7 @@ HRESULT CStage::Load_NaviMesh(const _tchar * pFilePath)
 	DWORD dwByte = 0;
 	DWORD dwStringCount = 0;
 	TCHAR* szBuf = nullptr;
-	list<CGameObject*> pTerrainlst = Engine::Get_List(GAMELOGIC, L"Terrain");
+	list<CGameObject*> pTerrainlst = *Engine::Get_List(GAMELOGIC, L"Terrain");
 	CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
 	for (int i = 0; i < pTerrain->Get_vecCell().size(); i++)
 	{
@@ -415,15 +506,15 @@ HRESULT CStage::Load_NaviMesh(const _tchar * pFilePath)
 
 HRESULT CStage::Connect_CameraToPlayer()
 {
-	CDynamicCamera* pCamera =  (CDynamicCamera*)Get_List(CAMERA, L"DynamicCamera").front();
-	CPlayer* pPlayer = (CPlayer*)Get_List(GAMELOGIC, L"Player").front();
+	CDynamicCamera* pCamera =  (CDynamicCamera*)Get_List(CAMERA, L"DynamicCamera")->front();
+	CPlayer* pPlayer = (CPlayer*)Get_List(GAMELOGIC, L"Player")->front();
 	pCamera->Set_Target(pPlayer);
 	return S_OK;
 }
 
 HRESULT CStage::DisConnect_CameraToPlayer()
 {
-	CDynamicCamera* pCamera = (CDynamicCamera*)Get_List(CAMERA, L"DynamicCamera").front();
+	CDynamicCamera* pCamera = (CDynamicCamera*)Get_List(CAMERA, L"DynamicCamera")->front();
 	pCamera->Release_Target();
 	return S_OK;
 }

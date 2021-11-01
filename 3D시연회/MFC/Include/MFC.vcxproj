@@ -208,6 +208,7 @@
     <ClInclude Include="..\Code\Stage.h" />
     <ClInclude Include="..\Code\Struct.h" />
     <ClInclude Include="..\Code\Terrain.h" />
+    <ClInclude Include="..\Code\Trigger.h" />
     <ClInclude Include="..\Code\Weapon.h" />
     <ClInclude Include="Enum.h" />
     <ClInclude Include="Form.h" />
@@ -232,6 +233,7 @@
     <ClCompile Include="..\Code\Sphrer.cpp" />
     <ClCompile Include="..\Code\Stage.cpp" />
     <ClCompile Include="..\Code\Terrain.cpp" />
+    <ClCompile Include="..\Code\Trigger.cpp" />
     <ClCompile Include="..\Code\Weapon.cpp" />
     <ClCompile Include="Form.cpp" />
     <ClCompile Include="MainFrm.cpp" />

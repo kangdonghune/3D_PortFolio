@@ -4,6 +4,10 @@
 
 // CTabObject 대화 상자입니다.
 
+BEGIN(Engine)
+
+
+END
 class CTabObject : public CDialogEx
 {
 	DECLARE_DYNAMIC(CTabObject)

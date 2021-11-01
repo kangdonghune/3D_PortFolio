@@ -71,7 +71,7 @@ HRESULT Engine::CCollider::Ready_Collider(const _vec3* pPos, const _ulong& dwNum
 {
 	D3DXComputeBoundingBox(pPos, dwNumVtx, sizeof(_vec3), &m_vMin, &m_vMax);
 
-#ifdef _DEBUG
+
 	if (FAILED(m_pGraphicDev->CreateVertexBuffer(sizeof(VTXCUBE) * 8,	
 													0,					
 													FVF_CUBE,			
@@ -198,7 +198,7 @@ HRESULT Engine::CCollider::Ready_Collider(const _vec3* pPos, const _ulong& dwNum
 		m_pTexture[i]->UnlockRect(0);
 	}
 
-#endif
+
 
 	m_vCenter = (m_vMax + m_vMin) / 2;
 	m_vMaxDir = m_vMax - m_vCenter;
@@ -209,7 +209,7 @@ void Engine::CCollider::Render_Collider(COLLTYPE eType, const _matrix* pCollider
 {
 	m_matCollWorld = *pColliderMatrix;
 
-#ifdef _DEBUG
+
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, pColliderMatrix);
 	m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
@@ -221,6 +221,6 @@ void Engine::CCollider::Render_Collider(COLLTYPE eType, const _matrix* pCollider
 	m_pGraphicDev->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 8, 0, 12);
 
 
-#endif
+
 }
 

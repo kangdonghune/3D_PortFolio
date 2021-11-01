@@ -16,6 +16,7 @@ private:
 
 public:
 	void			Set_AnimationIndex(const _uint& iIndex);	
+	void			Set_AnimationIndexRepeat(const _uint& iIndex);
 	void			Play_Animation(const _float& fTimeDelta);	
 	const	D3DXFRAME_DERIVED*		Get_FrameByName(const char* pFrameName);
 	_bool			Is_AnimationsetFinish(void);

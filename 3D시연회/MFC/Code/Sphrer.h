@@ -54,6 +54,7 @@ private:
 
 public:
 	static	_int			m_iShpereCount;
+
 	_int					m_iID = -2;
 
 public:

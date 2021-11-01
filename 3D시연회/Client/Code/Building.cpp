@@ -33,6 +33,7 @@ HRESULT CBuilding::Ready_Object(void)
 	
 	//m_pNaviCom->Set_CellIndex(1);
 
+	m_pTransformCom->Get_Info(INFO_POS, &m_vPos);
 
 	return S_OK;
 }
@@ -48,11 +49,10 @@ Engine::_int CBuilding::Update_Object(const _float& fTimeDelta)
 
 
 	Add_RenderGroup(RENDER_ALPHA, this);
-	m_pShprer->Update_Object(fTimeDelta);
+	/*m_pShprer->Update_Object(fTimeDelta);
 
-	_vec3	vPos;
-	m_pTransformCom->Get_Info(INFO_POS, &vPos);
-	m_pShprerTransCom->Set_Pos(vPos.x, vPos.y + m_pShprer->Get_Height(), vPos.z);
+	m_pTransformCom->Get_Info(INFO_POS, &m_vPos);
+	m_pShprerTransCom->Set_Pos(m_vPos.x, m_vPos.y + m_pShprer->Get_Height(), m_vPos.z);*/
 
 	return 0;
 }
@@ -68,6 +68,7 @@ void CBuilding::Render_Object(void)
 
 	//m_pMeshCom->Render_Meshes();
 
+	
 	LPD3DXEFFECT	pEffect = m_pShaderCom->Get_EffectHandle();
 	NULL_CHECK(pEffect);
 	pEffect->AddRef();
@@ -85,6 +86,9 @@ void CBuilding::Render_Object(void)
 	pEffect->End();
 
 	Safe_Release(pEffect);
+
+
+
 
 
 }
@@ -117,6 +121,7 @@ HRESULT CBuilding::Add_Component(void)
 	pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
+
 
 
 	// Shader

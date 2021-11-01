@@ -5,6 +5,11 @@
 
 // CTabChar 대화 상자입니다.
 
+BEGIN(Engine)
+
+
+END
+
 class CTabChar : public CDialogEx
 {
 	DECLARE_DYNAMIC(CTabChar)
@@ -88,3 +93,4 @@ public:
 	afx_msg void OnBnClickedLoad();
 	afx_msg void OnBnClickedLoadMonster();
 };
+

@@ -19,7 +19,7 @@ private:
 	virtual ~CEffect(void);
 
 public:
-	virtual HRESULT Ready_Object(void) override;
+	virtual HRESULT Ready_Object(_vec3* pPos);
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void Render_Object(void) override;
 
@@ -35,7 +35,7 @@ private:
 	_float					m_fFrame = 0.f;
 
 public:
-	static CEffect*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CEffect*		Create(LPDIRECT3DDEVICE9 pGraphicDev, _vec3* pPos);
 
 private:
 	virtual void		Free(void);

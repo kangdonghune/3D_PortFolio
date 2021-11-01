@@ -68,6 +68,9 @@
     <Filter Include="03.GameObject\08.Weapon">
       <UniqueIdentifier>{0a8a28b6-35d9-429d-97ee-215060a21322}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\09.Triger">
+      <UniqueIdentifier>{abceb3c6-e0f0-4214-b161-d208197bae64}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -124,12 +127,6 @@
     <ClInclude Include="..\Code\Monster.h">
       <Filter>03.GameObject\04.Monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\Code\Sphrer.h">
-      <Filter>03.GameObject\05.Sphrer</Filter>
-    </ClInclude>
-    <ClInclude Include="TabObject.h">
-      <Filter>01.View\00.Form\00.Object</Filter>
-    </ClInclude>
     <ClInclude Include="..\Code\Object.h">
       <Filter>03.GameObject\06.Object</Filter>
     </ClInclude>
@@ -144,6 +141,15 @@
     </ClInclude>
     <ClInclude Include="..\Code\Weapon.h">
       <Filter>03.GameObject\08.Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="TabObject.h">
+      <Filter>01.View\00.Form\00.Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Trigger.h">
+      <Filter>03.GameObject\09.Triger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Sphrer.h">
+      <Filter>03.GameObject\05.Sphrer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -203,6 +209,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Weapon.cpp">
       <Filter>03.GameObject\08.Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Trigger.cpp">
+      <Filter>03.GameObject\09.Triger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

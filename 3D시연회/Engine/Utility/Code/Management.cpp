@@ -14,7 +14,7 @@ Engine::CManagement::~CManagement(void)
 	Free();
 }
 
-list<CGameObject*> CManagement::Get_List(Layer type, const _tchar * pObjTag)
+list<CGameObject*>* CManagement::Get_List(Layer type, const _tchar * pObjTag)
 {
 	return m_pScene->Get_List(type, pObjTag);
 }

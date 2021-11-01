@@ -20,15 +20,15 @@ CUI::~CUI(void)
 
 }
 
-HRESULT CUI::Ready_Object(void)
+HRESULT CUI::Ready_Object(_float fX, _float fY, _float fSizeX, _float fSizeY)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
-	m_fX = 400.f;
-	m_fY = 550.f;
+	m_fX = fX;
+	m_fY = fY;
 
-	m_fSizeX = 800.f;
-	m_fSizeY = 100.f;
+	m_fSizeX = fSizeX;
+	m_fSizeY = fSizeY;
 
 	return S_OK;
 }
@@ -81,10 +81,7 @@ HRESULT CUI::Add_Component(void)
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_Buffer", pComponent);
 
-	// texture
-	pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Clone_Proto(L"Proto_Texture_UI"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].emplace(L"Com_Texture", pComponent);
+
 
 	// Transform
 	pComponent = m_pTransformCom = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_Transform"));
@@ -101,11 +98,22 @@ HRESULT CUI::Add_Component(void)
 
 }
 
-CUI* CUI::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+HRESULT CUI::Select_ProtoMesh(const _tchar * pUiProtoname)
+{
+	CComponent*			pComponent = nullptr;
+	// texture
+	pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Clone_Proto(pUiProtoname));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_STATIC].emplace(L"Com_Texture", pComponent);
+	return S_OK;
+}
+
+CUI* CUI::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pUiProtoname, _float fX, _float fY, _float fSizeX, _float fSizeY)
 {
 	CUI*	pInstance = new CUI(pGraphicDev);
-
-	if (FAILED(pInstance->Ready_Object()))
+	if (FAILED(pInstance->Select_ProtoMesh(pUiProtoname)))
+		Safe_Release(pInstance);
+	if (FAILED(pInstance->Ready_Object(fX,fY,fSizeX,fSizeY)))
 		Safe_Release(pInstance);
 
 	return pInstance;

@@ -1,10 +1,11 @@
 #include "stdafx.h"
 #include "MainApp.h"
 #include "Logo.h"
+#include "SoundMgr.h"
 
 CMainApp::CMainApp(void)
 {
-
+	ShowCursor(false);
 }
 
 CMainApp::~CMainApp(void)
@@ -17,7 +18,7 @@ HRESULT CMainApp::Ready_MainApp(void)
 	FAILED_CHECK_RETURN(SetUp_DefaultSetting(&m_pGraphicDev), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Scene(m_pGraphicDev, &m_pManagementClass), E_FAIL);
 
-
+	CSoundMgr::Get_Instance()->Initialize();
 	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, FALSE);
 
 	return S_OK;
@@ -68,7 +69,9 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 *ppGraphicDev)
 	// ÆùÆ®
 
 	FAILED_CHECK_RETURN(Ready_Font((*ppGraphicDev), L"Font_Default", L"¹ÙÅÁ", 15, 20, FW_NORMAL), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_Font((*ppGraphicDev), L"Font_Jinji", L"±Ã¼­", 30, 30, FW_HEAVY), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Font((*ppGraphicDev), L"Font_Jinji", L"±Ã¼­", 15, 15, FW_HEAVY), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Font((*ppGraphicDev), L"Font_UI", L"ºñÆ®·Î ÄÚ¾î OTF", 15, 15, FW_HEAVY), E_FAIL);
+
 
 	// InputDev
 

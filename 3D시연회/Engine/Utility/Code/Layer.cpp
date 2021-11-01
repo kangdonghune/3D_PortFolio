@@ -104,11 +104,14 @@ CComponent* Engine::CLayer::Get_Component(const _tchar* pObjTag, CGameObject* pO
 	return nullptr;
 }
 
-list<CGameObject*> CLayer::Get_List(const _tchar * pObjTag)
+list<CGameObject*>* CLayer::Get_List(const _tchar * pObjTag)
 {
 	auto	iter = find_if(m_mapObject.begin(), m_mapObject.end(), CTag_Finder(pObjTag));
 
-	return iter->second;
+	if (iter == m_mapObject.end())
+		return nullptr;
+
+	return &(iter->second);
 	
 }
 

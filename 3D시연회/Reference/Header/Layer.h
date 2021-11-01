@@ -17,7 +17,7 @@ public:
 								  const _tchar* pComponentTag,
 								  COMPONENTID eID);
 
-	list<CGameObject*>			Get_List(const _tchar* pObjTag);
+	list<CGameObject*>*			Get_List(const _tchar* pObjTag);
 
 	void		Clear_List(const _tchar* pObjTag);
 public:

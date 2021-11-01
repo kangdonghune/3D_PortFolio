@@ -21,6 +21,7 @@ public:
 	const	 _matrix*		Get_NRotWorldMatrix(void);
 	void					Get_WorldMatrix(_matrix* pWorld) const;
 	void					Get_Info(INFO eType, _vec3* pInfo);
+
 	void					Move_Pos(const _vec3* pDir, const _float& fSpeed, const _float& fTimeDelta);
 	void					Move_Pos(const _vec3* pDir, const _float& fDist);
 	void					Move_PickingPos(const _vec3* pPos, const _float& fSpeed, const _float& fTimeDelta);

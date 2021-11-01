@@ -3,6 +3,7 @@
 #include "MainFrm.h"
 #include "Form.h"
 #include "Sphrer.h"
+#include "Trigger.h"
 
 #include "TabTerrain.h"
 #include "Export_Function.h"
@@ -212,6 +213,7 @@ void CTerrain::Key_Input(const _float & fTimeDelta)
 		m_bLBPress = true;
 
 		CSphere* pShprer = nullptr;
+		CTrigger* pTrigger = nullptr;
 		for (int i = 0; i < m_vecShpere.size(); i++)
 		{
 			if (m_pCalculatorCom->raySphrerIntersection(g_HWnd, m_vecShpere[i]->Get_Radius(), (CTransform*)m_vecShpere[i]->Get_Component(L"Com_Transform", ID_DYNAMIC)))
@@ -220,25 +222,36 @@ void CTerrain::Key_Input(const _float & fTimeDelta)
 				break;
 			}
 		}
-		if (pShprer != nullptr)
+		for (int i = 0; i < m_vecTrigger.size(); i++)
 		{
-			switch (m_pForm->m_ptabTerrain->eType)
+			if (m_pCalculatorCom->raySphrerIntersection(g_HWnd, m_vecTrigger[i]->Get_Radius(), (CTransform*)m_vecTrigger[i]->Get_Component(L"Com_Transform", ID_DYNAMIC)))
 			{
-			case TerrainTool::SPHERE:
-				m_pForm->m_ptabTerrain->Set_Sphere(pShprer);
-				break;
-			case TerrainTool::CELL:
-				m_pForm->m_ptabTerrain->Set_Sphere(pShprer);
-				m_pForm->m_ptabTerrain->InPut_Point(pShprer);
-				break;
-			default:
+				pTrigger = m_vecTrigger[i];
 				break;
 			}
-	
 		}
 
-
-		
+	
+		switch (m_pForm->m_ptabTerrain->eType)
+		{
+		case TerrainTool::SPHERE:
+			if(pShprer != nullptr)
+			m_pForm->m_ptabTerrain->Set_Sphere(pShprer);
+			break;
+		case TerrainTool::CELL:
+			if (pShprer != nullptr)
+			{
+				m_pForm->m_ptabTerrain->Set_Sphere(pShprer);
+				m_pForm->m_ptabTerrain->InPut_Point(pShprer);
+			}
+			break;
+		case TerrainTool::TRIGGER:
+			if(pTrigger != nullptr)
+			m_pForm->m_ptabTerrain->Set_Trigger(pTrigger);
+			break;
+		default:
+			break;
+		}
 
 		
 	}
@@ -248,6 +261,7 @@ void CTerrain::Key_Input(const _float & fTimeDelta)
 		m_pForm = dynamic_cast<CForm*>(pMain->m_MainSplitter.GetPane(0, 0));
 		_vec3 MovePos = {};
 		CSphere* pSphere = nullptr;
+		CTrigger* pTrigger = nullptr;
 		switch (m_pForm->m_ptabTerrain->eType)
 		{
 		case TerrainTool::SPHERE:
@@ -263,6 +277,15 @@ void CTerrain::Key_Input(const _float & fTimeDelta)
 			break;
 		case TerrainTool::CELL:
 			break;
+		case TerrainTool::TRIGGER:
+			m_bRBPress = true;
+			MovePos = m_pCalculatorCom->Picking_OnTerrain(g_HWnd, m_pBufferCom, m_pTransformCom);
+			if (MovePos.y == -100.f)
+				return;
+			pTrigger = m_pForm->m_ptabTerrain->Create_Triger(m_pGraphicDev, &MovePos);
+			if (pTrigger == nullptr)
+				return;
+			m_vecTrigger.push_back(pTrigger);
 		default:
 			break;
 		}

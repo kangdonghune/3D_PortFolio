@@ -4,12 +4,14 @@ USING(Engine)
 
 Engine::CGameObject::CGameObject(LPDIRECT3DDEVICE9 pGraphicDev)
 	: m_pGraphicDev(pGraphicDev)
+	, m_bRender(true)
 {
 	m_pGraphicDev->AddRef();
 }
 
 Engine::CGameObject::CGameObject(const CGameObject& rhs)
 	: m_pGraphicDev(rhs.m_pGraphicDev)
+	, m_bRender(rhs.m_bRender)
 {
 	m_pGraphicDev->AddRef();
 }

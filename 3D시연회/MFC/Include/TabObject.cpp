@@ -200,11 +200,19 @@ BOOL CTabObject::OnInitDialog()
 	h_Root = m_ObjectTree.InsertItem(cst_Root, NULL, NULL);
 
 	h_entryBuilding = m_ObjectTree.InsertItem(_T("Building"), h_Root, NULL);
-	m_ObjectTree.InsertItem(_T("Proto_Mesh_House"), h_entryBuilding, NULL);
+	m_ObjectTree.InsertItem(_T("Proto_Mesh_Brown"), h_entryBuilding, NULL);
+	m_ObjectTree.InsertItem(_T("Proto_Mesh_Burn"), h_entryBuilding, NULL);
 	m_ObjectTree.InsertItem(_T("Proto_Mesh_Church"), h_entryBuilding, NULL);
+	m_ObjectTree.InsertItem(_T("Proto_Mesh_Factory"), h_entryBuilding, NULL);
+	m_ObjectTree.InsertItem(_T("Proto_Mesh_GeneratorBody"), h_entryBuilding, NULL);
+
 
 	h_entryStuff = m_ObjectTree.InsertItem(_T("Object"), h_Root, NULL);
-	m_ObjectTree.InsertItem(_T("Proto_Mesh_TrainRightDoor"), h_entryStuff, NULL);
+	m_ObjectTree.InsertItem(_T("Proto_Mesh_Sedan"), h_entryStuff, NULL);
+	m_ObjectTree.InsertItem(_T("Proto_Mesh_ChurchDoorL"), h_entryStuff, NULL);
+	m_ObjectTree.InsertItem(_T("Proto_Mesh_ChurchDoorR"), h_entryStuff, NULL);
+	m_ObjectTree.InsertItem(_T("Proto_Mesh_GeneratorAxle"), h_entryStuff, NULL);
+	m_ObjectTree.InsertItem(_T("Proto_Mesh_Wall"), h_entryStuff, NULL);
 	//
 
 	//Slider
@@ -582,7 +590,7 @@ void CTabObject::OnBnClickedBuildingSave()
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		//순회하면서 키와 리스트 아이템들 저장
-		list<CGameObject*> pPlayerlst = Engine::Get_List(GAMELOGIC, L"Building");
+		list<CGameObject*> pPlayerlst = *Engine::Get_List(GAMELOGIC, L"Building");
 
 		//저장요소. 오브젝트 태그명(proto type name), pos, rotate, scale 
 		for (CGameObject* pObj : pPlayerlst)
@@ -686,7 +694,7 @@ void CTabObject::OnBnClickedStuffSave()
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		//순회하면서 키와 리스트 아이템들 저장
-		list<CGameObject*> pPlayerlst = Engine::Get_List(GAMELOGIC, L"Object");
+		list<CGameObject*> pPlayerlst = *Engine::Get_List(GAMELOGIC, L"Object");
 
 		//저장요소. 오브젝트 태그명(proto type name), pos, rotate, scale 
 		for (CGameObject* pObj : pPlayerlst)

@@ -21,6 +21,9 @@ public:
 	const		bool		Get_Dead() { return m_bDead; }
 	void					Set_Dead(_bool isDead) { m_bDead = isDead; }
 
+	_bool					Get_IsRender() { return m_bRender; }
+	void					Set_IsRender(_bool IsRender) { m_bRender = IsRender; }
+
 public:
 	virtual		HRESULT		Ready_Object(void);
 	virtual		_int		Update_Object(const _float& fTimeDelta);
@@ -33,6 +36,7 @@ protected:
 	LPDIRECT3DDEVICE9					m_pGraphicDev;
 	map<const _tchar*, CComponent*>		m_mapComponent[ID_END];
 	_float								m_fViewZ;
+	_bool								m_bRender;
 
 private:
 	CComponent*			Find_Component(const _tchar* pComponentTag, COMPONENTID eID);

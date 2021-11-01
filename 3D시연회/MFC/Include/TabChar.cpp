@@ -651,7 +651,7 @@ void CTabChar::OnBnClickedUnitSave()
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		//순회하면서 키와 리스트 아이템들 저장
-		list<CGameObject*> pPlayerlst = Engine::Get_List(GAMELOGIC, L"Player");
+		list<CGameObject*> pPlayerlst = *(Engine::Get_List(GAMELOGIC, L"Player"));
 	
 		//저장요소. 오브젝트 태그명(proto type name), pos, rotate, scale 
 		for (CGameObject* pObj : pPlayerlst)
@@ -700,7 +700,7 @@ void CTabChar::OnBnClickedMonsterSave()
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		//순회하면서 키와 리스트 아이템들 저장
-		list<CGameObject*> pMonsterlst = Engine::Get_List(GAMELOGIC, L"Monster");
+		list<CGameObject*> pMonsterlst = *Engine::Get_List(GAMELOGIC, L"Monster");
 
 		//저장요소. 오브젝트 태그명(proto type name), pos, rotate, scale 
 		for (CGameObject* pObj : pMonsterlst)
@@ -744,7 +744,7 @@ void CTabChar::OnBnClickedLoad()
 		if (INVALID_HANDLE_VALUE == hFile)
 			return;
 		//리스트 초기화 진행 
-		Clear_List(GAMELOGIC, L"Player");
+		Engine::Clear_List(GAMELOGIC, L"Player");
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		TCHAR* szBuf = nullptr;
@@ -807,7 +807,7 @@ void CTabChar::OnBnClickedLoadMonster()
 		if (INVALID_HANDLE_VALUE == hFile)
 			return;
 		//리스트 초기화 진행 
-		Clear_List(GAMELOGIC, L"Monster");
+		Engine::Clear_List(GAMELOGIC, L"Monster");
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		TCHAR* szBuf = nullptr;
