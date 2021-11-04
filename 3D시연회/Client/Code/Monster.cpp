@@ -1,8 +1,11 @@
 
 #include "stdafx.h"
 #include "Monster.h"
+#include "Player.h"
 #include "Export_Function.h"
 #include "Sphrer.h"
+#include "Object.h"
+#include "Terrain.h"
 
 
 CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -31,8 +34,9 @@ HRESULT CMonster::Ready_Object(void)
 	m_pTransformCom->Set_Scale(0.01f, 0.01f, 0.01f);
 	m_pTransformCom->Set_Pos(0.f, 0.f, 0.f);
 
-	m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
+	m_pMeshCom->Set_AnimationIndex(Idle);
 
+	m_pTarget = dynamic_cast<CPlayer*>(Get_List(PLAYER, L"Player")->front());
 
 
 	return S_OK;
@@ -43,19 +47,19 @@ Engine::_int CMonster::Update_Object(const _float& fTimeDelta)
 	if (m_bDead)
 		return 0;
 
-	if (m_iHp <= 0)
+
+	if (m_iHp <= 0 && type != MonsterState::STOP)
 	{
-		Set_Dead(true);
-		return 0 ;
+		type = MonsterState::DEAD;
 	}
 
+	StateCheck(fTimeDelta);
 	CGameObject::Update_Object(fTimeDelta);
-
-	StateCheck();
-	m_pMeshCom->Play_Animation(fTimeDelta);
+	m_fDeltaTime = fTimeDelta;
+	Update_TargetDist();
+	
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
-
 
 	if (nullptr == m_pSphere->Get_ParentBoneMartrix())
 	{
@@ -66,8 +70,17 @@ Engine::_int CMonster::Update_Object(const _float& fTimeDelta)
 		m_pSphere->Set_ParentWorldMartrix(m_pTransformCom->Get_WorldMatrix());
 	}
 
+	if (nullptr == m_pAttackSphere->Get_ParentBoneMartrix())
+	{
 
-	m_pShprerTransCom->Set_ParentMatrix(&(*m_pSphere->Get_ParentBoneMartrix() * *m_pSphere->Get_ParentWorldMartrix()));
+		const D3DXFRAME_DERIVED*		pFrame = m_pMeshCom->Get_FrameByName("Goblin_JOChain11Tip");
+
+		m_pAttackSphere->Set_ParentBoneMartrix(&pFrame->CombinedTransformMatrix);
+		m_pAttackSphere->Set_ParentWorldMartrix(m_pTransformCom->Get_WorldMatrix());
+	}
+
+	m_pAttackSphereTransCom->Set_WorldMatrix(&(*m_pAttackSphere->Get_ParentBoneMartrix() * *m_pAttackSphere->Get_ParentWorldMartrix()));
+	m_pShprerTransCom->Set_WorldMatrix(&(*m_pSphere->Get_ParentBoneMartrix() * *m_pSphere->Get_ParentWorldMartrix()));
 
 	return 0;
 }
@@ -75,6 +88,15 @@ Engine::_int CMonster::Update_Object(const _float& fTimeDelta)
 void CMonster::Render_Object(void)
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
+
+	if (type == MonsterState::ROAR)
+		m_pMeshCom->Play_Animation(2 * m_fDeltaTime);
+	else if (type == MonsterState::STOP)
+	{
+
+	}
+	else
+		m_pMeshCom->Play_Animation(m_fDeltaTime);
 
 	//m_pNaviCom->Render_NaviMesh();
 
@@ -87,27 +109,42 @@ void CMonster::Key_Input(const _float& fTimeDelta)
 
 }
 
-void CMonster::StateCheck()
+	
+void CMonster::StateCheck(_float fTimedelta)
 {
 	switch (type)
 	{
 	case MonsterState::IDLE:
-		if (true == m_pMeshCom->Is_AnimationsetFinish())
-			m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
+		IdleF();
 		break;
-	//case MonsterState::IMPACT:
-	//	m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Impact_F_FromL);
-	//	if (true == m_pMeshCom->Is_AnimationsetFinish())
-	//		m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
-	//	break;
-	//case MonsterState::Enum_END:
-	//	if (true == m_pMeshCom->Is_AnimationsetFinish())
-	//		m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
-	//	break;
-	//default:
-	//	if (true == m_pMeshCom->Is_AnimationsetFinish())
-	//		m_pMeshCom->Set_AnimationIndex(Goblin_Blacksmith_Idle);
-	//	break;
+	case MonsterState::ROAR:
+		Roar();
+		break;
+	case MonsterState::WALK:
+		Walk(fTimedelta);
+		break;
+	case MonsterState::ATTACK:
+		Attack();
+		break;
+	case MonsterState::DOWN:
+		Down();
+		break;
+	case MonsterState::GETUP:
+		GetUp();
+		break;
+	case MonsterState::DEAD:
+		Dead();
+		break;
+	case MonsterState::DAMAGED:
+		Damage();
+		break;
+	case MonsterState::STOP:
+		Stop();
+		break;
+	case MonsterState::Enum_END:
+		break;
+	default:
+		break;
 	}
 }
 
@@ -118,9 +155,10 @@ HRESULT CMonster::Add_Component(void)
 
 
 	// NaviMesh
-	pComponent = m_pNaviCom = dynamic_cast<CNaviMesh*>(Clone_Proto(L"Proto_Mesh_Navi"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].emplace(L"Com_Navi", pComponent);
+	CTerrain* pTerrain = (CTerrain*)Engine::Get_List(ENVIRONMENT, L"Terrain")->front();
+	NULL_CHECK_RETURN(pTerrain, E_FAIL);
+	m_pNaviCom = (CNaviMesh*)pTerrain->Get_Component(L"Com_Navi", ID_STATIC);
+
 
 	// Transform
 	pComponent = m_pTransformCom = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_Transform"));
@@ -138,8 +176,15 @@ HRESULT CMonster::Add_Component(void)
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
-
-
+	//_vec3 Pos = {};
+	//m_pTransformCom->Get_Info(INFO_POS, &Pos); //플레이어 월드 좌표
+	//_matrix matWorld, matInverseWorld;
+	//m_pTransformCom->Get_WorldMatrix(&matWorld); //플레이어 월드행렬
+	//D3DXMatrixInverse(&matInverseWorld, NULL, &matWorld); //플레이어 월드 행렬 역행렬로
+	//D3DXVec3TransformCoord(&Pos, &Pos, &matInverseWorld); //플레이어 월드 좌표를 로컬 좌표로
+	//pComponent = m_pDynamicColliderCom = CDynamicCollider::Create(m_pGraphicDev, &Pos, 185.f, 50.f, 50.f);
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Transform", pComponent);
 
 	return S_OK;
 
@@ -151,7 +196,37 @@ HRESULT CMonster::Add_Collider(void)
 	m_pSphere->Set_Height(0.f);
 	m_pShprerTransCom = (CTransform*)m_pSphere->Get_Component(L"Com_Transform", ID_DYNAMIC);
 	m_pShprerTransCom->Set_Pos(&_vec3{ 0.f, 0.f, 0.f });
+
+
+	m_pAttackSphere = CSphere::Create(m_pGraphicDev, 30.2f);
+	m_pAttackSphere->Set_Height(0.f);
+	m_pAttackSphereTransCom = (CTransform*)m_pAttackSphere->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	m_pAttackSphereTransCom->Set_Pos(&_vec3{ 0.f, 0.f, 0.f });
 	return S_OK;
+}
+
+_float CMonster::Check_ObjectCollision()
+{
+	list<CGameObject*>* Objlist = Engine::Get_List(GAMELOGIC, L"Object");
+	if (Objlist == nullptr)
+		return 0.f;
+	_float fPushDist = 0.f;
+
+	for (CGameObject* pGameObj : *Objlist)
+	{
+		C_Object* pObj = dynamic_cast<C_Object*>(pGameObj);
+		NULL_CHECK_RETURN(pObj, false);
+		CCollider* pCollider = (CCollider*)pObj->Get_Component(L"Com_Collider", ID_STATIC);
+
+		if (m_pCalculatorCom->Collision_OBB(m_pDynamicColliderCom->Get_Min(), m_pDynamicColliderCom->Get_Max(), m_pDynamicColliderCom->Get_Center(), m_pDynamicColliderCom->Get_MaxDir(),
+			m_pDynamicColliderCom->Get_ColliderWorld(),
+			pCollider->Get_Min(), pCollider->Get_Max(), pCollider->Get_Center(), pCollider->Get_MaxDir(),
+			pCollider->Get_CollWorldMatrix(),
+			&fPushDist
+		))
+			return fPushDist;
+	}
+	return 0;
 }
 
 
@@ -183,5 +258,114 @@ void CMonster::Free(void)
 {
 	CGameObject::Free();
 	m_pSphere->Set_Dead(true);
+	m_pAttackSphere->Set_Dead(true);
 }
 
+void CMonster::IdleF()
+{
+	if (m_iHp < 30 || m_fTargetDist < 50.f)
+		type = MonsterState::ROAR;
+	m_pMeshCom->Set_AnimationIndex(Idle);
+}
+
+void CMonster::Walk(_float fTimedelta)
+{
+	m_pMeshCom->Set_AnimationIndex(Walk_F);
+	_vec3 TargetPos;
+	CTransform* TargetTransform = (CTransform*)m_pTarget->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	TargetTransform->Get_Info(INFO_POS, &TargetPos);
+	m_pTransformCom->Compute_LookAtTarget_Set(&TargetPos);
+	if (m_fTargetDist < 10.f)
+		type = MonsterState::ATTACK;
+	
+	_vec3 vDir = {};
+	m_pTransformCom->Get_Info(INFO_LOOK, &vDir);
+	D3DXVec3Normalize(&vDir, &vDir);
+	_vec3 vPos = {};
+	m_pTransformCom->Get_Info(INFO_POS, &vPos);
+
+	m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimedelta * 3.f)));
+
+	//if (Check_ObjectCollision())//0이 아니면 충돌
+	//	m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimedelta * -3.f)));
+}
+
+void CMonster::Roar()
+{
+	m_pMeshCom->Set_AnimationIndex(CallToAction_Roar);
+	_vec3 TargetPos;
+	CTransform* TargetTransform = (CTransform*)m_pTarget->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	TargetTransform->Get_Info(INFO_POS, &TargetPos);
+	m_pTransformCom->Compute_LookAtTarget_Set(&TargetPos);;
+	if (m_pMeshCom->Is_AnimationsetFinish())
+	{
+		type = MonsterState::WALK;
+		return;
+	}
+}
+
+void CMonster::Down()
+{
+	m_pMeshCom->Set_AnimationIndex(KnockDown_B);
+	if (m_pMeshCom->Is_AnimationsetFinish())
+	{
+		type = MonsterState::GETUP;
+		return;
+	}
+}
+
+void CMonster::Damage()
+{
+	m_pMeshCom->Set_AnimationIndex(CallToAction_Roar);
+	if (m_pMeshCom->Is_AnimationsetFinish())
+	{
+		type = MonsterState::WALK;
+		return;
+	}
+}
+
+void CMonster::Dead()
+{
+	m_pMeshCom->Set_AnimationIndex(Death_B);
+	if (m_pMeshCom->Is_AnimationsetFinish())
+	{
+		Set_Dead(true);
+		return;
+	}
+}
+
+void CMonster::GetUp()
+{
+	m_pMeshCom->Set_AnimationIndex(GetUp_B);
+	if (m_pMeshCom->Is_AnimationsetFinish())
+	{
+		type = MonsterState::WALK;
+		return;
+	}
+}
+
+void CMonster::Attack()
+{
+	m_pMeshCom->Set_AnimationIndex(TentacleSwing_Sideways_00);
+	if (m_pMeshCom->Is_AnimationsetFinish())
+	{
+		type = MonsterState::WALK;
+		return;
+	}
+}
+
+void CMonster::Stop()
+{
+	//m_pMeshCom->Set_AnimationIndex(GetUp_B);
+}
+
+void CMonster::Update_TargetDist()
+{
+	_vec3 TargetPos, MonsPos;
+
+	CTransform* TargetTransform = (CTransform*)m_pTarget->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	TargetTransform->Get_Info(INFO_POS, &TargetPos);
+	m_pTransformCom->Get_Info(INFO_POS, &MonsPos);
+	_vec3 TargetDist = TargetPos - MonsPos;
+	m_fTargetDist = D3DXVec3Dot(&TargetDist, &TargetDist);
+}

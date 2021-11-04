@@ -15,12 +15,12 @@ class CCollider;
 
 END
 
-class CSphere : public CGameObject
+class CTrigger : public CGameObject
 {
 private:
-	explicit CSphere(LPDIRECT3DDEVICE9 pGraphicDev);
-	explicit CSphere(const CSphere& rhs);
-	virtual ~CSphere(void);
+	explicit CTrigger(LPDIRECT3DDEVICE9 pGraphicDev);
+	explicit CTrigger(const CTrigger& rhs);
+	virtual ~CTrigger(void);
 
 public:
 	virtual HRESULT Ready_Object(void) override;
@@ -33,16 +33,16 @@ private:
 public:
 	const _float					Get_Radius() { return m_fRadius; }
 	const _float					Get_Height() { return m_fHeight; }
-	const _matrix*					Get_ParentBoneMartrix() { return m_pParentBoneMatrix; }
-	const _matrix*					Get_ParentWorldMartrix() { return m_pParentWorldMatrix; }
-	void							Set_ParentBoneMartrix(const _matrix* pParentBone) {m_pParentBoneMatrix = pParentBone; }
-	void							Set_ParentWorldMartrix(const _matrix*	pParentWolrd) { m_pParentWorldMatrix = pParentWolrd; }
+
 	void					Set_ID();
 	void					Set_Height(_float fHeight) { m_fHeight = fHeight; }
 	void					Set_Radius(_float fRadius) { m_fRadius = fRadius; }
+	void					Set_TriggerNum(_int iNum) { m_iTriggetNum = iNum; }
+	void					Set_TriggerCount(_int iNum) { m_iTriggerCount = iNum; }
+	void					Set_TriggetOn(_bool bOff) { m_bTriggerOn = bOff; }
 
-	
-
+	_bool					Get_TriggerOn() { return m_bTriggerOn; }
+	_int					Get_TriggerNum() { return m_iTriggetNum; }
 private:
 	CStaticMesh*			m_pMeshCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
@@ -57,15 +57,16 @@ private:
 	LPD3DXMESH						m_pSphereMesh;
 	_ulong							m_dwFVF;	// FVFÀÇÁ¾·ù
 
-	const _matrix*			m_pParentBoneMatrix = nullptr;
-	const _matrix*			m_pParentWorldMatrix = nullptr;
+	_bool					m_bTriggerOn = true;
 
 public:
 	static	_int			m_iShpereCount;
+	_int					m_iTriggetNum;
+	static  _int			m_iTriggerCount;
 	_int					m_iID = -2;
 
 public:
-	static CSphere*		Create(LPDIRECT3DDEVICE9 pGraphicDev, _float fRadius = 1);
+	static CTrigger*		Create(LPDIRECT3DDEVICE9 pGraphicDev, _float fRadius = 1);
 
 private:
 	virtual void		Free(void);

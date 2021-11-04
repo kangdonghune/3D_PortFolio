@@ -213,6 +213,8 @@ BOOL CTabObject::OnInitDialog()
 	m_ObjectTree.InsertItem(_T("Proto_Mesh_ChurchDoorR"), h_entryStuff, NULL);
 	m_ObjectTree.InsertItem(_T("Proto_Mesh_GeneratorAxle"), h_entryStuff, NULL);
 	m_ObjectTree.InsertItem(_T("Proto_Mesh_Wall"), h_entryStuff, NULL);
+	m_ObjectTree.InsertItem(_T("Proto_Mesh_Cable"), h_entryStuff, NULL);
+	m_ObjectTree.InsertItem(_T("Proto_Mesh_FinalDoor"), h_entryStuff, NULL);
 	//
 
 	//Slider

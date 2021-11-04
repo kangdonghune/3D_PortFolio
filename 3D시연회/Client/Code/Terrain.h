@@ -5,6 +5,8 @@
 #include "Sphrer.h"
 #include "Export_Function.h"
 
+class CTrigger;
+
 BEGIN(Engine)
 
 class CTerrainTex;
@@ -32,7 +34,7 @@ public:
 
 public:
 	vector<CCell*>&				Get_vecCell() { return m_vecCell; }
-
+	vector<CTrigger*>&			Get_vecTrigger() { return m_vecTrigger; }
 
 private:
 	HRESULT						Add_Component(void);
@@ -61,6 +63,7 @@ private:
 	_bool						m_bLBPress = false;
 	vector<CCell*>				m_vecCell;
 	vector<CSphere*>			m_vecShpere;
+	vector<CTrigger*>			m_vecTrigger;
 public:
 	static CTerrain*			Create(LPDIRECT3DDEVICE9 pGraphicDev);
 

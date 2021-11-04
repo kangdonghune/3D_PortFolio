@@ -81,6 +81,8 @@ const _float CTransform::Get_Rotate(ROTATION eType)
 }
 
 
+
+
 void Engine::CTransform::Move_Pos(const _vec3* pDir, const _float& fSpeed, const _float& fTimeDelta)
 {
 	m_vInfo[INFO_POS] += *pDir * fSpeed *fTimeDelta;
@@ -203,6 +205,24 @@ void CTransform::Chase_Target(const _vec3 * pTargetPos, const _float & fSpeed, c
 	m_matWorld = matScale * matRot * matTrans;
 }
 
+void CTransform::Chase_TargetDir(const _vec3 * pTargetPos, const _float & fSpeed, const _float & fTimeDelta)
+{
+	_vec3	vDir = *pTargetPos - m_vInfo[INFO_POS];
+
+	m_vInfo[INFO_POS] += *D3DXVec3Normalize(&vDir, &vDir) * fSpeed * fTimeDelta;
+
+	_matrix		matRot = *Compute_LookAtTarget(pTargetPos);
+
+	_matrix		matScale, matTrans;
+
+	D3DXMatrixScaling(&matScale, m_vScale.x, m_vScale.y, m_vScale.z);
+	D3DXMatrixTranslation(&matTrans, m_vInfo[INFO_POS].x,
+		m_vInfo[INFO_POS].y,
+		m_vInfo[INFO_POS].z);
+
+	m_matWorld = matScale * matRot * matTrans;
+}
+
 const _matrix * CTransform::Compute_LookAtTarget(const _vec3 * pTargetPos)
 {
 	_vec3	vDir = *pTargetPos - m_vInfo[INFO_POS];
@@ -217,6 +237,41 @@ const _matrix * CTransform::Compute_LookAtTarget(const _vec3 * pTargetPos)
 	return D3DXMatrixRotationAxis(&matRot, &vAxis,
 											acosf(D3DXVec3Dot(D3DXVec3Normalize(&vDir, &vDir),
 															  D3DXVec3Normalize(&vUp, &m_vInfo[INFO_UP]))));
+}
+
+void CTransform::RotateAxis(INFO eType, const _float & fAngle)
+{
+	_matrix		matRot;
+	D3DXMatrixRotationAxis(&matRot, &m_vInfo[eType], D3DXToRadian(fAngle));
+	D3DXVec3TransformNormal(&m_vInfo[INFO_LOOK], &m_vInfo[INFO_LOOK], &matRot);
+}
+
+void CTransform::Compute_LookAtTarget_Set(const _vec3 * pTargetPos)
+{
+	_vec3 vUp, vDir;
+
+	vUp = { 0.f,0.f,1.f };
+	D3DXVec3Normalize(&vUp, &vUp);
+
+	vDir = *pTargetPos - m_vInfo[INFO_POS];
+	D3DXVec3Normalize(&vDir, &vDir);
+
+	_float theta, degree;
+	theta = vUp.x * vDir.x + vUp.y * vDir.y + vUp.z * vDir.z;
+	theta = acos(theta);
+
+	if (pTargetPos->x > m_vInfo[INFO_POS].x)
+	{
+		degree = theta * (180 / 3.141592);
+	}
+	else
+	{
+		degree = theta * (180 / 3.141592);
+		degree = 180 + (180 - degree);
+
+	}
+
+	Rotation2(ROT_Y, D3DXToRadian(degree));
 }
 
 const _float CTransform::Get_Scale(SCALE eType)

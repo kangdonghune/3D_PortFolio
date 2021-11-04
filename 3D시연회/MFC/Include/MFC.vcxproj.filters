@@ -11,9 +11,6 @@
     <Filter Include="01.View">
       <UniqueIdentifier>{980188f6-fab1-4175-b161-4cbe55883af5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Document">
-      <UniqueIdentifier>{8b16cc70-ad76-45c2-a62a-70a1f90a5f94}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.View\00.Form">
       <UniqueIdentifier>{8578b483-59ac-42c4-86f7-0b2c2388514f}</UniqueIdentifier>
     </Filter>
@@ -70,6 +67,9 @@
     </Filter>
     <Filter Include="03.GameObject\09.Triger">
       <UniqueIdentifier>{abceb3c6-e0f0-4214-b161-d208197bae64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Document">
+      <UniqueIdentifier>{8b16cc70-ad76-45c2-a62a-70a1f90a5f94}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

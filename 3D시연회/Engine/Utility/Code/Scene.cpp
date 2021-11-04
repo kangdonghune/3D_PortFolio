@@ -41,9 +41,9 @@ Engine::_int Engine::CScene::Update_Scene(const _float& fTimeDelta)
 {
 	_int iResult = 0;
 
-	for (CLayer* pLayer : m_mapLayer)
+	for (int i = 0;  i <Layer::LAYER_END; i++)
 	{
-		iResult = pLayer->Update_Layer(fTimeDelta);
+		iResult = m_mapLayer[i]->Update_Layer(fTimeDelta);
 
 		if (iResult & 0x80000000)
 			return iResult;

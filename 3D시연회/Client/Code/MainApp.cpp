@@ -2,7 +2,8 @@
 #include "MainApp.h"
 #include "Logo.h"
 #include "SoundMgr.h"
-
+#include "TriggerFunc.h"
+#include "ObjAnime.h"
 CMainApp::CMainApp(void)
 {
 	ShowCursor(false);
@@ -17,7 +18,8 @@ HRESULT CMainApp::Ready_MainApp(void)
 {
 	FAILED_CHECK_RETURN(SetUp_DefaultSetting(&m_pGraphicDev), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Scene(m_pGraphicDev, &m_pManagementClass), E_FAIL);
-
+	CTriggerFunc::GetInstance()->Set_GraphicDev(m_pGraphicDev);
+	CObjAnime::GetInstance()->Set_GraphicDev(m_pGraphicDev);
 	CSoundMgr::Get_Instance()->Initialize();
 	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, FALSE);
 
@@ -38,7 +40,7 @@ int CMainApp::Update_MainApp(const float& fTimeDelta)
 	{
 		int a = 0;
 	}*/
-
+	CObjAnime::GetInstance()->Update_ObjAnime(fTimeDelta);
 
 	m_pManagementClass->Update_Scene(fTimeDelta);
 
@@ -53,6 +55,7 @@ void CMainApp::Render_MainApp(void)
 	m_pDeviceClass->Render_Begin(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.f));
 		
 	m_pManagementClass->Render_Scene(m_pGraphicDev);
+
 
 	m_pDeviceClass->Render_End();
 }
@@ -71,6 +74,8 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 *ppGraphicDev)
 	FAILED_CHECK_RETURN(Ready_Font((*ppGraphicDev), L"Font_Default", L"바탕", 15, 20, FW_NORMAL), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Font((*ppGraphicDev), L"Font_Jinji", L"궁서", 15, 15, FW_HEAVY), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Font((*ppGraphicDev), L"Font_UI", L"비트로 코어 OTF", 15, 15, FW_HEAVY), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Font((*ppGraphicDev), L"Font_UI_M", L"비트로 코어 OTF", 20, 20, FW_HEAVY), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Font((*ppGraphicDev), L"Font_UI_L", L"비트로 코어 OTF", 50, 50, FW_HEAVY), E_FAIL);
 
 
 	// InputDev
@@ -121,6 +126,8 @@ void CMainApp::Free(void)
 	
 	Release_Utility();
 	Release_System();
+
+	CTriggerFunc::DestroyInstance();
 }
 
 

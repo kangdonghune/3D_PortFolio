@@ -30,7 +30,11 @@ public:
 	const	_float			Get_Rotate(ROTATION eType);
 	_vec3					Get_RotationVec() { return m_vAngle; }
 
+	void					RotateAxis(INFO eType, const _float& fAngle);
+
+	void					Compute_LookAtTarget_Set(const _vec3 * pTargetPos);
 	void					Chase_Target(const _vec3* pTargetPos, const _float& fSpeed, const _float& fTimeDelta);
+	void					Chase_TargetDir(const _vec3* pTargetPos, const _float& fSpeed, const _float& fTimeDelta);
 	const	_matrix*		Compute_LookAtTarget(const _vec3* pTargetPos);
 	const	_float			Get_Scale(SCALE eType);
 	void					Set_Scale(const _float& fX, const _float& fY, const _float& fZ);

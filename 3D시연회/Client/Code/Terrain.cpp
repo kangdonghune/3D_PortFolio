@@ -74,7 +74,10 @@ void CTerrain::Render_Object(void)
 
 	Safe_Release(pEffect);
 
-	m_pNaviCom->Render_NaviMesh();
+	if (GetAsyncKeyState(VK_SPACE) & 0x8001)
+	{
+		m_pNaviCom->Render_NaviMesh();
+	}
 	//m_pNaviCom->Delete_Cell();
 
 

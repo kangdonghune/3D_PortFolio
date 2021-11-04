@@ -16,6 +16,7 @@ class CCollider;
 class CNaviMesh;
 class CSphrerMeshs;
 class CCollider;
+class CShader;
 END
 class C_Object : public CGameObject
 {
@@ -34,7 +35,7 @@ private:
 	HRESULT					Add_Object(void);
 
 	HRESULT					Select_ProtoMesh(const _tchar* pObjProtoName);
-
+	HRESULT					SetUp_ConstantTable(LPD3DXEFFECT& pEffect);
 private:
 	CStaticMesh*			m_pMeshCom = nullptr;
 	CNaviMesh*				m_pNaviCom = nullptr;
@@ -45,6 +46,7 @@ private:
 	CSphere*				m_pShprer;
 	CTransform*				m_pShprerTransCom = nullptr;
 	CCollider*				m_pColliderCom = nullptr;
+	CShader*				m_pShaderCom = nullptr;
 
 public:
 	static C_Object*		Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pObjProtoName);

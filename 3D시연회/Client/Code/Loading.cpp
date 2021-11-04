@@ -30,7 +30,7 @@ HRESULT CLoading::Ready_Loading(LOADINGID eID)
 
 Engine::_uint CLoading::LoadingForStage(void)
 {
-	lstrcpy(m_szLoading, L"Texture Loading.................");
+	lstrcpy(m_szLoading, L"리소스 불러오는 중");
 
 	//버퍼
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Buffer_TerrainTex", CTerrainTex::Create(m_pGraphicDev, VTXCNTX, VTXCNTZ, VTXITV)), E_FAIL);
@@ -38,7 +38,7 @@ Engine::_uint CLoading::LoadingForStage(void)
 
 	// 텍스쳐
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_Terrain", CTexture::Create(m_pGraphicDev, L"../../Resource/Texture/Terrain/Terrain.dds", TYPE_NORMAL, 2)), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_Effect", CTexture::Create(m_pGraphicDev, L"../../Resource/Texture/Effect/Hit%d.dds", TYPE_NORMAL, 2)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_Effect", CTexture::Create(m_pGraphicDev, L"../../Resource/Texture/Effect/blood%d.png", TYPE_NORMAL, 4)), E_FAIL);
 	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_UI", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/hpbar.png", TYPE_NORMAL, 1)), E_FAIL);
 
 	// 메쉬
@@ -54,21 +54,24 @@ Engine::_uint CLoading::LoadingForStage(void)
 
 	//오브젝트
 	//오브젝트 빌딩
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Brown", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/House/HouseBrown/", L"HouseBrown.X")), E_FAIL);
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Burn", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/House/HouseBurn/", L"HouseBurn.X")), E_FAIL);
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Church", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/Church/", L"Church.X")), E_FAIL);
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Factory", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/Factory/", L"factory.X")), E_FAIL);
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_GeneratorBody", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Generator/", L"Generator_Body.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Brown", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/House/HouseBrown/", L"HouseBrown.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Burn", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/House/HouseBurn/", L"HouseBurn.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Church", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/Church/", L"Church.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Factory", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/Factory/", L"factory.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_GeneratorBody", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Generator/", L"Generator_Body.X")), E_FAIL);
 
 
 	////스터프
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Sedan", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Vehicles/", L"Sedan.X")), E_FAIL);
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_ChurchDoorL", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Door/", L"Church_DoorL.X")), E_FAIL);
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_ChurchDoorR", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Door/", L"Church_DoorR.X")), E_FAIL);
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_GeneratorAxle", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Generator/", L"Generator_Axle.X")), E_FAIL);
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Wall", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Wall/", L"Wall.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Sedan", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Vehicles/", L"Sedan.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_ChurchDoorL", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Door/", L"Church_DoorL.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_ChurchDoorR", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Door/", L"Church_DoorR.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_GeneratorAxle", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Generator/", L"Generator_Axle.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Cable", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Cable/", L"Cable.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_FinalDoor", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Door/", L"FinalDoor.X")), E_FAIL);
+
 
 	//벽
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Wall", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Wall/", L"Wall.X")), E_FAIL);
 
 	// 기타 등등
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Calculator", CCalculator::Create(m_pGraphicDev)), E_FAIL);
@@ -84,13 +87,14 @@ Engine::_uint CLoading::LoadingForStage(void)
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_M4Icon", CTexture::Create(m_pGraphicDev, L"../../Resource/Texture/UI/T_ICON_NEW_HunterMachineGun.png", TYPE_NORMAL, 1)), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_HPBar", CTexture::Create(m_pGraphicDev, L"../../Resource/Texture/UI/HPBar.bmp", TYPE_NORMAL, 1)), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_StaminaBar", CTexture::Create(m_pGraphicDev, L"../../Resource/Texture/UI/StaminaBar.png", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_CableIcon", CTexture::Create(m_pGraphicDev, L"../../Resource/Texture/UI/T_UI_Spool.dds", TYPE_NORMAL, 1)), E_FAIL);
 
 
 
 
 	m_bFinish = true;
 
-	lstrcpy(m_szLoading, L"Loading Complete!!!!!!!!!!!!!!!!!!!!!!");
+	lstrcpy(m_szLoading, L"불러오기 완료");
 
 
 	return 0;

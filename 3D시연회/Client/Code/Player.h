@@ -65,6 +65,7 @@ public:
 
 	void	Check_State(const _float& fTimeDelta);
 	void	Update_Stat();
+	PlayerState::STATE	Get_State() { return m_State; }
 
 private: // state func
 	void	Idle(const _float& fTimeDelta);
@@ -82,7 +83,6 @@ private:
 
 public:
 	void					Set_State(PlayerState::STATE State) { m_State = State; }
-	PlayerState::STATE		Get_State() { return m_State; }
 
 	void					Set_3State(Player3State::State State) { m_3State = State; }
 	Player3State::State		Get_3State() { return m_3State; }
@@ -99,7 +99,7 @@ private:
 	void					SetUp_OnTerrain(void);
 	HRESULT					Select_ProtoMesh(const _tchar* pObjProtoName);
 	_float					Check_ObjectCollision();
-
+	_int					Collision_Trigger();
 	void					Update_StatBar();
 		
 

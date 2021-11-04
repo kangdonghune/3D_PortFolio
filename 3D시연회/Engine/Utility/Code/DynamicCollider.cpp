@@ -155,12 +155,16 @@ void Engine::CDynamicCollider::Render_Buffer(const _matrix* matWorld)
 {
 	m_matCollWorld = *matWorld;
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, matWorld);
+
+	if (GetAsyncKeyState(VK_SPACE) & 0x8001)
+	{
 	m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
 	CVIBuffer::Render_Buffer();
 
 
 	m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+	}
 }
 
 void Engine::CDynamicCollider::Free(void)

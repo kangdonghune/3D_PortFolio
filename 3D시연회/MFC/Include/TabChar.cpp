@@ -651,7 +651,7 @@ void CTabChar::OnBnClickedUnitSave()
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		//순회하면서 키와 리스트 아이템들 저장
-		list<CGameObject*> pPlayerlst = *(Engine::Get_List(GAMELOGIC, L"Player"));
+		list<CGameObject*> pPlayerlst = *(Engine::Get_List(PLAYER, L"Player"));
 	
 		//저장요소. 오브젝트 태그명(proto type name), pos, rotate, scale 
 		for (CGameObject* pObj : pPlayerlst)
@@ -744,7 +744,7 @@ void CTabChar::OnBnClickedLoad()
 		if (INVALID_HANDLE_VALUE == hFile)
 			return;
 		//리스트 초기화 진행 
-		Engine::Clear_List(GAMELOGIC, L"Player");
+		Engine::Clear_List(PLAYER, L"Player");
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		TCHAR* szBuf = nullptr;
@@ -769,7 +769,7 @@ void CTabChar::OnBnClickedLoad()
 			ReadFile(hFile, &LoadPos, sizeof(_vec3), &dwByte, nullptr);
 			ReadFile(hFile, &LoadRot, sizeof(_vec3), &dwByte, nullptr);
 			ReadFile(hFile, &LoadScale, sizeof(_vec3), &dwByte, nullptr);
-			pObj = pView->CreateCharictor(GAMELOGIC, L"Player", wstrNametag.c_str());
+			pObj = pView->CreateCharictor(PLAYER, L"Player", wstrNametag.c_str());
 			CTransform* pTransCom = (CTransform*)pObj->Get_Component(L"Com_Transform", ID_DYNAMIC);
 			pTransCom->Set_Pos(&LoadPos);
 			pTransCom->Rotation2(ROT_X, LoadRot.x);

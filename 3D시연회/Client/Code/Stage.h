@@ -29,6 +29,7 @@ public:
 private:
 	HRESULT			Ready_Environment_Layer();
 	HRESULT			Ready_GameLogic_Layer();
+	HRESULT			Ready_Player_Layer();
 	HRESULT			Ready_UI_Layer();
 	HRESULT			Ready_Weapon_Layer();
 	HRESULT			Ready_Camera_Layer();
@@ -44,6 +45,7 @@ private:
 	HRESULT			Load_Building(const _tchar * pFilePath);
 	HRESULT			Load_Stuff(const _tchar * pFilePath);
 	HRESULT			Load_NaviMesh(const _tchar *pFilePath);
+	HRESULT			Load_Trigger(const _tchar *pFilePath);
 
 	HRESULT			Connect_CameraToPlayer();
 	HRESULT			DisConnect_CameraToPlayer();

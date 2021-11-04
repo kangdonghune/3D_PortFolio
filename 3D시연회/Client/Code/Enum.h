@@ -1,6 +1,6 @@
 namespace MonsterState
 {
-	enum GoblinBlakcSmith { IDLE, IMPACT, Enum_END};
+	enum GoblinBlakcSmith { IDLE, ROAR, WALK,ATTACK,DOWN, GETUP, DEAD, DAMAGED, STOP, Enum_END};
 }
 
 namespace PlayerState

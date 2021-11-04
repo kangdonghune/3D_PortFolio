@@ -23,6 +23,7 @@ public:
 private:
 	HRESULT			Ready_Environment_Layer();
 	HRESULT			Ready_GameLogic_Layer();
+	HRESULT			Ready_Player_Layer();
 	HRESULT			Ready_UI_Layer();
 	HRESULT			Ready_Camera_Layer();
 	HRESULT			Ready_Weapon_Layer();

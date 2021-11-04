@@ -237,7 +237,7 @@ CGameObject* CMFCView::CreateCharictor(Layer type, const _tchar * pParentName, c
 	if (!lstrcmp(L"Player", pParentName))
 	{
 		pGameObject = CPlayer::Create(m_pGraphicDev, pObjProtoName);
-		m_pManagementClass->Get_Scene()->Add_GameObject(type, L"Player", pGameObject);
+		m_pManagementClass->Get_Scene()->Add_GameObject(PLAYER, L"Player", pGameObject);
 		m_pForm->m_ptabObject->Set_Object(nullptr);
 		return pGameObject;
 	}

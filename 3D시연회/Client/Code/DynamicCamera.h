@@ -19,6 +19,7 @@ public:
 	void			Release_Target() { m_pTarget = nullptr; m_pTargetTransCom = nullptr; }
 	_vec3			Get_At() { return m_vAt; }
 	_vec3			Get_Eye() { return m_vEye; }
+	_matrix			Get_View() { return m_matView; }
 
 private:
 	void			Key_Input(const _float& fTimeDelta, const _float& fSpeed);
@@ -44,6 +45,12 @@ public:
 										const _float& fFov, const _float& fAspect, 
 										const _float& fNear, const _float& fFar);
 
+public:
+	void				CCTV_Mod(_float fTimeDelta);
+
+public:
+	_bool				m_bMode = false;
+	_float				m_fCount = 0.f;
 private:
 	virtual void		Free(void);
 };

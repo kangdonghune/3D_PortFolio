@@ -169,6 +169,7 @@
     <ClInclude Include="..\Code\Logo.h" />
     <ClInclude Include="..\Code\MainApp.h" />
     <ClInclude Include="..\Code\Monster.h" />
+    <ClInclude Include="..\Code\ObjAnime.h" />
     <ClInclude Include="..\Code\Object.h" />
     <ClInclude Include="..\Code\Player.h" />
     <ClInclude Include="..\Code\SkyBox.h" />
@@ -177,6 +178,8 @@
     <ClInclude Include="..\Code\Stage.h" />
     <ClInclude Include="..\Code\Struct.h" />
     <ClInclude Include="..\Code\Terrain.h" />
+    <ClInclude Include="..\Code\Trigger.h" />
+    <ClInclude Include="..\Code\TriggerFunc.h" />
     <ClInclude Include="..\Code\UI.h" />
     <ClInclude Include="..\Code\Weapon.h" />
     <ClInclude Include="Client.h" />
@@ -193,6 +196,7 @@
     <ClCompile Include="..\Code\Logo.cpp" />
     <ClCompile Include="..\Code\MainApp.cpp" />
     <ClCompile Include="..\Code\Monster.cpp" />
+    <ClCompile Include="..\Code\ObjAnime.cpp" />
     <ClCompile Include="..\Code\Object.cpp" />
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\SkyBox.cpp" />
@@ -200,6 +204,8 @@
     <ClCompile Include="..\Code\Sphrer.cpp" />
     <ClCompile Include="..\Code\Stage.cpp" />
     <ClCompile Include="..\Code\Terrain.cpp" />
+    <ClCompile Include="..\Code\Trigger.cpp" />
+    <ClCompile Include="..\Code\TriggerFunc.cpp" />
     <ClCompile Include="..\Code\UI.cpp" />
     <ClCompile Include="..\Code\Weapon.cpp" />
     <ClCompile Include="Client.cpp" />

@@ -34,9 +34,9 @@ HRESULT CEffect::Ready_Object(_vec3* pPos)
 Engine::_int CEffect::Update_Object(const _float& fTimeDelta)
 {
 
-	m_fFrame += 90.f * fTimeDelta;
+	m_fFrame += 110.f * fTimeDelta;
 
-	if (m_fFrame > 90.f)
+	if (m_fFrame > 40.f)
 	{
 		Set_Dead(true);
 		return 0;
@@ -78,12 +78,41 @@ Engine::_int CEffect::Update_Object(const _float& fTimeDelta)
 
 void CEffect::Render_Object(void)
 {
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
+	LPD3DXEFFECT	pEffect = m_pShaderCom->Get_EffectHandle();
+	NULL_CHECK(pEffect);
+	pEffect->AddRef();
 
-	m_pTextureCom->Render_Texture(0);
+	FAILED_CHECK_RETURN(SetUp_ConstantTable(pEffect), );
+
+	_uint	iMaxPass = 0;
+
+	pEffect->Begin(&iMaxPass, 0);	// 1. 현재 쉐이더 파일이 가진 최대 pass의 개수 반환 2. 시작하는 방식에 대한 flag 값(default 값)
+	pEffect->BeginPass(0);
+
 	m_pBufferCom->Render_Buffer();
 
+	pEffect->EndPass();
+	pEffect->End();
 
+	Safe_Release(pEffect);
+
+
+}
+
+HRESULT CEffect::SetUp_ConstantTable(LPD3DXEFFECT & pEffect)
+{
+	_matrix		matWorld, matView, matProj;
+
+	m_pTransformCom->Get_WorldMatrix(&matWorld);
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
+
+	pEffect->SetMatrix("g_matWorld", &matWorld);
+	pEffect->SetMatrix("g_matView", &matView);
+	pEffect->SetMatrix("g_matProj", &matProj);
+	
+	m_pTextureCom->Set_Texture(pEffect, "g_BaseTexture", (int)(m_fFrame/10.f));
+	return S_OK;
 }
 
 HRESULT CEffect::Add_Component(void)
@@ -110,6 +139,11 @@ HRESULT CEffect::Add_Component(void)
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	pComponent->AddRef();
 	m_mapComponent[ID_STATIC].emplace(L"Com_Renderer", pComponent);
+
+	// Shader
+	pComponent = m_pShaderCom = dynamic_cast<CShader*>(Clone_Proto(L"Proto_Shader_Effect"));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_STATIC].emplace(L"Com_Shader", pComponent);
 
 	return S_OK;
 

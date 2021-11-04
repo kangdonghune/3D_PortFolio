@@ -43,11 +43,18 @@ Engine::_int CDynamicCamera::Update_Object(const _float& fTimeDelta)
 		Mouse_Fix();
 		Mouse_Move(fTimeDelta);
 	}
+	if (!m_bMode)
+	{
+		Check_TargetState();
+		Move_Camera(fTimeDelta);
+		Fallow_Target();
+	}
 
-	Check_TargetState();
-	Move_Camera(fTimeDelta);
-	Fallow_Target();
-
+	else
+	{
+		CCTV_Mod(fTimeDelta);
+	}
+	
 	_int	iExit = CCamera::Update_Object(fTimeDelta);
 
 
@@ -262,6 +269,38 @@ CDynamicCamera* CDynamicCamera::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _vec
 		Safe_Release(pInstance);
 
 	return pInstance;
+}
+
+void CDynamicCamera::CCTV_Mod(_float fTimeDelta)
+{
+	m_fCount += 2.f * fTimeDelta;
+	_int iCount = m_fCount / 5.f;
+
+	switch (iCount)
+	{
+	case 0:
+		m_vEye = _vec3{ 70.f, 20.f, 50.f };
+		m_vAt.x = m_vEye.x - 1.f;
+		m_vAt.y = m_vEye.y - 1.f;
+		m_vAt.z = m_vEye.z - 1.f;
+		break;
+	case 1:
+		m_vEye = _vec3{ 45.f, 15.f, 30.f };
+		m_vAt.x = m_vEye.x - 1.f;
+		m_vAt.y = m_vEye.y - 1.f;
+		m_vAt.z = m_vEye.z - 1.f;
+		break;
+	case 2:
+		m_vEye = _vec3{ 80.f, 20.f, 70.f };
+		m_vAt.x = m_vEye.x - 1.f;
+		m_vAt.y = m_vEye.y - 1.f;
+		m_vAt.z = m_vEye.z + 1.f;
+		break;
+	default:
+		m_bMode = false;
+		break;
+	}
+	
 }
 
 void CDynamicCamera::Free(void)

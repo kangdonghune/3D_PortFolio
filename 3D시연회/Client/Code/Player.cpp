@@ -10,7 +10,10 @@
 #include "Monster.h"
 #include "Terrain.h"
 #include "Effect.h"
+#include "Trigger.h"
+#include "TriggerFunc.h"
 #include "DynamicCamera.h"
+#include "ObjAnime.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev)
@@ -66,6 +69,7 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 	
 	Check_State(fTimeDelta);
 
+
 	if (m_State == PlayerState::FIRE)
 	{
 	m_pMeshCom->Play_Animation(fTimeDelta);
@@ -74,6 +78,20 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 		m_pMeshCom->Play_Animation(fTimeDelta);
 
 	Engine::Add_RenderGroup(RENDER_NONALPHA, this);
+
+	if (nullptr == m_pShprer->Get_ParentBoneMartrix())
+	{
+
+		const D3DXFRAME_DERIVED*		pFrame = m_pMeshCom->Get_FrameByName("Hunter_Spine1");
+
+		m_pShprer->Set_ParentBoneMartrix(&pFrame->CombinedTransformMatrix);
+		m_pShprer->Set_ParentWorldMartrix(m_pTransformCom->Get_WorldMatrix());
+	}
+
+
+	m_pShprerTransCom->Set_ParentMatrix(&(*m_pShprer->Get_ParentBoneMartrix() * *m_pShprer->Get_ParentWorldMartrix()));
+	Collision_Trigger();
+
 
 	Update_StatBar();
 	//list<CGameObject*> pBuildinglst = Engine::Get_List(GAMELOGIC, L"Building");
@@ -139,7 +157,8 @@ void CPlayer::Update_Stat()
 
 void CPlayer::Idle(const _float & fTimeDelta)
 {
-	m_fStamina += 2.f* fTimeDelta;
+	if (m_fStamina < 200.f)
+		m_fStamina += 20.f* fTimeDelta;
 
 	m_pMeshCom->Set_AnimationIndex(M4_Idle);
 
@@ -194,7 +213,8 @@ void CPlayer::Idle(const _float & fTimeDelta)
 
 void CPlayer::Walk(const _float & fTimeDelta)
 {
-	m_fStamina += 2.f* fTimeDelta;
+	if (m_fStamina < 200.f)
+		m_fStamina += 20.f* fTimeDelta;
 
 	Direction::Dir Dir = Direction::NONE;
 	m_vDir = {};
@@ -255,7 +275,7 @@ void CPlayer::Walk(const _float & fTimeDelta)
 		Dir = Direction::L;
 		if (GetAsyncKeyState('W') & 0x8001)
 			Dir = Direction::FL;
-		if (GetAsyncKeyState('D') & 0x8001)
+		if (GetAsyncKeyState('S') & 0x8001)
 			Dir = Direction::BL;
 	}
 
@@ -395,7 +415,7 @@ void CPlayer::Run(const _float & fTimeDelta)
 		Dir = Direction::L;
 		if (GetAsyncKeyState('W') & 0x8001)
 			Dir = Direction::FL;
-		if (GetAsyncKeyState('D') & 0x8001)
+		if (GetAsyncKeyState('S') & 0x8001)
 			Dir = Direction::BL;
 	}
 
@@ -459,14 +479,14 @@ void CPlayer::Run(const _float & fTimeDelta)
 
 	m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(m_vDir *fTimeDelta * 7.f)));
 
-	if (Check_ObjectCollision())//0이 아니면 충돌
-		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(m_vDir *fTimeDelta * -7.f)));
+	//if (Check_ObjectCollision())//0이 아니면 충돌
+	//	m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(m_vDir *fTimeDelta * -7.f)));
 }
 
 void CPlayer::AimStand(const _float & fTimeDelta)
 {
-
-	m_fStamina += 2.f* fTimeDelta;
+	if (m_fStamina < 200.f)
+		m_fStamina += 20.f* fTimeDelta;
 
 	m_pMeshCom->Set_AnimationIndex(M4_Standing_CC);
 	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
@@ -508,8 +528,8 @@ void CPlayer::AimStand(const _float & fTimeDelta)
 
 void CPlayer::AimWalk(const _float & fTimeDelta)
 {
-
-	m_fStamina += 2.f* fTimeDelta;
+	if (m_fStamina < 200.f)
+		m_fStamina += 20.f* fTimeDelta;
 
 	Direction::Dir Dir = Direction::NONE;
 	m_vDir = {};
@@ -565,7 +585,7 @@ void CPlayer::AimWalk(const _float & fTimeDelta)
 		Dir = Direction::L;
 		if (GetAsyncKeyState('W') & 0x8001)
 			Dir = Direction::FL;
-		if (GetAsyncKeyState('D') & 0x8001)
+		if (GetAsyncKeyState('S') & 0x8001)
 			Dir = Direction::BL;
 	}
 
@@ -637,7 +657,9 @@ void CPlayer::AimWalk(const _float & fTimeDelta)
 
 void CPlayer::Fire(const _float & fTimeDelta)
 {
-	m_fStamina += 2.f* fTimeDelta;
+	if (m_fStamina < 200.f)
+		m_fStamina += 20.f* fTimeDelta;
+
 	if (m_pM4->Get_LoadedBullet() == 0)
 	{
 		m_State = PlayerState::RELOAD;
@@ -711,7 +733,7 @@ void CPlayer::Fire(const _float & fTimeDelta)
 		Dir = Direction::L;
 		if (GetAsyncKeyState('W') & 0x8001)
 			Dir = Direction::FL;
-		if (GetAsyncKeyState('D') & 0x8001)
+		if (GetAsyncKeyState('S') & 0x8001)
 			Dir = Direction::BL;
 	}
 
@@ -791,7 +813,9 @@ void CPlayer::Fire(const _float & fTimeDelta)
 
 void CPlayer::Reload(const _float & fTimeDelta)
 {
-	m_fStamina += 2.f* fTimeDelta;
+	if(m_fStamina < 200.f)
+		m_fStamina += 20.f* fTimeDelta;
+	
 
 	m_pMeshCom->Set_AnimationIndex(M4_Reload);
 
@@ -835,10 +859,14 @@ _bool CPlayer::HitCheck()
 		{
 			_vec3 temp = {};
 			pMon->Get_SphereTransform()->Get_Info(INFO_POS, &temp);
+			_vec3 CameraAt = dynamic_cast<CDynamicCamera*>(Get_List(CAMERA, L"DynamicCamera")->front())->Get_At();
 			_vec3 CameraEye = dynamic_cast<CDynamicCamera*>(Get_List(CAMERA, L"DynamicCamera")->front())->Get_Eye();
-			_vec3 tempDir = CameraEye - temp;
-			D3DXVec3Normalize(&tempDir,&tempDir);
-			_vec3 EffectPos = temp + tempDir*(pSphere->Get_Radius() / 100.f);
+			//_vec3 tempDir = CameraEye - temp;
+			_vec3 tempDir = CameraAt - CameraEye;
+			D3DXVec3Normalize(&tempDir, &tempDir);
+			_float fDist = sqrtf(powf(temp.x - CameraEye.x, 2) + powf(temp.y - CameraEye.y, 2) + powf(temp.z - CameraEye.z, 2));
+
+			_vec3 EffectPos = CameraEye + fDist*tempDir - (pSphere->Get_Radius() / 100.f)*tempDir;
 			CEffect::Create(m_pGraphicDev, &EffectPos);
 			pMon->Damaged();
 			return true;
@@ -874,7 +902,7 @@ HRESULT CPlayer::Add_Component(void)
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
 	//NaviMap
-	CTerrain* pTerrain = (CTerrain*)Engine::Get_List(GAMELOGIC, L"Terrain")->front();
+	CTerrain* pTerrain = (CTerrain*)Engine::Get_List(ENVIRONMENT, L"Terrain")->front();
 	m_pNaviCom = (CNaviMesh*)pTerrain->Get_Component(L"Com_Navi", ID_STATIC);
 
 
@@ -908,9 +936,9 @@ HRESULT CPlayer::LateAdd_Component(void)
 HRESULT CPlayer::Add_Object(void)
 {
 
-	//m_pShprer = CSphere::Create(m_pGraphicDev, 1.f);
-	//m_pShprer->Set_Height(1.f);
-	//m_pShprerTransCom = (CTransform*)m_pShprer->Get_Component(L"Com_Transform", ID_DYNAMIC);
+	m_pShprer = CSphere::Create(m_pGraphicDev, 30.f);
+	m_pShprer->Set_Height(1.f);
+	m_pShprerTransCom = (CTransform*)m_pShprer->Get_Component(L"Com_Transform", ID_DYNAMIC);
 
 
 	m_pM4 = CWeapon::Create(m_pGraphicDev);
@@ -948,15 +976,41 @@ _float CPlayer::Check_ObjectCollision()
 		NULL_CHECK_RETURN(pObj, false);
 		CCollider* pCollider = (CCollider*)pObj->Get_Component(L"Com_Collider", ID_STATIC);
 
-		if (m_pCalculatorCom->Collision_OBB(m_pDynamicColliderCom->Get_Min(), m_pDynamicColliderCom->Get_Max(),m_pDynamicColliderCom->Get_Center(), m_pDynamicColliderCom->Get_MaxDir(),
-											m_pDynamicColliderCom->Get_ColliderWorld(),
-											pCollider->Get_Min(), pCollider->Get_Max(), pCollider->Get_Center() ,pCollider->Get_MaxDir(),
-											pCollider->Get_CollWorldMatrix(),
-											&fPushDist
-											))
+		if (m_pCalculatorCom->Collision_OBB(m_pDynamicColliderCom->Get_Min(), m_pDynamicColliderCom->Get_Max(), m_pDynamicColliderCom->Get_Center(), m_pDynamicColliderCom->Get_MaxDir(),
+			m_pDynamicColliderCom->Get_ColliderWorld(),
+			pCollider->Get_Min(), pCollider->Get_Max(), pCollider->Get_Center(), pCollider->Get_MaxDir(),
+			pCollider->Get_CollWorldMatrix(),
+			&fPushDist
+		))
+		{
+			if (GetAsyncKeyState('E') & 0x0001)
+			{
+				CObjAnime::GetInstance()->Classify_Obj(pObj);
+			}
 			return fPushDist;
+		}
 	}
 	return 0;
+}
+
+_int CPlayer::Collision_Trigger()
+{
+	list<CGameObject*> pTerrainlst = *Engine::Get_List(ENVIRONMENT, L"Terrain");
+	CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
+	vector<CTrigger*> pTriggerlst = pTerrain->Get_vecTrigger();
+	for (auto& pTrigger : pTriggerlst)
+	{
+		if (!pTrigger->Get_TriggerOn())
+			continue;
+		if (m_pCalculatorCom->Collision_Sphere(m_pShprerTransCom, m_pShprer->Get_Radius() / 100.f, (CTransform*)pTrigger->Get_Component(L"Com_Transform", ID_DYNAMIC), pTrigger->Get_Radius()))
+		{
+			CTriggerFunc::GetInstance()->Classify_Trigger(pTrigger->Get_TriggerNum());
+			pTrigger->Set_TriggetOn(false);
+			return pTrigger->Get_TriggerNum();
+		}
+
+	}
+	return -1;
 }
 
 void CPlayer::Update_StatBar()

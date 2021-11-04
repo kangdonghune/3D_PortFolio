@@ -43,9 +43,6 @@
     <Filter Include="01. Scene\02. Public\Loading">
       <UniqueIdentifier>{1b6e9d90-40c2-4a94-bcb6-f7971569aba4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\03. Terrain">
-      <UniqueIdentifier>{ab2dfabd-a026-429b-a764-4d6eccdb85be}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\04. DynamicCamera">
       <UniqueIdentifier>{5322141c-d5f8-4d02-9104-03c6aa27d286}</UniqueIdentifier>
     </Filter>
@@ -72,6 +69,18 @@
     </Filter>
     <Filter Include="03.SoundMgr">
       <UniqueIdentifier>{90f5224d-e2c5-472b-b3a9-923f96b387bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\12.Trigger">
+      <UniqueIdentifier>{93949c45-d771-494c-889b-a8e2c22802ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\12.Trigger\TriggerFunc">
+      <UniqueIdentifier>{c16c1c3f-eb28-444c-b8e1-b1e8e91a974a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\06.Object\ObjAnime">
+      <UniqueIdentifier>{d8442562-cc84-44c1-aecc-035da20618a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\03. Terrain">
+      <UniqueIdentifier>{ab2dfabd-a026-429b-a764-4d6eccdb85be}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -120,9 +129,6 @@
     <ClInclude Include="..\Code\Player.h">
       <Filter>02. GameObject\01. Player</Filter>
     </ClInclude>
-    <ClInclude Include="..\Code\Monster.h">
-      <Filter>02. GameObject\02. Monster</Filter>
-    </ClInclude>
     <ClInclude Include="..\Code\DynamicCamera.h">
       <Filter>02. GameObject\04. DynamicCamera</Filter>
     </ClInclude>
@@ -149,6 +155,18 @@
     </ClInclude>
     <ClInclude Include="..\Code\SoundMgr.h">
       <Filter>03.SoundMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Trigger.h">
+      <Filter>02. GameObject\12.Trigger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\TriggerFunc.h">
+      <Filter>02. GameObject\12.Trigger\TriggerFunc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\ObjAnime.h">
+      <Filter>02. GameObject\06.Object\ObjAnime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Monster.h">
+      <Filter>02. GameObject\02. Monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -185,9 +203,6 @@
     <ClCompile Include="..\Code\Player.cpp">
       <Filter>02. GameObject\01. Player</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Monster.cpp">
-      <Filter>02. GameObject\02. Monster</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\DynamicCamera.cpp">
       <Filter>02. GameObject\04. DynamicCamera</Filter>
     </ClCompile>
@@ -208,6 +223,18 @@
     </ClCompile>
     <ClCompile Include="..\Code\SoundMgr.cpp">
       <Filter>03.SoundMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Trigger.cpp">
+      <Filter>02. GameObject\12.Trigger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TriggerFunc.cpp">
+      <Filter>02. GameObject\12.Trigger\TriggerFunc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ObjAnime.cpp">
+      <Filter>02. GameObject\06.Object\ObjAnime</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Monster.cpp">
+      <Filter>02. GameObject\02. Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

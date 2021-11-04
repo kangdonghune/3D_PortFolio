@@ -36,7 +36,7 @@ Engine::_int CWeapon::Update_Object(const _float& fTimeDelta)
 {
 	if (nullptr == m_pParentBoneMatrix)
 	{
-		CPlayer*		pPlayer = dynamic_cast<CPlayer*>(Get_List(GAMELOGIC, L"Player")->front());
+		CPlayer*		pPlayer = dynamic_cast<CPlayer*>(Get_List(PLAYER, L"Player")->front());
 		
 		CDynamicMesh*		pPlayerMeshCom = dynamic_cast<CDynamicMesh*>(pPlayer->Get_Component(L"Com_Mesh", ID_STATIC));
 		NULL_CHECK_RETURN(pPlayerMeshCom, -1);
@@ -159,9 +159,12 @@ _bool CWeapon::Collision_ToObject()
 		CMonster* pMon = dynamic_cast<CMonster*>(pobj);
 		if (m_pCalculatorCom->Collision_Sphere(m_pSphrerTransformCom, m_pSphere->Get_Radius() / 100.f, pMon->Get_SphereTransform(), pMon->Get_Sphere()->Get_Radius() / 100.f))
 		{
-
-			pMon->Set_State(MonsterState::IMPACT);
+			CPlayer*		pPlayer = dynamic_cast<CPlayer*>(Get_List(PLAYER, L"Player")->front());
+			if (pPlayer->Get_State() == PlayerState::BASH)
+			{
+			pMon->Set_State(MonsterState::DOWN);
 			return true;
+			}
 		}
 	}
 

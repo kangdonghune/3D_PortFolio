@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Stage.h"
-
+#include "Trigger.h"
 #include "Terrain.h"
 #include "DynamicCamera.h"
 #include "UI.h"
@@ -11,6 +11,8 @@
 #include "Building.h"
 #include "SkyBox.h"
 #include "DynamicCamera.h"
+#include "ObjAnime.h"
+#include "TriggerFunc.h"
 
 #include "Export_Function.h"
 
@@ -35,6 +37,7 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Environment_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_UI_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_GameLogic_Layer(), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Player_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Weapon_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Camera_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Sphere_Layer(), E_FAIL);
@@ -73,7 +76,7 @@ void CStage::Render_Scene(void)
 		m_dwRenderCnt = 0;
 	}
 	
-	CPlayer* pPlayer = dynamic_cast<CPlayer*>(Get_List(GAMELOGIC, L"Player")->front());
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(Get_List(PLAYER, L"Player")->front());
 	CWeapon* pM4 = dynamic_cast<CWeapon*>(Get_List(WEAPON, L"M4")->front());
 
 	_int HP = pPlayer->Get_HP();
@@ -87,12 +90,13 @@ void CStage::Render_Scene(void)
 	wsprintf(m_szResidueBullet, L"/ %d", ResidueBullet);
 
 
-	Render_Font(L"Font_Jinji", m_szFPS, &_vec2(600.f, 20.f), D3DXCOLOR(0.f, 0.f, 0.f, 1.f));
+	//Render_Font(L"Font_Jinji", m_szFPS, &_vec2(600.f, 20.f), D3DXCOLOR(0.f, 0.f, 0.f, 1.f));
 	Render_Font(L"Font_UI", m_szHP, &_vec2(315.f, 33.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 	Render_Font(L"Font_UI", m_szStamina, &_vec2(460.f, 33.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 	Render_Font(L"Font_UI", m_szLoadedBullet, &_vec2(370.f, 60.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 	Render_Font(L"Font_UI", m_szResidueBullet, &_vec2(390.f, 60.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
-
+	
+	CTriggerFunc::GetInstance()->Render_Text();
 	//hp
 
 	//스테미나
@@ -113,6 +117,11 @@ HRESULT CStage::Ready_Environment_Layer()
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"SkyBox", pGameObject), E_FAIL);
 
+	// Terrain
+	pGameObject = CTerrain::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
+
 	m_mapLayer[ENVIRONMENT] = pLayer;
 
 	return S_OK;
@@ -125,12 +134,21 @@ HRESULT CStage::Ready_GameLogic_Layer()
 
 	CGameObject*			pGameObject = nullptr;
 
-	// Terrain
-	pGameObject = CTerrain::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
+
 
 	m_mapLayer[GAMELOGIC] = pLayer;
+	return S_OK;
+}
+
+HRESULT CStage::Ready_Player_Layer()
+{
+	CLayer*		pLayer = CLayer::Create();
+	NULL_CHECK_RETURN(pLayer, E_FAIL);
+
+	CGameObject*			pGameObject = nullptr;
+
+
+	m_mapLayer[PLAYER] = pLayer;
 	return S_OK;
 }
 
@@ -274,11 +292,12 @@ HRESULT CStage::Ready_Resource(LPDIRECT3DDEVICE9 pGraphicDev)
 HRESULT CStage::Load_Data()
 {
 	FAILED_CHECK_RETURN(Load_NaviMesh(L"../../Resource/Data/NaviMesh/MFCCell.dat"), E_FAIL);
+	FAILED_CHECK_RETURN(Load_Trigger(L"../../Resource/Data/NaviMesh/MFCTrigger.dat"), E_FAIL);
+	FAILED_CHECK_RETURN(Load_Building(L"../../Resource/Data/Object/Building.dat"), E_FAIL);
+	FAILED_CHECK_RETURN(Load_Stuff(L"../../Resource/Data/Object/Stuff.dat"), E_FAIL);
 	FAILED_CHECK_RETURN(Load_Player(L"../../Resource/Data/Unit/Player.dat"),E_FAIL);
 	FAILED_CHECK_RETURN(Load_Monster(L"../../Resource/Data/Unit/Monster.dat"), E_FAIL);
-	//FAILED_CHECK_RETURN(Load_Building(L"../../Resource/Data/Object/Building.dat"), E_FAIL);
-	//FAILED_CHECK_RETURN(Load_Stuff(L"../../Resource/Data/Object/Stuff.dat"), E_FAIL);
-	
+
 	Connect_CameraToPlayer();
 
 	CGameObject*			pGameObject = nullptr;
@@ -292,7 +311,7 @@ HRESULT CStage::Load_Player(const _tchar * pFilePath)
 	if (INVALID_HANDLE_VALUE == hFile)
 		return E_FAIL;
 	//리스트 초기화 진행 
-	Clear_List(GAMELOGIC, L"Player");
+	Clear_List(PLAYER, L"Player");
 	DWORD dwByte = 0;
 	DWORD dwStringCount = 0;
 	TCHAR* szBuf = nullptr;
@@ -315,7 +334,7 @@ HRESULT CStage::Load_Player(const _tchar * pFilePath)
 		ReadFile(hFile, &LoadPos, sizeof(_vec3), &dwByte, nullptr);
 		ReadFile(hFile, &LoadRot, sizeof(_vec3), &dwByte, nullptr);
 		ReadFile(hFile, &LoadScale, sizeof(_vec3), &dwByte, nullptr);
-		pObj = Create_Unit(GAMELOGIC, L"Player", wstrNametag.c_str());
+		pObj = Create_Unit(PLAYER, L"Player", wstrNametag.c_str());
 		CTransform* pTransCom = (CTransform*)pObj->Get_Component(L"Com_Transform", ID_DYNAMIC);
 		pTransCom->Set_Pos(&LoadPos);
 		pTransCom->Rotation2(ROT_X, LoadRot.x);
@@ -462,7 +481,7 @@ HRESULT CStage::Load_NaviMesh(const _tchar * pFilePath)
 	DWORD dwByte = 0;
 	DWORD dwStringCount = 0;
 	TCHAR* szBuf = nullptr;
-	list<CGameObject*> pTerrainlst = *Engine::Get_List(GAMELOGIC, L"Terrain");
+	list<CGameObject*> pTerrainlst = *Engine::Get_List(ENVIRONMENT, L"Terrain");
 	CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
 	for (int i = 0; i < pTerrain->Get_vecCell().size(); i++)
 	{
@@ -504,10 +523,57 @@ HRESULT CStage::Load_NaviMesh(const _tchar * pFilePath)
 	return S_OK;
 }
 
+HRESULT CStage::Load_Trigger(const _tchar * pFilePath)
+{
+
+
+	HANDLE hFile = CreateFile(pFilePath, GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	if (INVALID_HANDLE_VALUE == hFile)
+		return E_FAIL;
+	//리스트 초기화 진행 
+
+	DWORD dwByte = 0;
+	DWORD dwStringCount = 0;
+	TCHAR* szBuf = nullptr;
+	list<CGameObject*> pTerrainlst = *Engine::Get_List(ENVIRONMENT, L"Terrain");
+	CTerrain* pTerrain = dynamic_cast<CTerrain*>(pTerrainlst.front());
+	for (int i = 0; i < pTerrain->Get_vecTrigger().size(); i++)
+	{
+		pTerrain->Get_vecTrigger()[i]->Set_Dead(true); // Set_Dead하면서 컴퍼넌트에 저장된 것들도 지워주는 예약.
+	}
+	pTerrain->Get_vecTrigger().clear();
+
+	_ulong dwIndex = 0;
+	_int iNum = -1;
+
+	//로드 순서 1.pCell 정보 불러들여온다. 2.cell 생성 후 MFC Cell에 생성 터레인 셀 벡터에 추가, 3. 컴퍼넌트에 cell만 추가 
+	while (true)
+	{
+
+		_float fRadius = 0.f;
+		_vec3  tempPos = {};
+		CTrigger* pTrigger;
+		ReadFile(hFile, &iNum, sizeof(_int), &dwByte, nullptr);
+		if (0 == dwByte)
+			break;//읽어올 게 없으면 종료
+		ReadFile(hFile, &fRadius, sizeof(_float), &dwByte, nullptr);
+		ReadFile(hFile, &tempPos, sizeof(_vec3), &dwByte, nullptr);
+
+		pTrigger = CTrigger::Create(m_pGraphicDev, fRadius);
+		CTransform* pTransform = (CTransform*)pTrigger->Get_Component(L"Com_Transform", ID_DYNAMIC);
+		pTransform->Set_Pos(&tempPos);
+		pTrigger->m_iTriggetNum = iNum;
+		pTerrain->Get_vecTrigger().push_back(pTrigger);
+	}
+	CTrigger::m_iTriggerCount = iNum;
+	CloseHandle(hFile);
+	return S_OK;
+}
+
 HRESULT CStage::Connect_CameraToPlayer()
 {
 	CDynamicCamera* pCamera =  (CDynamicCamera*)Get_List(CAMERA, L"DynamicCamera")->front();
-	CPlayer* pPlayer = (CPlayer*)Get_List(GAMELOGIC, L"Player")->front();
+	CPlayer* pPlayer = (CPlayer*)Get_List(PLAYER, L"Player")->front();
 	pCamera->Set_Target(pPlayer);
 	return S_OK;
 }

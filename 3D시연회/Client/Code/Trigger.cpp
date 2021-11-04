@@ -2,31 +2,32 @@
 
 
 #include "Export_Function.h"
-#include "Sphrer.h"
-
-
-
+#include "Trigger.h"
 //#include "../MFC/Include/MainFrm.h"
 
-_int CSphere::m_iShpereCount = -1;
-CSphere::CSphere(LPDIRECT3DDEVICE9 pGraphicDev)
+_int CTrigger::m_iShpereCount = -1;
+_int CTrigger::m_iTriggerCount = -1;
+CTrigger::CTrigger(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev)
 {
-
+	m_iTriggerCount++;
+	m_iTriggetNum = m_iTriggerCount;
 }
 
-CSphere::CSphere(const CSphere& rhs)
+CTrigger::CTrigger(const CTrigger& rhs)
 	: CGameObject(rhs)
 {
 	m_iID = rhs.m_iID;
+	m_iTriggerCount++;
+	m_iTriggetNum = m_iTriggerCount;
 }
 
-CSphere::~CSphere(void)
+CTrigger::~CTrigger(void)
 {
-
+	m_iTriggerCount--;
 }
 
-HRESULT CSphere::Ready_Object(void)
+HRESULT CTrigger::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 	m_pTransformCom->Set_Pos(0.f, 0.f, 0.f);
@@ -48,12 +49,12 @@ HRESULT CSphere::Ready_Object(void)
 	m_pVB->Unlock();
 	m_pVB->Release();
 
-	Get_Scene()->Add_GameObject(SPHERE, L"Sphrer", this);
+	FAILED_CHECK_RETURN(Get_Scene()->Add_GameObject(TRIGGER, L"Trigger", this), E_FAIL);
 
 	return S_OK;
 }
 
-Engine::_int CSphere::Update_Object(const _float& fTimeDelta)
+Engine::_int CTrigger::Update_Object(const _float& fTimeDelta)
 {
 
 	if (m_bDead)
@@ -61,7 +62,8 @@ Engine::_int CSphere::Update_Object(const _float& fTimeDelta)
 
 	CGameObject::Update_Object(fTimeDelta);
 	Add_RenderGroup(RENDER_NONALPHA, this);
-	
+
+
 	//if (nullptr == m_pParentBoneMatrix)
 	//{
 	//	CDynamicMesh*		pPlayerMeshCom = dynamic_cast<CDynamicMesh*>(Engine::Get_Component(L"GameLogic", L"Player", L"Com_Mesh", ID_STATIC));
@@ -100,9 +102,8 @@ Engine::_int CSphere::Update_Object(const _float& fTimeDelta)
 	return 0;
 }
 
-void CSphere::Render_Object(void)
+void CTrigger::Render_Object(void)
 {
-	
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
 
 	if (GetAsyncKeyState(VK_SPACE) & 0x8001)
@@ -116,11 +117,9 @@ void CSphere::Render_Object(void)
 		m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 		m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 	}
-
-
 }
 
-HRESULT CSphere::Add_Component(void)
+HRESULT CTrigger::Add_Component(void)
 {
 	CComponent*			pComponent = nullptr;
 
@@ -145,7 +144,7 @@ HRESULT CSphere::Add_Component(void)
 
 }
 
-void CSphere::Set_ID()
+void CTrigger::Set_ID()
 {
 	m_iShpereCount++;
 	m_iID = m_iShpereCount;
@@ -153,9 +152,9 @@ void CSphere::Set_ID()
 
 
 
-CSphere* CSphere::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float fRadius)
+CTrigger* CTrigger::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float fRadius)
 {
-	CSphere*	pInstance = new CSphere(pGraphicDev);
+	CTrigger*	pInstance = new CTrigger(pGraphicDev);
 	pInstance->Set_Radius(fRadius);
 	if (FAILED(pInstance->Ready_Object()))
 		Safe_Release(pInstance);
@@ -163,7 +162,7 @@ CSphere* CSphere::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float fRadius)
 	return pInstance;
 }
 
-void CSphere::Free(void)
+void CTrigger::Free(void)
 {
 	CGameObject::Free();
 }

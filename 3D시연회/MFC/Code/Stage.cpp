@@ -29,6 +29,7 @@ HRESULT CStage::Ready_Scene(void)
 
 	FAILED_CHECK_RETURN(Ready_Environment_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_GameLogic_Layer(), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Player_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Weapon_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_UI_Layer(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Camera_Layer(), E_FAIL);
@@ -91,6 +92,11 @@ HRESULT CStage::Ready_Environment_Layer()
 	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"SkyBox", pGameObject), E_FAIL);
 
+	// Terrain
+	pGameObject = CTerrain::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
+
 	m_mapLayer[ENVIRONMENT] = pLayer;
 
 	return S_OK;
@@ -103,15 +109,25 @@ HRESULT CStage::Ready_GameLogic_Layer()
 
 	CGameObject*			pGameObject = nullptr;
 
-	// Terrain
-	pGameObject = CTerrain::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
+
 
 	m_mapLayer[GAMELOGIC] = pLayer;
 
 	return S_OK;
 }
+
+HRESULT CStage::Ready_Player_Layer()
+{
+	CLayer*		pLayer = CLayer::Create();
+	NULL_CHECK_RETURN(pLayer, E_FAIL);
+
+	CGameObject*			pGameObject = nullptr;
+
+	m_mapLayer[PLAYER] = pLayer;
+
+	return S_OK;
+}
+
 
 HRESULT CStage::Ready_Weapon_Layer()
 {
@@ -237,18 +253,24 @@ HRESULT CStage::Ready_Resource(LPDIRECT3DDEVICE9 pGraphicDev)
 	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Brown", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/House/HouseBrown/", L"HouseBrown.X")), E_FAIL);
 	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Burn", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/House/HouseBurn/", L"HouseBurn.X")), E_FAIL);
 	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Church", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/Church/", L"Church.X")), E_FAIL);
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Factory", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/Factory/", L"factory.X")), E_FAIL);
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_GeneratorBody", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Generator/", L"Generator_Body.X")), E_FAIL);
+	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Factory", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/Factory/", L"factory.X")), E_FAIL);wddsssssssssssssssssssssssssssssssssssssssssx
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_GeneratorBody", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Generator/", L"Generator_Body.X")), E_FAIL);
 
 
-	////스터프
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Sedan", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Vehicles/", L"Sedan.X")), E_FAIL);
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_ChurchDoorL", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Door/", L"Church_DoorL.X")), E_FAIL);
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_ChurchDoorR", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Door/", L"Church_DoorR.X")), E_FAIL);
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_GeneratorAxle", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Generator/", L"Generator_Axle.X")), E_FAIL);
+	//스터프
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Sedan", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Vehicles/", L"Sedan.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_ChurchDoorL", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Door/", L"Church_DoorL.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_ChurchDoorR", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Door/", L"Church_DoorR.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_FinalDoor", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Door/", L"FinalDoor.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_GeneratorAxle", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Generator/", L"Generator_Axle.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Cable", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Cable/", L"Cable.X")), E_FAIL);
+
+
 
 	////벽
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Wall", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuffx/Wall/", L"Wall.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Wall", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Wall/", L"Wall.X")), E_FAIL);
+
+
 
 
 	// 기타 등등
