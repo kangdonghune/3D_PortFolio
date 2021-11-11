@@ -78,11 +78,10 @@ void CBuilding::Render_Object(void)
 	_uint	iMaxPass = 0;
 
 	pEffect->Begin(&iMaxPass, 0);	// 1. 현재 쉐이더 파일이 가진 최대 pass의 개수 반환 2. 시작하는 방식에 대한 flag 값(default 값)
-	pEffect->BeginPass(0);
 
 	m_pMeshCom->Render_Meshes(pEffect);
 
-	pEffect->EndPass();
+
 	pEffect->End();
 
 	Safe_Release(pEffect);

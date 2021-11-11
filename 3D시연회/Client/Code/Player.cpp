@@ -115,6 +115,8 @@ void CPlayer::Render_Object(void)
 	_matrix	matWorld;
 	m_pTransformCom->Get_WorldMatrix(&matWorld);
 	m_pDynamicColliderCom->Render_Buffer(&matWorld);
+
+
 }
 
 void CPlayer::Check_State(const _float & fTimeDelta)

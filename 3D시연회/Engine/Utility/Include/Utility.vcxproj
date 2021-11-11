@@ -192,6 +192,8 @@ call CopyUtility.bat</Command>
     <ClCompile Include="..\Code\RcCol.cpp" />
     <ClCompile Include="..\Code\RcTex.cpp" />
     <ClCompile Include="..\Code\Renderer.cpp" />
+    <ClCompile Include="..\Code\RenderTarget.cpp" />
+    <ClCompile Include="..\Code\RenderTargetManager.cpp" />
     <ClCompile Include="..\Code\Scene.cpp" />
     <ClCompile Include="..\Code\Shader.cpp" />
     <ClCompile Include="..\Code\SphereMeshs.cpp" />
@@ -228,6 +230,8 @@ call CopyUtility.bat</Command>
     <ClInclude Include="..\Code\RcCol.h" />
     <ClInclude Include="..\Code\RcTex.h" />
     <ClInclude Include="..\Code\Renderer.h" />
+    <ClInclude Include="..\Code\RenderTarget.h" />
+    <ClInclude Include="..\Code\RenderTargetManager.h" />
     <ClInclude Include="..\Code\Scene.h" />
     <ClInclude Include="..\Code\Shader.h" />
     <ClInclude Include="..\Code\Shader_Effect.hpp" />

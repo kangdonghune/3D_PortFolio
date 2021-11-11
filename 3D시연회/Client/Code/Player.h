@@ -12,6 +12,7 @@ class CDynamicMesh;
 class CTransform;
 class CRenderer;
 class CCalculator;
+class CShader;
 class CCollider;
 class CNaviMesh;
 class CCollider;

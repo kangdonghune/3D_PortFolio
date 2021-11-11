@@ -52,6 +52,21 @@ CComponent*		Clone_Proto(const _tchar* pProtoTag)
 	return CProtoMgr::GetInstance()->Clone_Proto(pProtoTag);
 }
 
+
+HRESULT				Ready_RenderTarget(LPDIRECT3DDEVICE9 pGraphicDev,
+										const _tchar* pTargetTag,
+										const _uint& iWidth, const _uint& iHeight,
+										D3DFORMAT Format, D3DXCOLOR Color)
+{
+	return	CRenderTargetManager::GetInstance()->Ready_RenderTarget(pGraphicDev, pTargetTag, iWidth, iHeight, Format, Color);
+}
+
+HRESULT				Ready_MRT(const _tchar*	pMRTTag, const _tchar* pTargetTag)
+{
+	return	CRenderTargetManager::GetInstance()->Ready_MRT(pMRTTag, pTargetTag);
+}
+
+
 CRenderer*	Get_Renderer(void)
 {
 	return CRenderer::GetInstance();
@@ -80,6 +95,7 @@ const D3DLIGHT9*		Get_Light(const _ulong& iIndex)
 
 void				Release_Utility(void)
 {
+	CRenderTargetManager::GetInstance()->DestroyInstance();
 	CLightMgr::GetInstance()->DestroyInstance();
 	CRenderer::GetInstance()->DestroyInstance();
 	CProtoMgr::GetInstance()->DestroyInstance();

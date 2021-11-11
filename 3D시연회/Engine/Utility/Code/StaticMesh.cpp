@@ -151,10 +151,38 @@ void CStaticMesh::Render_Meshes(LPD3DXEFFECT & pEffect)
 {
 	for (_ulong i = 0; i < m_dwSubsetCnt; ++i)
 	{
+		_bool	bAlpha = true;
+		_uint	iPassCnt = 0;
+
+		if (bAlpha = Find_Alpha(m_pMtrl[i].pTextureFilename))
+		{
+			iPassCnt = 1;
+		}
+
 		pEffect->SetTexture("g_BaseTexture", m_ppTexture[i]);
 		pEffect->CommitChanges();
+
+		pEffect->BeginPass(iPassCnt);
+
 		m_pMesh->DrawSubset(i);
+
+		pEffect->EndPass();
 	}
+}
+
+_bool CStaticMesh::Find_Alpha(const char * pFileName)
+{
+	_ulong iLength = strlen(pFileName);
+	
+	for (_uint i = 0; i < iLength + 1; i++)
+	{
+		if (pFileName[i] == '.')
+		{
+			if (pFileName[i - 1] == 'A')
+				return true ;
+		}
+	}
+	return _bool();
 }
 
 CStaticMesh* Engine::CStaticMesh::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pFilePath, const _tchar* pFileName)

@@ -106,6 +106,12 @@
     <Filter Include="04. Component\07. Collider\00.DynamicCollider">
       <UniqueIdentifier>{99d48e3c-6651-496b-a85f-88c273432931}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07.RenderTarget">
+      <UniqueIdentifier>{2d497293-4d0b-463e-9385-b04661c1c34a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.RenderTarget\RenderTargetManager">
+      <UniqueIdentifier>{33911d52-6498-4e7f-b140-d8298269b8bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\Management.cpp">
@@ -206,6 +212,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\DynamicCollider.cpp">
       <Filter>04. Component\07. Collider\00.DynamicCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RenderTarget.cpp">
+      <Filter>07.RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RenderTargetManager.cpp">
+      <Filter>07.RenderTarget\RenderTargetManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -322,6 +334,12 @@
     </ClInclude>
     <ClInclude Include="..\Code\Shader_Effect.hpp">
       <Filter>04. Component\10. Shader\hpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\RenderTarget.h">
+      <Filter>07.RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\RenderTargetManager.h">
+      <Filter>07.RenderTarget\RenderTargetManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

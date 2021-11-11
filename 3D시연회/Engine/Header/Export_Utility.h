@@ -23,6 +23,7 @@
 #include "DynamicMesh.h"
 #include "NaviMesh.h"
 
+#include "RenderTargetManager.h"
 
 #include "Shader.h"
 
@@ -49,6 +50,14 @@ inline HRESULT			Ready_Proto(const _tchar* pProtoTag, CComponent* pComponent);
 inline CComponent*		Clone_Proto(const _tchar* pProtoTag);
 
 
+//RenderTargetMgr
+inline HRESULT				Ready_RenderTarget(LPDIRECT3DDEVICE9 pGraphicDev,
+												const _tchar* pTargetTag,
+												const _uint& iWidth, const _uint& iHeight,
+												D3DFORMAT Format, D3DXCOLOR Color);
+
+
+inline	HRESULT				Ready_MRT(const _tchar*	pMRTTag, const _tchar* pTargetTag);
 
 // renderer
 inline CRenderer*	Get_Renderer(void);

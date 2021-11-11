@@ -276,6 +276,9 @@ HRESULT CStage::Ready_LightInfo(void)
 	tLightInfo.Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
 	tLightInfo.Specular = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
 	tLightInfo.Ambient = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.f);
+	//tLightInfo.Diffuse = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.f);
+	//tLightInfo.Specular = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.f);
+	//tLightInfo.Ambient = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.f);
 	tLightInfo.Direction = _vec3(1.f, -1.f, 1.f);
 
 	FAILED_CHECK_RETURN(Ready_Light(m_pGraphicDev, &tLightInfo, 0), E_FAIL);
@@ -293,7 +296,7 @@ HRESULT CStage::Load_Data()
 {
 	FAILED_CHECK_RETURN(Load_NaviMesh(L"../../Resource/Data/NaviMesh/MFCCell.dat"), E_FAIL);
 	FAILED_CHECK_RETURN(Load_Trigger(L"../../Resource/Data/NaviMesh/MFCTrigger.dat"), E_FAIL);
-	FAILED_CHECK_RETURN(Load_Building(L"../../Resource/Data/Object/Building.dat"), E_FAIL);
+	//FAILED_CHECK_RETURN(Load_Building(L"../../Resource/Data/Object/Building.dat"), E_FAIL);
 	FAILED_CHECK_RETURN(Load_Stuff(L"../../Resource/Data/Object/Stuff.dat"), E_FAIL);
 	FAILED_CHECK_RETURN(Load_Player(L"../../Resource/Data/Unit/Player.dat"),E_FAIL);
 	FAILED_CHECK_RETURN(Load_Monster(L"../../Resource/Data/Unit/Monster.dat"), E_FAIL);

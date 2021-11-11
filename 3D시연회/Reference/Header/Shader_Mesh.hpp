@@ -113,13 +113,33 @@ PS_OUT		PS_MAIN(PS_IN In)
 	return Out;
 }
 
+PS_OUT		PS_ALPHA(PS_IN In)
+{
+	PS_OUT	 Out = (PS_OUT)0;
+
+	Out.vColor = tex2D(BaseSampler, In.vTexUV);
+																											  //Out.vColor.r = 1.f
+	return Out;
+}
+
 technique	Default_Device
 {
 	pass Temp
-{
-
+	{
 	vertexshader = compile vs_3_0 VS_MAIN();
 	pixelshader = compile ps_3_0 PS_MAIN();
-}
+	}
+
+	pass Temp
+	{
+
+	alphatestenable = true;
+	alphafunc = greater;
+	alpharef = 0xc0;
+	cullmode = none;
+
+	vertexshader = compile vs_3_0 VS_MAIN();
+	pixelshader = compile ps_3_0 PS_ALPHA();
+	}
 
 };
