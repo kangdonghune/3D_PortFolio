@@ -1,4 +1,6 @@
 #include "Renderer.h"
+#include "Export_Utility.h"
+
 
 USING(Engine)
 IMPLEMENT_SINGLETON(CRenderer)
@@ -24,8 +26,11 @@ void Engine::CRenderer::Add_RenderGroup(RENDERID eID, CGameObject* pGameObject)
 // 재편성된 렌더그룹을 출력
 void Engine::CRenderer::Render_GameObject(LPDIRECT3DDEVICE9& pGraphicDev)
 {
-	Render_Priority(pGraphicDev);
-	Render_Nonalpha(pGraphicDev);
+	Render_Priority(pGraphicDev);	
+
+	Render_Deferred(pGraphicDev);
+
+
 	Render_Alpha(pGraphicDev);
 	Render_UI(pGraphicDev);
 
@@ -100,6 +105,13 @@ void CRenderer::Render_UI(LPDIRECT3DDEVICE9 & pGraphicDev)
 	pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 
+}
+
+void CRenderer::Render_Deferred(LPDIRECT3DDEVICE9 & pGraphicDev)
+{
+	Begin_MRT(L"MRT_Deferred");
+	Render_Nonalpha(pGraphicDev);
+	End_MRT(L"MRT_Deferred");
 }
 
 void Engine::CRenderer::Free(void)

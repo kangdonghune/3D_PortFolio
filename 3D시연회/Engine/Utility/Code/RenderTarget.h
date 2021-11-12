@@ -13,8 +13,13 @@ private:
 
 public:
 	HRESULT				Ready_RenderTarget(const _uint& iWidth, const _uint& iHeight, D3DFORMAT format, D3DXCOLOR Color);
+	
 	void				Setup_OnGraphicDev(const _uint& iIndex);//장치슬롯에 원하는 랜더타겟을 링크시키는 함수
 	
+	void				Release_OnGraphicDev(const _uint& iIndex);
+
+	void				Clear_RenderTarget();
+
 private:
 	LPDIRECT3DDEVICE9	m_pGraphicDev;
 	LPDIRECT3DTEXTURE9	m_pTargetTexture; 

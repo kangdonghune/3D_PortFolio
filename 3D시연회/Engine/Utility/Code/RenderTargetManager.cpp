@@ -51,6 +51,46 @@ HRESULT CRenderTargetManager::Ready_MRT(const _tchar * pMRTTag, const _tchar * p
 	return S_OK;
 }
 
+HRESULT CRenderTargetManager::Begin_MRT(const _tchar * pMRTTag)
+{
+	list<CRenderTarget*>*		pMRTList = Find_MRT(pMRTTag);
+
+	if (pMRTList == nullptr)
+		return E_FAIL;
+
+	for (auto& iter : *pMRTList)
+	{
+		iter->Clear_RenderTarget();
+
+	}
+
+	_uint iIndex = 0;
+
+	for (auto& iter : *pMRTList)
+	{
+		iter->Setup_OnGraphicDev(iIndex++);
+	}
+
+	return S_OK;
+}
+
+HRESULT CRenderTargetManager::End_MRT(const _tchar * pMRTTag)
+{
+	list<CRenderTarget*>*		pMRTList = Find_MRT(pMRTTag);
+
+	if (pMRTList == nullptr)
+		return E_FAIL;
+
+	_uint iIndex = 0;
+
+	for (auto& iter : *pMRTList)
+	{
+		iter->Release_OnGraphicDev(iIndex++);
+	}
+
+	return S_OK;
+}
+
 CRenderTarget * CRenderTargetManager::Find_RenderTarget(const _tchar * pTargetTag)
 {
 	auto	iter = find_if(m_mapRenderTarget.begin(), m_mapRenderTarget.end(), CTag_Finder(pTargetTag));

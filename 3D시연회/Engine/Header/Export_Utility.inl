@@ -67,6 +67,16 @@ HRESULT				Ready_MRT(const _tchar*	pMRTTag, const _tchar* pTargetTag)
 }
 
 
+HRESULT				Begin_MRT(const _tchar* pMRTTag)
+{
+	return	CRenderTargetManager::GetInstance()->Begin_MRT(pMRTTag);
+}
+
+HRESULT				End_MRT(const _tchar* pMRTTag)
+{
+	return	CRenderTargetManager::GetInstance()->End_MRT(pMRTTag);
+}
+
 CRenderer*	Get_Renderer(void)
 {
 	return CRenderer::GetInstance();

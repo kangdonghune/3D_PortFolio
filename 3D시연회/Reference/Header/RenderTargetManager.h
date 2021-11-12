@@ -25,6 +25,15 @@ public:
 
 	HRESULT				Ready_MRT(const _tchar*	pMRTTag, const _tchar* pTargetTag);
 
+	HRESULT				Begin_MRT(const _tchar* pMRTTag);
+	
+	HRESULT				End_MRT(const _tchar* pMRTTag);
+
+
+
+
+
+
 private:
 	CRenderTarget*			Find_RenderTarget(const _tchar* pTargetTag);
 	list<CRenderTarget*>*	Find_MRT(const _tchar* pMRTTag);

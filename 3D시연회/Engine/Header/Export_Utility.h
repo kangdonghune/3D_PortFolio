@@ -59,11 +59,18 @@ inline HRESULT				Ready_RenderTarget(LPDIRECT3DDEVICE9 pGraphicDev,
 
 inline	HRESULT				Ready_MRT(const _tchar*	pMRTTag, const _tchar* pTargetTag);
 
+inline	HRESULT				Begin_MRT(const _tchar* pMRTTag);
+
+inline	HRESULT				End_MRT(const _tchar* pMRTTag);
+
+
+
 // renderer
 inline CRenderer*	Get_Renderer(void);
 inline void			Add_RenderGroup(RENDERID eID, CGameObject* pGameObject);
 inline void			Render_GameObject(LPDIRECT3DDEVICE9 pGraphicDev);
 inline void			Clear_RenderGroup(void);
+
 
 // light
 inline HRESULT				Ready_Light(LPDIRECT3DDEVICE9 pGraphicDev, const D3DLIGHT9* pLightInfo, const _uint& iIndex);
