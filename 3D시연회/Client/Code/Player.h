@@ -18,7 +18,7 @@ class CNaviMesh;
 class CCollider;
 class CDynamicCollider;
 class COptimization;
-
+class CShader;
 END
 class CPlayer : public CGameObject
 {
@@ -79,8 +79,9 @@ private: // state func
 	void	Bash(const _float& fTimeDelta);
 
 private:
-	void	RotatePlayer(_float fDegree);
-	_bool	HitCheck();
+	void					RotatePlayer(_float fDegree);
+	_bool					HitCheck();
+	HRESULT					SetUp_ConstantTable(LPD3DXEFFECT& pEffect);
 
 public:
 	void					Set_State(PlayerState::STATE State) { m_State = State; }
@@ -99,7 +100,7 @@ private:
 	HRESULT					Add_Object(void);
 	void					SetUp_OnTerrain(void);
 	HRESULT					Select_ProtoMesh(const _tchar* pObjProtoName);
-	_float					Check_ObjectCollision();
+	_bool					Check_ObjectCollision();
 	_int					Collision_Trigger();
 	void					Update_StatBar();
 		
@@ -116,6 +117,10 @@ private:
 	CCollider*				m_pColliderCom = nullptr;
 	CDynamicCollider*		m_pDynamicColliderCom = nullptr;
 	COptimization*			m_pOptimizationCom = nullptr;
+	CShader*				m_pShaderCom = nullptr;
+
+
+private:
 	_float					m_fFireTime = 0.f;
 	CUI*					m_pHPBar;
 	CUI*					m_pStaminaBar;

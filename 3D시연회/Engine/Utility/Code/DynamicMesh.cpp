@@ -119,6 +119,41 @@ HRESULT Engine::CDynamicMesh::Ready_Meshes(const _tchar* pFilePath, const _tchar
 
 }
 
+	void CDynamicMesh::Render_Meshes(LPD3DXEFFECT & pEffect)
+	{
+
+		for (auto& iter : m_MeshcontainerList)
+		{
+			D3DXMESHCONTAINER_DERIVED*		pDerivedMeshContainer = iter;
+
+			for (_ulong i = 0; i < pDerivedMeshContainer->dwNumBones; ++i)
+			{
+				pDerivedMeshContainer->pRenderingMatrix[i] = pDerivedMeshContainer->pFrameOffsetMatrix[i] * *pDerivedMeshContainer->ppFrameCombinedTransformMatrix[i];
+			}
+
+			void*		pSrcVtx = nullptr;
+			void*		pDestVtx = nullptr;
+
+			pDerivedMeshContainer->pOriMesh->LockVertexBuffer(0, &pSrcVtx);
+			pDerivedMeshContainer->MeshData.pMesh->LockVertexBuffer(0, &pDestVtx);
+
+			// 소프트웨어 스키닝을 수행하는 함수(스키닝 애니메이션 뿐 아니라 뼈들과 정점들의 정보 변경도 수행해주는 함수)
+			// 1. 뼈의 최종 변환 상태 2. 원래대로 돌리기 위한 역행렬(안넣어줘도 상관없음) 3. 변하지 않는 원본의 정점 정보 4. 애니메이션에 의해 변환된 정점 정보
+			pDerivedMeshContainer->pSkinInfo->UpdateSkinnedMesh(pDerivedMeshContainer->pRenderingMatrix, NULL, pSrcVtx, pDestVtx);
+
+			for (_ulong i = 0; i < pDerivedMeshContainer->NumMaterials; ++i)
+			{
+				m_pGraphicDev->SetTexture(0, pDerivedMeshContainer->ppTexture[i]);
+				pEffect->SetTexture("g_BaseTexture", pDerivedMeshContainer->ppTexture[i]);
+				pEffect->CommitChanges(); // 기존에 출력하던 텍스쳐 정보를 갱신
+				pDerivedMeshContainer->MeshData.pMesh->DrawSubset(i);
+			}
+
+			pDerivedMeshContainer->pOriMesh->UnlockVertexBuffer();
+			pDerivedMeshContainer->MeshData.pMesh->UnlockVertexBuffer();
+		}
+	}
+
 // 재귀 함수
 void Engine::CDynamicMesh::Update_FrameMatrices(D3DXFRAME_DERIVED* pFrame, const _matrix* pParentMatrix)
 {

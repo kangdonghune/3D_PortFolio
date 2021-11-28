@@ -42,15 +42,10 @@ public:
 
 	_bool			Collision_OBB(const _vec3* pDestMin,
 									const _vec3* pDestMax,
-									const _vec3* pDestCenter,
-									const _vec3 * pDestMaxDir,
 									const _matrix* pDestWorld,
 									const _vec3* pSourMin,
 									const _vec3* pSourMax,
-									const _vec3 * pSourCenter,
-									const _vec3 * pSourMaxDir,
-									const _matrix* pSourWorld,
-									_float* fOut);
+									const _matrix* pSourWorld);
 
 	_bool			Collision_Sphere(CTransform * pDestTransform, _float fDestRadius, CTransform * pSourTransform, _float fSourRadius);
 

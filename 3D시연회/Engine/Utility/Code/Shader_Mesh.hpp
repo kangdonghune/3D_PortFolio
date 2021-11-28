@@ -106,7 +106,7 @@ PS_OUT		PS_MAIN(PS_IN In)
 	// Out.vColor = (In.vShade * Out.vColor) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient);
 	//Out.vColor = (In.vShade) * (g_vLightDiffuse * g_vMtrlDiffuse) + Out.vColor * (g_vLightAmbient * g_vMtrlAmbient);
 
-	Out.vColor = (Out.vColor) * (g_vLightDiffuse * g_vMtrlDiffuse) * (In.vShade + (g_vLightAmbient * g_vMtrlAmbient));// +In.vSpecular * (g_vLightSpecular * g_vMtrlSpecular);
+	Out.vColor = (Out.vColor) * (g_vLightDiffuse * g_vMtrlDiffuse) * (In.vShade + (g_vLightAmbient * g_vMtrlAmbient)) +In.vSpecular * (g_vLightSpecular * g_vMtrlSpecular);
 
 	//Out.vColor.r = 1.f;
 

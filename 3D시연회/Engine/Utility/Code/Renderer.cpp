@@ -1,4 +1,3 @@
-#include "Renderer.h"
 #include "Export_Utility.h"
 
 
@@ -28,9 +27,9 @@ void Engine::CRenderer::Render_GameObject(LPDIRECT3DDEVICE9& pGraphicDev)
 {
 	Render_Priority(pGraphicDev);	
 
-	Render_Deferred(pGraphicDev);
+	//Render_Deferred(pGraphicDev);
 
-
+	Render_Nonalpha(pGraphicDev);
 	Render_Alpha(pGraphicDev);
 	Render_UI(pGraphicDev);
 
@@ -110,7 +109,6 @@ void CRenderer::Render_UI(LPDIRECT3DDEVICE9 & pGraphicDev)
 void CRenderer::Render_Deferred(LPDIRECT3DDEVICE9 & pGraphicDev)
 {
 	Begin_MRT(L"MRT_Deferred");
-	Render_Nonalpha(pGraphicDev);
 	End_MRT(L"MRT_Deferred");
 }
 

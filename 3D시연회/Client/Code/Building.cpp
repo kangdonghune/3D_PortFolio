@@ -48,7 +48,7 @@ Engine::_int CBuilding::Update_Object(const _float& fTimeDelta)
 	//SetUp_OnTerrain();
 
 
-	Add_RenderGroup(RENDER_ALPHA, this);
+	Add_RenderGroup(RENDER_NONALPHA, this);
 	/*m_pShprer->Update_Object(fTimeDelta);
 
 	m_pTransformCom->Get_Info(INFO_POS, &m_vPos);

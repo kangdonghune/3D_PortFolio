@@ -41,7 +41,7 @@ inline void				Render_Scene(LPDIRECT3DDEVICE9& pGraphicDev);
 
 inline 	list<CGameObject*>*		Get_List(Layer type, const _tchar* pObjTag);
 inline	void					Clear_List(Layer type, const _tchar* pObjTag);
-HRESULT							Add_GameObject(Layer type, const _tchar* pObjTag, CGameObject* pInstance);
+inline	HRESULT					Add_GameObject(Layer type, const _tchar* pObjTag, CGameObject* pInstance);
 
 
 

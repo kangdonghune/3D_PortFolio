@@ -110,11 +110,25 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 
 void CPlayer::Render_Object(void)
 {
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
-	m_pMeshCom->Render_Meshes();
-	_matrix	matWorld;
-	m_pTransformCom->Get_WorldMatrix(&matWorld);
-	m_pDynamicColliderCom->Render_Buffer(&matWorld);
+	//m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
+	//m_pMeshCom->Render_Meshes();
+	LPD3DXEFFECT	pEffect = m_pShaderCom->Get_EffectHandle();
+	NULL_CHECK(pEffect);
+	pEffect->AddRef();
+
+	FAILED_CHECK_RETURN(SetUp_ConstantTable(pEffect), );
+
+	_uint	iMaxPass = 0;
+
+	pEffect->Begin(&iMaxPass, 0);	// 1. 현재 쉐이더 파일이 가진 최대 pass의 개수 반환 2. 시작하는 방식에 대한 flag 값(default 값)
+	pEffect->BeginPass(0);
+
+	m_pMeshCom->Render_Meshes(pEffect);
+
+	pEffect->EndPass();
+	pEffect->End();
+
+	Safe_Release(pEffect);
 
 
 }
@@ -261,6 +275,7 @@ void CPlayer::Walk(const _float & fTimeDelta)
 			Dir = Direction::FL;
 		if (GetAsyncKeyState('D') & 0x8001)
 			Dir = Direction::FR;
+		goto skip;
 	}
 
 	if (GetAsyncKeyState('S') & 0x8001)
@@ -270,6 +285,7 @@ void CPlayer::Walk(const _float & fTimeDelta)
 			Dir = Direction::BL;
 		if (GetAsyncKeyState('D') & 0x8001)
 			Dir = Direction::BR;
+		goto skip;
 	}
 
 	if (GetAsyncKeyState('A') & 0x8001)
@@ -279,6 +295,8 @@ void CPlayer::Walk(const _float & fTimeDelta)
 			Dir = Direction::FL;
 		if (GetAsyncKeyState('S') & 0x8001)
 			Dir = Direction::BL;
+
+		goto skip;
 	}
 
 	if (GetAsyncKeyState('D') & 0x8001)
@@ -288,8 +306,14 @@ void CPlayer::Walk(const _float & fTimeDelta)
 			Dir = Direction::FR;
 		if (GetAsyncKeyState('S') & 0x8001)
 			Dir = Direction::BR;
+		goto skip;
 	}
 
+
+	skip:
+
+
+	m_vDir = {};
 	switch (Dir)
 	{
 	case Direction::F:
@@ -341,7 +365,9 @@ void CPlayer::Walk(const _float & fTimeDelta)
 	}
 
 	m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(m_vDir *fTimeDelta * 5.f)));
-
+	_matrix	matWorld;
+	m_pTransformCom->Get_WorldMatrix(&matWorld);
+	m_pDynamicColliderCom->Render_Buffer(&matWorld);
 	if (Check_ObjectCollision())//0이 아니면 충돌
 		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(m_vDir *fTimeDelta * -5.f)));
 
@@ -401,6 +427,7 @@ void CPlayer::Run(const _float & fTimeDelta)
 			Dir = Direction::FL;
 		if (GetAsyncKeyState('D') & 0x8001)
 			Dir = Direction::FR;
+		goto skipR;
 	}
 
 	if (GetAsyncKeyState('S') & 0x8001)
@@ -410,6 +437,7 @@ void CPlayer::Run(const _float & fTimeDelta)
 			Dir = Direction::BL;
 		if (GetAsyncKeyState('D') & 0x8001)
 			Dir = Direction::BR;
+		goto skipR;
 	}
 
 	if (GetAsyncKeyState('A') & 0x8001)
@@ -419,6 +447,7 @@ void CPlayer::Run(const _float & fTimeDelta)
 			Dir = Direction::FL;
 		if (GetAsyncKeyState('S') & 0x8001)
 			Dir = Direction::BL;
+		goto skipR;
 	}
 
 	if (GetAsyncKeyState('D') & 0x8001)
@@ -428,7 +457,10 @@ void CPlayer::Run(const _float & fTimeDelta)
 			Dir = Direction::FR;
 		if (GetAsyncKeyState('S') & 0x8001)
 			Dir = Direction::BR;
+		goto skipR;
 	}
+
+	skipR:
 
 	switch (Dir)
 	{
@@ -480,9 +512,12 @@ void CPlayer::Run(const _float & fTimeDelta)
 	}
 
 	m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(m_vDir *fTimeDelta * 7.f)));
+	_matrix	matWorld;
+	m_pTransformCom->Get_WorldMatrix(&matWorld);
+	m_pDynamicColliderCom->Render_Buffer(&matWorld);
+	if (Check_ObjectCollision())//0이 아니면 충돌
+		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(m_vDir *fTimeDelta * -7.f)));
 
-	//if (Check_ObjectCollision())//0이 아니면 충돌
-	//	m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(m_vDir *fTimeDelta * -7.f)));
 }
 
 void CPlayer::AimStand(const _float & fTimeDelta)
@@ -651,9 +686,12 @@ void CPlayer::AimWalk(const _float & fTimeDelta)
 	}
 
 	m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(m_vDir *fTimeDelta * 3.f)));
-
+	_matrix	matWorld;
+	m_pTransformCom->Get_WorldMatrix(&matWorld);
+	m_pDynamicColliderCom->Render_Buffer(&matWorld);
 	if (Check_ObjectCollision())//0이 아니면 충돌
 		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(m_vDir *fTimeDelta * -3.f)));
+
 }
 
 
@@ -789,7 +827,9 @@ void CPlayer::Fire(const _float & fTimeDelta)
 	}
 
 	m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(m_vDir *fTimeDelta * 3.f)));
-
+	_matrix	matWorld;
+	m_pTransformCom->Get_WorldMatrix(&matWorld);
+	m_pDynamicColliderCom->Render_Buffer(&matWorld);
 	if (Check_ObjectCollision())//0이 아니면 충돌
 		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(m_vDir *fTimeDelta * -3.f)));
 
@@ -878,6 +918,48 @@ _bool CPlayer::HitCheck()
 	return false;
 }
 
+HRESULT CPlayer::SetUp_ConstantTable(LPD3DXEFFECT & pEffect)
+{
+	_matrix		matWorld, matView, matProj;
+
+	m_pTransformCom->Get_WorldMatrix(&matWorld);
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
+
+	pEffect->SetMatrix("g_matWorld", &matWorld);
+	pEffect->SetMatrix("g_matView", &matView);
+	pEffect->SetMatrix("g_matProj", &matProj);
+
+	const D3DLIGHT9*	pLight = Get_Light();
+	NULL_CHECK_RETURN(pLight, E_FAIL);
+
+	pEffect->SetVector("g_vLightDir", &_vec4(pLight->Direction, 0.f));
+
+	pEffect->SetVector("g_vLightDiffuse", (_vec4*)&pLight->Diffuse);
+	pEffect->SetVector("g_vLightAmbient", (_vec4*)&pLight->Ambient);
+	pEffect->SetVector("g_vLightSpecular", (_vec4*)&pLight->Specular);
+
+	D3DMATERIAL9		tMtrl;
+	ZeroMemory(&tMtrl, sizeof(D3DMATERIAL9));
+
+	tMtrl.Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	tMtrl.Specular = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	tMtrl.Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	tMtrl.Emissive = D3DXCOLOR(0.f, 0.f, 0.f, 0.f);
+	tMtrl.Power = 20.f;
+
+	pEffect->SetVector("g_vMtrlDiffuse", (_vec4*)&tMtrl.Diffuse);
+	pEffect->SetVector("g_vMtrlAmbient", (_vec4*)&tMtrl.Ambient);
+	pEffect->SetVector("g_vMtrlSpecular", (_vec4*)&tMtrl.Specular);
+	pEffect->SetFloat("g_fPower", tMtrl.Power);
+
+
+	D3DXMatrixInverse(&matView, NULL, &matView);
+	pEffect->SetVector("g_vCameraPos", (_vec4*)&matView._41);
+
+	return S_OK;
+}
+
 
 
 HRESULT CPlayer::Add_Component(void)
@@ -913,6 +995,9 @@ HRESULT CPlayer::Add_Component(void)
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_Optimization", pComponent);
 
+	pComponent = m_pShaderCom = dynamic_cast<CShader*>(Clone_Proto(L"Proto_Shader_Mesh"));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_STATIC].emplace(L"Com_Shader", pComponent);
 
 
 	return S_OK;
@@ -965,12 +1050,12 @@ HRESULT CPlayer::Select_ProtoMesh(const _tchar * pObjProtoName)
 	return S_OK;
 }
 
-_float CPlayer::Check_ObjectCollision()
+_bool CPlayer::Check_ObjectCollision()
 {
 	list<CGameObject*>* Objlist = Engine::Get_List(GAMELOGIC, L"Object");
 	if (Objlist == nullptr)
-		return 0.f;
-	_float fPushDist = 0.f;
+		return false;
+
 
 	for (CGameObject* pGameObj : *Objlist)
 	{
@@ -978,21 +1063,17 @@ _float CPlayer::Check_ObjectCollision()
 		NULL_CHECK_RETURN(pObj, false);
 		CCollider* pCollider = (CCollider*)pObj->Get_Component(L"Com_Collider", ID_STATIC);
 
-		if (m_pCalculatorCom->Collision_OBB(m_pDynamicColliderCom->Get_Min(), m_pDynamicColliderCom->Get_Max(), m_pDynamicColliderCom->Get_Center(), m_pDynamicColliderCom->Get_MaxDir(),
-			m_pDynamicColliderCom->Get_ColliderWorld(),
-			pCollider->Get_Min(), pCollider->Get_Max(), pCollider->Get_Center(), pCollider->Get_MaxDir(),
-			pCollider->Get_CollWorldMatrix(),
-			&fPushDist
-		))
+		if (m_pCalculatorCom->Collision_OBB(m_pDynamicColliderCom->Get_Min(), m_pDynamicColliderCom->Get_Max(), m_pDynamicColliderCom->Get_ColliderWorld(),
+			pCollider->Get_Min(), pCollider->Get_Max(),pCollider->Get_CollWorldMatrix()))
 		{
 			if (GetAsyncKeyState('E') & 0x0001)
 			{
 				CObjAnime::GetInstance()->Classify_Obj(pObj);
 			}
-			return fPushDist;
+			return true;
 		}
 	}
-	return 0;
+	return false;
 }
 
 _int CPlayer::Collision_Trigger()

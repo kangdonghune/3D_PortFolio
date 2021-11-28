@@ -218,11 +218,8 @@ _float CMonster::Check_ObjectCollision()
 		NULL_CHECK_RETURN(pObj, false);
 		CCollider* pCollider = (CCollider*)pObj->Get_Component(L"Com_Collider", ID_STATIC);
 
-		if (m_pCalculatorCom->Collision_OBB(m_pDynamicColliderCom->Get_Min(), m_pDynamicColliderCom->Get_Max(), m_pDynamicColliderCom->Get_Center(), m_pDynamicColliderCom->Get_MaxDir(),
-			m_pDynamicColliderCom->Get_ColliderWorld(),
-			pCollider->Get_Min(), pCollider->Get_Max(), pCollider->Get_Center(), pCollider->Get_MaxDir(),
-			pCollider->Get_CollWorldMatrix(),
-			&fPushDist
+		if (m_pCalculatorCom->Collision_OBB(m_pDynamicColliderCom->Get_Min(), m_pDynamicColliderCom->Get_Max(), m_pDynamicColliderCom->Get_ColliderWorld(),
+			pCollider->Get_Min(), pCollider->Get_Max(),pCollider->Get_CollWorldMatrix()
 		))
 			return fPushDist;
 	}
