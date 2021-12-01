@@ -31,7 +31,7 @@
 //#endif
 #endif
 
-#pragma warning(disable : 4251)
+#pragma warning(disable : 4251)                                   
 
 
 
@@ -49,6 +49,6 @@ using namespace Engine;
 #define RADIAN 57.296f
 
 #define UNITLAYERTAG	L"GameLogic"
-#define OBJECTLAYERTAG	L"GameLogic"
+#define OBJECTLAYERTAG	L"GameLogic"s
 
 #endif // Engine_Define_h__

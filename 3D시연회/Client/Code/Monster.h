@@ -15,6 +15,7 @@ class CCollider;
 class CNaviMesh;
 class CSphrerMeshs;
 class CDynamicCollider;
+class CShader;
 
 END
 class CMonster : public CGameObject
@@ -66,6 +67,8 @@ private:
 
 	void					Update_TargetDist();
 
+	HRESULT					SetUp_ConstantTable(LPD3DXEFFECT& pEffect);
+
 protected:
 	void					Key_Input(const _float& fTimeDelta);
 	void					StateCheck(_float fTimedelta);
@@ -82,6 +85,8 @@ protected:
 	CCalculator*			m_pCalculatorCom = nullptr;
 	CSphere*				m_pSphere;
 	CTransform*				m_pShprerTransCom = nullptr;
+	CShader*				m_pShaderCom = nullptr;
+
 	CPlayer*				m_pTarget = nullptr;
 	_float					m_fTargetDist = 99999.f;
 	CSphere*				m_pAttackSphere = nullptr;
@@ -90,6 +95,8 @@ protected:
 	_float					m_fDeltaTime;
 
 	_int					m_iHp =30;
+
+
 
 	MonsterState::GoblinBlakcSmith  type = MonsterState::GoblinBlakcSmith::IDLE;
 public:

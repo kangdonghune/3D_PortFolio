@@ -59,7 +59,7 @@ Engine::_int CBuilding::Update_Object(const _float& fTimeDelta)
 
 void CBuilding::Render_Object(void)
 {
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
+	//m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
 
 
 	//카메라 at을 가져와서 카메라보다 뒤에 있으면 그리지마라.(문제는 집이 통짜건물이라는 점, 분별하려면 낮개로 다 뜯어와야함,근데 그건 너무 빡시다.)
@@ -78,13 +78,15 @@ void CBuilding::Render_Object(void)
 	_uint	iMaxPass = 0;
 
 	pEffect->Begin(&iMaxPass, 0);	// 1. 현재 쉐이더 파일이 가진 최대 pass의 개수 반환 2. 시작하는 방식에 대한 flag 값(default 값)
+	pEffect->BeginPass(0);
 
 	m_pMeshCom->Render_Meshes(pEffect);
 
-
+	pEffect->EndPass();
 	pEffect->End();
 
 	Safe_Release(pEffect);
+
 
 
 
@@ -190,8 +192,9 @@ HRESULT CBuilding::SetUp_ConstantTable(LPD3DXEFFECT & pEffect)
 	pEffect->SetVector("g_vMtrlSpecular", (_vec4*)&tMtrl.Specular);
 	pEffect->SetFloat("g_fPower", tMtrl.Power);
 
+
 	D3DXMatrixInverse(&matView, NULL, &matView);
-	pEffect->SetVector("g_vCamPos", (_vec4*)&matView._41);
+	pEffect->SetVector("g_vCameraPos", (_vec4*)&matView._41);
 
 	return S_OK;
 }

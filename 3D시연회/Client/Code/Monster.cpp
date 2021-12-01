@@ -88,19 +88,25 @@ Engine::_int CMonster::Update_Object(const _float& fTimeDelta)
 void CMonster::Render_Object(void)
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
+	 
+	LPD3DXEFFECT	pEffect = m_pShaderCom->Get_EffectHandle();
+	NULL_CHECK(pEffect);
+	pEffect->AddRef();
 
-	if (type == MonsterState::ROAR)
-		m_pMeshCom->Play_Animation(2 * m_fDeltaTime);
-	else if (type == MonsterState::STOP)
-	{
+	FAILED_CHECK_RETURN(SetUp_ConstantTable(pEffect), );
 
-	}
-	else
-		m_pMeshCom->Play_Animation(m_fDeltaTime);
+	_uint	iMaxPass = 0;
 
-	//m_pNaviCom->Render_NaviMesh();
+	pEffect->Begin(&iMaxPass, 0);	// 1. 현재 쉐이더 파일이 가진 최대 pass의 개수 반환 2. 시작하는 방식에 대한 flag 값(default 값)
+	pEffect->BeginPass(0);
 
-	m_pMeshCom->Render_Meshes();
+	m_pMeshCom->Render_Meshes(pEffect);
+
+	pEffect->EndPass();
+	pEffect->End();
+
+	Safe_Release(pEffect);
+
 
 }
 
@@ -185,6 +191,13 @@ HRESULT CMonster::Add_Component(void)
 	//pComponent = m_pDynamicColliderCom = CDynamicCollider::Create(m_pGraphicDev, &Pos, 185.f, 50.f, 50.f);
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Transform", pComponent);
+
+
+	pComponent = m_pShaderCom = dynamic_cast<CShader*>(Clone_Proto(L"Proto_Shader_Mesh"));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_STATIC].emplace(L"Com_Shader", pComponent);
+
+
 
 	return S_OK;
 
@@ -365,4 +378,46 @@ void CMonster::Update_TargetDist()
 	m_pTransformCom->Get_Info(INFO_POS, &MonsPos);
 	_vec3 TargetDist = TargetPos - MonsPos;
 	m_fTargetDist = D3DXVec3Dot(&TargetDist, &TargetDist);
+}
+
+HRESULT CMonster::SetUp_ConstantTable(LPD3DXEFFECT & pEffect)
+{
+	_matrix		matWorld, matView, matProj;
+
+	m_pTransformCom->Get_WorldMatrix(&matWorld);
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
+
+	pEffect->SetMatrix("g_matWorld", &matWorld);
+	pEffect->SetMatrix("g_matView", &matView);
+	pEffect->SetMatrix("g_matProj", &matProj);
+
+	const D3DLIGHT9*	pLight = Get_Light();
+	NULL_CHECK_RETURN(pLight, E_FAIL);
+
+	pEffect->SetVector("g_vLightDir", &_vec4(pLight->Direction, 0.f));
+
+	pEffect->SetVector("g_vLightDiffuse", (_vec4*)&pLight->Diffuse);
+	pEffect->SetVector("g_vLightAmbient", (_vec4*)&pLight->Ambient);
+	pEffect->SetVector("g_vLightSpecular", (_vec4*)&pLight->Specular);
+
+	D3DMATERIAL9		tMtrl;
+	ZeroMemory(&tMtrl, sizeof(D3DMATERIAL9));
+
+	tMtrl.Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	tMtrl.Specular = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	tMtrl.Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	tMtrl.Emissive = D3DXCOLOR(0.f, 0.f, 0.f, 0.f);
+	tMtrl.Power = 20.f;
+
+	pEffect->SetVector("g_vMtrlDiffuse", (_vec4*)&tMtrl.Diffuse);
+	pEffect->SetVector("g_vMtrlAmbient", (_vec4*)&tMtrl.Ambient);
+	pEffect->SetVector("g_vMtrlSpecular", (_vec4*)&tMtrl.Specular);
+	pEffect->SetFloat("g_fPower", tMtrl.Power);
+
+
+	D3DXMatrixInverse(&matView, NULL, &matView);
+	pEffect->SetVector("g_vCameraPos", (_vec4*)&matView._41);
+
+	return S_OK;
 }
