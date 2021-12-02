@@ -87,8 +87,15 @@ Engine::_int CMonster::Update_Object(const _float& fTimeDelta)
 
 void CMonster::Render_Object(void)
 {
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
-	 
+	if (type == MonsterState::ROAR)
+		m_pMeshCom->Play_Animation(2 * m_fDeltaTime);
+	else if (type == MonsterState::STOP)
+	{
+
+	}
+	else
+		m_pMeshCom->Play_Animation(m_fDeltaTime);
+
 	LPD3DXEFFECT	pEffect = m_pShaderCom->Get_EffectHandle();
 	NULL_CHECK(pEffect);
 	pEffect->AddRef();

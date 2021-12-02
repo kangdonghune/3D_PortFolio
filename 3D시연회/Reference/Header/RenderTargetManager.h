@@ -29,7 +29,8 @@ public:
 	
 	HRESULT				End_MRT(const _tchar* pMRTTag);
 
-
+	HRESULT				Ready_DebugBuffer(const _tchar* pTargetTag, const _float& fx, const _float& fy, const _float& fW, const _float& fH);
+	void				Render_DebugMRT(const _tchar* pMRTTag);
 
 
 

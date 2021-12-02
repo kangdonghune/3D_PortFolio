@@ -77,6 +77,16 @@ HRESULT				End_MRT(const _tchar* pMRTTag)
 	return	CRenderTargetManager::GetInstance()->End_MRT(pMRTTag);
 }
 
+HRESULT				Ready_DebugBuffer(const _tchar* pTargetTag, const _float& fx, const _float& fy, const _float& fW, const _float& fH)
+{
+	return	CRenderTargetManager::GetInstance()->Ready_DebugBuffer(pTargetTag, fx, fy, fH, fW);
+}
+void				Render_DebugMRT(const _tchar* pMRTTag)
+{
+	return	CRenderTargetManager::GetInstance()->Render_DebugMRT(pMRTTag);
+}
+
+
 CRenderer*	Get_Renderer(void)
 {
 	return CRenderer::GetInstance();

@@ -26,6 +26,8 @@ public:
 
 	void			Render_Deferred(LPDIRECT3DDEVICE9& pGraphicDev);
 
+
+
 public:
 	list<CGameObject*>				m_RenderGroup[RENDER_END];
 

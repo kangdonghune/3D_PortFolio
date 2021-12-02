@@ -40,6 +40,14 @@ namespace Engine
 	const _ulong	FVF_SPHERE = D3DFVF_XYZ | D3DFVF_DIFFUSE;
 
 
+	typedef struct tagVertexScreen
+	{
+		_vec4	vPos;
+		_vec2	vTexUV;
+	}VTXSCREEN;
+
+	const _ulong	FVF_SCREEN = D3DFVF_XYZRHW | D3DFVF_TEX1; // 윈도우 좌표 상태의 포지션
+
 	typedef struct tagIndex16
 	{
 		_ushort		_0;

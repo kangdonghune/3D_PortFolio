@@ -54,11 +54,11 @@ Engine::_uint CLoading::LoadingForStage(void)
 
 	//오브젝트
 	//오브젝트 빌딩
-	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Brown", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/House/HouseBrown/", L"HouseBrown.X")), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Burn", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/House/HouseBurn/", L"HouseBurn.X")), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Church", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/Church/", L"Church.X")), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Factory", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/Factory/", L"factory.X")), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_GeneratorBody", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Generator/", L"Generator_Body.X")), E_FAIL);
+	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Brown", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/House/HouseBrown/", L"HouseBrown.X")), E_FAIL);
+	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Burn", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/House/HouseBurn/", L"HouseBurn.X")), E_FAIL);
+	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Church", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/Church/", L"Church.X")), E_FAIL);
+	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Factory", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Building/Factory/", L"factory.X")), E_FAIL);
+	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_GeneratorBody", CStaticMesh::Create(m_pGraphicDev, L"../../Resource/Staticmesh/Stuff/Generator/", L"Generator_Body.X")), E_FAIL);
 
 
 	////스터프

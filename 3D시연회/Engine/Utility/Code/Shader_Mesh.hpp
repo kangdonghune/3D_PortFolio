@@ -94,6 +94,7 @@ struct PS_IN
 struct PS_OUT
 {
 	float4		vColor : COLOR0;
+	float4		vNormal : COLOR1;
 };
 
 // «»ºø Ω¶¿Ã¥ı
@@ -110,6 +111,7 @@ PS_OUT		PS_MAIN(PS_IN In)
 
 	//Out.vColor.r = 1.f;
 
+	Out.vNormal = vector(0.f, 0.f, 1.f, 1.f);
 	return Out;
 }
 

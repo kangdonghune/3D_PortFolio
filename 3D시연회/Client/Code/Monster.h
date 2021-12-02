@@ -94,7 +94,7 @@ protected:
 	CDynamicCollider*		m_pDynamicColliderCom = nullptr;
 	_float					m_fDeltaTime;
 
-	_int					m_iHp =30;
+	_int					m_iHp =31;
 
 
 

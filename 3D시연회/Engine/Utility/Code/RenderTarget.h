@@ -20,6 +20,9 @@ public:
 
 	void				Clear_RenderTarget();
 
+	HRESULT				Ready_DebugBuffer(const _float& fx, const _float& fy, const _float& fW, const _float& fH);
+	void				Render_DebugBuffer();
+
 private:
 	LPDIRECT3DDEVICE9	m_pGraphicDev;
 	LPDIRECT3DTEXTURE9	m_pTargetTexture; 
@@ -28,6 +31,9 @@ private:
 	LPDIRECT3DSURFACE9	m_pOldTargetSurface; // 기존에 슬롯에 연결되어 있는 타겟 텍스쳐를 임시적으로 보관하기 위한 서페이스
 
 	D3DXCOLOR			m_ClearColor;
+
+	LPDIRECT3DVERTEXBUFFER9	 m_pVB;
+	LPDIRECT3DINDEXBUFFER9	 m_pIB;
 
 public:
 	static  CRenderTarget*	Create(LPDIRECT3DDEVICE9 pGraphicDev,

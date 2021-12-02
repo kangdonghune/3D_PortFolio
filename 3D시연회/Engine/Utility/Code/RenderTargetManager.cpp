@@ -91,6 +91,26 @@ HRESULT CRenderTargetManager::End_MRT(const _tchar * pMRTTag)
 	return S_OK;
 }
 
+HRESULT CRenderTargetManager::Ready_DebugBuffer(const _tchar * pTargetTag, const _float & fx, const _float & fy, const _float & fW, const _float & fH)
+{
+	CRenderTarget* pRenderTarget = Find_RenderTarget(pTargetTag);
+	NULL_CHECK_RETURN(pRenderTarget, E_FAIL);
+
+	FAILED_CHECK_RETURN(pRenderTarget->Ready_DebugBuffer(fx, fy, fW, fH), E_FAIL);
+
+	return S_OK;
+}
+
+void CRenderTargetManager::Render_DebugMRT(const _tchar * pMRTTag)
+{
+	list<CRenderTarget*>* pMRTList = Find_MRT(pMRTTag);
+	NULL_CHECK(pMRTList);
+
+	for (auto& iter : *pMRTList)
+		iter->Render_DebugBuffer();
+
+}
+
 CRenderTarget * CRenderTargetManager::Find_RenderTarget(const _tchar * pTargetTag)
 {
 	auto	iter = find_if(m_mapRenderTarget.begin(), m_mapRenderTarget.end(), CTag_Finder(pTargetTag));

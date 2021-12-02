@@ -39,10 +39,13 @@ HRESULT Engine::CManagement::Ready_Shader(LPDIRECT3DDEVICE9& pGraphicDev)
 	FAILED_CHECK_RETURN(Ready_RenderTarget(pGraphicDev, L"Target_Shade", ViewPort.Width, ViewPort.Height, D3DFMT_A16B16G16R16F, D3DXCOLOR(0.f, 0.f, 0.f, 1.f)), E_FAIL);// ³ë¸» Å¸°ÙÀÌ¶û ºûÀÇ Á¤º¸¸¦ ÀúÀå
 
 	FAILED_CHECK_RETURN(Ready_MRT(L"MRT_Deferred", L"Target_Albedo"), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_MRT(L"MRT_Deferred", L"Target_Nomal"), E_FAIL);
-	
-	FAILED_CHECK_RETURN(Ready_MRT(L"MRT_LightAcc", L"Target_Shade"), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_DebugBuffer(L"Target_Albedo", 0.f, 0.f, 200.f, 200.f), E_FAIL);
 
+	FAILED_CHECK_RETURN(Ready_MRT(L"MRT_Deferred", L"Target_Nomal"), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_DebugBuffer(L"Target_Nomal", 0.f, 200.f, 200.f, 200.f), E_FAIL);
+
+	FAILED_CHECK_RETURN(Ready_MRT(L"MRT_LightAcc", L"Target_Shade"), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_DebugBuffer(L"Target_Shade", 200.f, 0.f, 200.f, 200.f), E_FAIL);
 
 	CShader*		pShader = nullptr;
 

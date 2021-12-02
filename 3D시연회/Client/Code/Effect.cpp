@@ -59,7 +59,6 @@ Engine::_int CEffect::Update_Object(const _float& fTimeDelta)
 
 	D3DXMatrixInverse(&matBill, NULL, &matBill);
 
-	// 현재 이 코드는 문제의 소지가 있다.
 	// 월드 행렬 = 스 * 자 * 이 * 공 * 부
 	// 월 = 빌 * 월(스(I)) -> 빌(자^-1) * 스 * 자 
 
