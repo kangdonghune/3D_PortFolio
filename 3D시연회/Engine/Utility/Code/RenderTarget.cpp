@@ -127,6 +127,11 @@ void CRenderTarget::Render_DebugBuffer()
 
 }
 
+void CRenderTarget::SetUp_Shader(LPD3DXEFFECT & pEffect, const char * pContantTable)
+{
+	pEffect->SetTexture(pContantTable, m_pTargetTexture);
+}
+
 CRenderTarget * CRenderTarget::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _uint & iWidth, const _uint & iHeight, D3DFORMAT format, D3DXCOLOR Color)
 {
 	CRenderTarget* pInstant = new CRenderTarget(pGraphicDev);

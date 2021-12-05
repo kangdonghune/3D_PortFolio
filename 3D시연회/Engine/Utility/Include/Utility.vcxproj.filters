@@ -341,6 +341,12 @@
     <ClInclude Include="..\Code\RenderTargetManager.h">
       <Filter>07.RenderTarget\RenderTargetManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\Shader_Shade.hpp">
+      <Filter>04. Component\10. Shader\hpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Shader_Blend.hpp">
+      <Filter>04. Component\10. Shader\hpp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Header\Export_Utility.inl">

@@ -34,7 +34,8 @@ HRESULT Engine::CManagement::Ready_Shader(LPDIRECT3DDEVICE9& pGraphicDev)
 	D3DVIEWPORT9	ViewPort;
 	pGraphicDev->GetViewport(&ViewPort);
 
-	FAILED_CHECK_RETURN(Ready_RenderTarget(pGraphicDev, L"Target_Albedo", ViewPort.Width, ViewPort.Height, D3DFMT_A16B16G16R16F, D3DXCOLOR(0.f, 0.f, 0.f, 1.f)), E_FAIL); //고유 색
+
+	FAILED_CHECK_RETURN(Ready_RenderTarget(pGraphicDev, L"Target_Albedo", ViewPort.Width, ViewPort.Height, D3DFMT_A16B16G16R16F, D3DXCOLOR(0.f, 0.f, 0.f, 0.f)), E_FAIL); //고유 색
 	FAILED_CHECK_RETURN(Ready_RenderTarget(pGraphicDev, L"Target_Nomal", ViewPort.Width, ViewPort.Height, D3DFMT_A16B16G16R16F, D3DXCOLOR(0.f, 0.f, 0.f, 1.f)), E_FAIL); //법선 정보를 텍스쳐형태로 추출
 	FAILED_CHECK_RETURN(Ready_RenderTarget(pGraphicDev, L"Target_Shade", ViewPort.Width, ViewPort.Height, D3DFMT_A16B16G16R16F, D3DXCOLOR(0.f, 0.f, 0.f, 1.f)), E_FAIL);// 노말 타겟이랑 빛의 정보를 저장
 
@@ -46,6 +47,9 @@ HRESULT Engine::CManagement::Ready_Shader(LPDIRECT3DDEVICE9& pGraphicDev)
 
 	FAILED_CHECK_RETURN(Ready_MRT(L"MRT_LightAcc", L"Target_Shade"), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_DebugBuffer(L"Target_Shade", 200.f, 0.f, 200.f, 200.f), E_FAIL);
+
+	FAILED_CHECK_RETURN(Ready_MRT(L"MRT_LightAcc", L"Target_Specular"), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_DebugBuffer(L"Target_Specular ", 200.f, 200.f, 200.f, 200.f), E_FAIL);
 
 	CShader*		pShader = nullptr;
 
@@ -60,6 +64,15 @@ HRESULT Engine::CManagement::Ready_Shader(LPDIRECT3DDEVICE9& pGraphicDev)
 	pShader = CShader::Create(pGraphicDev, L"../../Reference/Header/Shader_Mesh.hpp");
 	NULL_CHECK_RETURN(pShader, E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Shader_Mesh", pShader), E_FAIL);
+
+	pShader = CShader::Create(pGraphicDev, L"../../Reference/Header/Shader_Shade.hpp");
+	NULL_CHECK_RETURN(pShader, E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Shader_Shade", pShader), E_FAIL);
+
+	pShader = CShader::Create(pGraphicDev, L"../../Reference/Header/Shader_Blend.hpp");
+	NULL_CHECK_RETURN(pShader, E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Shader_Blend", pShader), E_FAIL);
+
 
 	pShader = CShader::Create(pGraphicDev, L"../../Reference/Header/Shader_Effect.hpp");
 	NULL_CHECK_RETURN(pShader, E_FAIL);

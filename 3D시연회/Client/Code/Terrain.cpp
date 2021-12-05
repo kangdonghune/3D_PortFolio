@@ -78,7 +78,7 @@ void CTerrain::Render_Object(void)
 	{
 		m_pNaviCom->Render_NaviMesh();
 	}
-	//m_pNaviCom->Delete_Cell();
+
 
 
 }

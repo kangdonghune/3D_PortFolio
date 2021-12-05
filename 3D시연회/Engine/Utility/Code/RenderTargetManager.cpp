@@ -111,6 +111,14 @@ void CRenderTargetManager::Render_DebugMRT(const _tchar * pMRTTag)
 
 }
 
+void CRenderTargetManager::SetUp_Shader(LPD3DXEFFECT & pEffect, const _tchar * pTargetTag, const char * pContantTable)
+{
+	CRenderTarget* pRenderTarget = Find_RenderTarget(pTargetTag);
+	NULL_CHECK(pRenderTarget);
+
+	pRenderTarget->SetUp_Shader(pEffect, pContantTable); 
+}
+
 CRenderTarget * CRenderTargetManager::Find_RenderTarget(const _tchar * pTargetTag)
 {
 	auto	iter = find_if(m_mapRenderTarget.begin(), m_mapRenderTarget.end(), CTag_Finder(pTargetTag));

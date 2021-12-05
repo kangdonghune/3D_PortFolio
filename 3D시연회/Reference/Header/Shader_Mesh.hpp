@@ -3,19 +3,19 @@ matrix			g_matView;
 matrix			g_matProj;
 
 texture			g_BaseTexture;
-
-vector			g_vLightDir;
-
-vector			g_vLightDiffuse;
-vector			g_vLightAmbient;
-vector			g_vLightSpecular;
-
-vector			g_vMtrlDiffuse;
-vector			g_vMtrlAmbient;
-vector			g_vMtrlSpecular;
-
-float			g_fPower;
-vector			g_vCamPos;
+//
+//vector			g_vLightDir;
+//
+//vector			g_vLightDiffuse;
+//vector			g_vLightAmbient;
+//vector			g_vLightSpecular;
+//
+//vector			g_vMtrlDiffuse;
+//vector			g_vMtrlAmbient;
+//vector			g_vMtrlSpecular;
+//
+//float			g_fPower;
+//vector			g_vCamPos;
 
 
 // 텍스처의 각종 성질을 지정하기 위한 구조체 
@@ -38,8 +38,7 @@ struct VS_IN
 struct VS_OUT
 {
 	float4		vPosition : POSITION;
-	float4		vShade : COLOR0;
-	float4		vSpecular : COLOR1;
+	float4		vNormal : NORMAL;
 	float2		vTexUV : TEXCOORD0;
 
 	//float4		vColor : COLOR0;
@@ -58,36 +57,39 @@ VS_OUT		VS_MAIN(VS_IN In)
 	Out.vPosition = mul(vector(In.vPosition.xyz, 1.f), matWVP);
 	Out.vTexUV = In.vTexUV;
 
-	vector vWolrdNormal = normalize(mul(vector(In.vNormal.xyz, 0.f), g_matWorld));
+	Out.vNormal = normalize(mul(vector(In.vNormal.xyz, 0.f), g_matWorld));
 
-	vector vWolrdDir = g_vLightDir * -1.f;
+#pragma region 포워드쉐이딩 조명연산
+	//vector vWolrdDir = g_vLightDir * -1.f;
 
-	// saturate : 함수 안의 결과 값을 0~1로 clamp하는 함수
-	float	fIntensity = saturate(dot(normalize(vWolrdDir), vWolrdNormal));
-	//float	fIntensity = max(dot(normalize(vWolrdDir), vWolrdNormal), 0.f);
+	//// saturate : 함수 안의 결과 값을 0~1로 clamp하는 함수
+	//float	fIntensity = saturate(dot(normalize(vWolrdDir), vWolrdNormal));
+	////float	fIntensity = max(dot(normalize(vWolrdDir), vWolrdNormal), 0.f);
 
-	Out.vShade = fIntensity;
-	//RGBA = FFFF
-	Out.vShade.a = 1.f;
+	//Out.vShade = fIntensity;
+	////RGBA = FFFF
+	//Out.vShade.a = 1.f;
 
-	// 정반사광
-	// 반사 벡터를 구해주는 쉐이더 함수 : 1인자 빛의 방향 벡터, 2인자 법선 벡터
-	vector vReflect = normalize(reflect(normalize(g_vLightDir), vWolrdNormal));
+	//// 정반사광
+	//// 반사 벡터를 구해주는 쉐이더 함수 : 1인자 빛의 방향 벡터, 2인자 법선 벡터
+	//vector vReflect = normalize(reflect(normalize(g_vLightDir), vWolrdNormal));
 
-	vector	vWorldPos = mul(vector(In.vPosition.xyz, 1.f), g_matWorld);
+	//vector	vWorldPos = mul(vector(In.vPosition.xyz, 1.f), g_matWorld);
 
-	vector	vLook = vWorldPos - g_vCamPos;
+	//vector	vLook = vWorldPos - g_vCamPos;
 
-	Out.vSpecular = pow(saturate(dot(vReflect, normalize(vLook) * -1.f)), g_fPower);
-	Out.vSpecular.a = 1.f;
+	//Out.vSpecular = pow(saturate(dot(vReflect, normalize(vLook) * -1.f)), g_fPower);
+	//Out.vSpecular.a = 1.f;
+#pragma endregion
+
+
 
 	return Out;
 }
 
 struct PS_IN
 {
-	vector		vShade : COLOR0;
-	vector		vSpecular : COLOR1;
+	vector		vNormal : NORMAL;
 	float2		vTexUV : TEXCOORD0;
 };
 
@@ -103,15 +105,12 @@ PS_OUT		PS_MAIN(PS_IN In)
 	PS_OUT	 Out = (PS_OUT)0;
 
 	Out.vColor = tex2D(BaseSampler, In.vTexUV);
+	//Out.vColor = (Out.vColor) * (g_vLightDiffuse * g_vMtrlDiffuse) * (In.vShade + (g_vLightAmbient * g_vMtrlAmbient)) +In.vSpecular * (g_vLightSpecular * g_vMtrlSpecular);
+	//단위 벡터로 만든 법선의 xy의 좌표 범위는 -1~1 사이의 값에 해당한다
+	//우리가 출력하고자 하는 랜더 타겟은 텍스처이기에 uv좌표에 해당하는 0~1사이 값으로 변환해줘야 한다..
 
-	// Out.vColor = (In.vShade * Out.vColor) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient);
-	//Out.vColor = (In.vShade) * (g_vLightDiffuse * g_vMtrlDiffuse) + Out.vColor * (g_vLightAmbient * g_vMtrlAmbient);
-
-	Out.vColor = (Out.vColor) * (g_vLightDiffuse * g_vMtrlDiffuse) * (In.vShade + (g_vLightAmbient * g_vMtrlAmbient)) +In.vSpecular * (g_vLightSpecular * g_vMtrlSpecular);
-
-	//Out.vColor.r = 1.f;
-
-	Out.vNormal = vector(0.f, 0.f, 1.f, 1.f);
+	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+	Out.vColor.a = 1.f;
 	return Out;
 }
 
@@ -120,7 +119,7 @@ PS_OUT		PS_ALPHA(PS_IN In)
 	PS_OUT	 Out = (PS_OUT)0;
 
 	Out.vColor = tex2D(BaseSampler, In.vTexUV);
-																											  //Out.vColor.r = 1.f
+	Out.vColor.a = 1.f;
 	return Out;
 }
 

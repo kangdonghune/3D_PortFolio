@@ -67,18 +67,20 @@ inline	HRESULT				Ready_DebugBuffer(const _tchar* pTargetTag, const _float& fx, 
 
 inline	void				Render_DebugMRT(const _tchar* pMRTTag);
 
-
+inline	void				SetUp_Shader(LPD3DXEFFECT & pEffect, const _tchar* pTargetTag, const char * pContantTable);
 
 // renderer
 inline CRenderer*	Get_Renderer(void);
 inline void			Add_RenderGroup(RENDERID eID, CGameObject* pGameObject);
 inline void			Render_GameObject(LPDIRECT3DDEVICE9 pGraphicDev);
 inline void			Clear_RenderGroup(void);
-
+inline HRESULT		Ready_Renderer(LPDIRECT3DDEVICE9& pGraphicDev);
 
 // light
 inline HRESULT				Ready_Light(LPDIRECT3DDEVICE9 pGraphicDev, const D3DLIGHT9* pLightInfo, const _uint& iIndex);
 inline const D3DLIGHT9*		Get_Light(const _ulong& iIndex = 0);
+inline	void				Render_Light(LPD3DXEFFECT& pEffect);
+
 
 inline void				Release_Utility(void);
 

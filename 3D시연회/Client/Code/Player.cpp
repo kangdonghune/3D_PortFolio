@@ -129,7 +129,10 @@ void CPlayer::Render_Object(void)
 	pEffect->End();
 
 	Safe_Release(pEffect);
-
+	
+	_matrix matWorld;
+	m_pTransformCom->Get_WorldMatrix(&matWorld);
+	m_pDynamicColliderCom->Render_Buffer(&matWorld);
 
 }
 
@@ -930,32 +933,32 @@ HRESULT CPlayer::SetUp_ConstantTable(LPD3DXEFFECT & pEffect)
 	pEffect->SetMatrix("g_matView", &matView);
 	pEffect->SetMatrix("g_matProj", &matProj);
 
-	const D3DLIGHT9*	pLight = Get_Light();
-	NULL_CHECK_RETURN(pLight, E_FAIL);
+	//const D3DLIGHT9*	pLight = Get_Light();
+	//NULL_CHECK_RETURN(pLight, E_FAIL);
 
-	pEffect->SetVector("g_vLightDir", &_vec4(pLight->Direction, 0.f));
+	//pEffect->SetVector("g_vLightDir", &_vec4(pLight->Direction, 0.f));
 
-	pEffect->SetVector("g_vLightDiffuse", (_vec4*)&pLight->Diffuse);
-	pEffect->SetVector("g_vLightAmbient", (_vec4*)&pLight->Ambient);
-	pEffect->SetVector("g_vLightSpecular", (_vec4*)&pLight->Specular);
+	//pEffect->SetVector("g_vLightDiffuse", (_vec4*)&pLight->Diffuse);
+	//pEffect->SetVector("g_vLightAmbient", (_vec4*)&pLight->Ambient);
+	//pEffect->SetVector("g_vLightSpecular", (_vec4*)&pLight->Specular);
 
-	D3DMATERIAL9		tMtrl;
-	ZeroMemory(&tMtrl, sizeof(D3DMATERIAL9));
+	//D3DMATERIAL9		tMtrl;
+	//ZeroMemory(&tMtrl, sizeof(D3DMATERIAL9));
 
-	tMtrl.Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-	tMtrl.Specular = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-	tMtrl.Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-	tMtrl.Emissive = D3DXCOLOR(0.f, 0.f, 0.f, 0.f);
-	tMtrl.Power = 20.f;
+	//tMtrl.Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	//tMtrl.Specular = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	//tMtrl.Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	//tMtrl.Emissive = D3DXCOLOR(0.f, 0.f, 0.f, 0.f);
+	//tMtrl.Power = 20.f;
 
-	pEffect->SetVector("g_vMtrlDiffuse", (_vec4*)&tMtrl.Diffuse);
-	pEffect->SetVector("g_vMtrlAmbient", (_vec4*)&tMtrl.Ambient);
-	pEffect->SetVector("g_vMtrlSpecular", (_vec4*)&tMtrl.Specular);
-	pEffect->SetFloat("g_fPower", tMtrl.Power);
+	//pEffect->SetVector("g_vMtrlDiffuse", (_vec4*)&tMtrl.Diffuse);
+	//pEffect->SetVector("g_vMtrlAmbient", (_vec4*)&tMtrl.Ambient);
+	//pEffect->SetVector("g_vMtrlSpecular", (_vec4*)&tMtrl.Specular);
+	//pEffect->SetFloat("g_fPower", tMtrl.Power);
 
 
-	D3DXMatrixInverse(&matView, NULL, &matView);
-	pEffect->SetVector("g_vCameraPos", (_vec4*)&matView._41);
+	//D3DXMatrixInverse(&matView, NULL, &matView);
+	//pEffect->SetVector("g_vCameraPos", (_vec4*)&matView._41);
 
 	return S_OK;
 }

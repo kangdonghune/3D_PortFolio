@@ -86,6 +86,11 @@ void				Render_DebugMRT(const _tchar* pMRTTag)
 	return	CRenderTargetManager::GetInstance()->Render_DebugMRT(pMRTTag);
 }
 
+void				SetUp_Shader(LPD3DXEFFECT & pEffect, const _tchar* pTargetTag, const char * pContantTable)
+{
+	return	CRenderTargetManager::GetInstance()->SetUp_Shader(pEffect, pTargetTag, pContantTable);
+}
+
 
 CRenderer*	Get_Renderer(void)
 {
@@ -103,15 +108,31 @@ void			Clear_RenderGroup(void)
 {
 	CRenderer::GetInstance()->Clear_RenderGroup();
 }
+
+
+HRESULT		Ready_Renderer(LPDIRECT3DDEVICE9& pGraphicDev)
+{
+	return CRenderer::GetInstance()->Ready_Renderer(pGraphicDev);
+}
+
+
 HRESULT		Ready_Light(LPDIRECT3DDEVICE9 pGraphicDev, const D3DLIGHT9* pLightInfo, const _uint& iIndex)
 {
 	return CLightMgr::GetInstance()->Ready_Light(pGraphicDev, pLightInfo, iIndex);
 }
 
+
+
 const D3DLIGHT9*		Get_Light(const _ulong& iIndex)
 {
 	return CLightMgr::GetInstance()->Get_Light(iIndex);
 }
+
+void				Render_Light(LPD3DXEFFECT& pEffect)
+{
+	return	CLightMgr::GetInstance()->Render_Light(pEffect);
+}
+
 
 void				Release_Utility(void)
 {

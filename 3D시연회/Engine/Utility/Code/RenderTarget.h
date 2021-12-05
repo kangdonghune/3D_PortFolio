@@ -23,6 +23,9 @@ public:
 	HRESULT				Ready_DebugBuffer(const _float& fx, const _float& fy, const _float& fW, const _float& fH);
 	void				Render_DebugBuffer();
 
+
+	void				SetUp_Shader(LPD3DXEFFECT& pEffect, const char* pContantTable);
+
 private:
 	LPDIRECT3DDEVICE9	m_pGraphicDev;
 	LPDIRECT3DTEXTURE9	m_pTargetTexture; 

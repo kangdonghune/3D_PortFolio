@@ -32,7 +32,7 @@ public:
 	HRESULT				Ready_DebugBuffer(const _tchar* pTargetTag, const _float& fx, const _float& fy, const _float& fW, const _float& fH);
 	void				Render_DebugMRT(const _tchar* pMRTTag);
 
-
+	void				SetUp_Shader(LPD3DXEFFECT & pEffect, const _tchar* pTargetTag, const char * pContantTable);
 
 
 private:

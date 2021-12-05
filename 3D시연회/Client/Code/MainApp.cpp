@@ -69,6 +69,7 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 *ppGraphicDev)
 	(*ppGraphicDev) = m_pDeviceClass->Get_Device();
 	(*ppGraphicDev)->AddRef();
 
+	Ready_Renderer(*ppGraphicDev);
 	// ∆˘∆Æ
 
 	FAILED_CHECK_RETURN(Ready_Font((*ppGraphicDev), L"Font_Default", L"πŸ≈¡", 15, 20, FW_NORMAL), E_FAIL);
@@ -81,6 +82,7 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 *ppGraphicDev)
 	// InputDev
 
 	FAILED_CHECK_RETURN(Ready_InputDev(g_hInst, g_hWnd), E_FAIL);
+
 
 
 	return S_OK;

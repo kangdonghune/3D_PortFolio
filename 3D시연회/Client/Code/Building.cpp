@@ -169,7 +169,7 @@ HRESULT CBuilding::SetUp_ConstantTable(LPD3DXEFFECT & pEffect)
 	pEffect->SetMatrix("g_matView", &matView);
 	pEffect->SetMatrix("g_matProj", &matProj);
 
-	const D3DLIGHT9*	pLight = Get_Light();
+	/*const D3DLIGHT9*	pLight = Get_Light();
 	NULL_CHECK_RETURN(pLight, E_FAIL);
 
 	pEffect->SetVector("g_vLightDir", &_vec4(pLight->Direction, 0.f));
@@ -194,7 +194,7 @@ HRESULT CBuilding::SetUp_ConstantTable(LPD3DXEFFECT & pEffect)
 
 
 	D3DXMatrixInverse(&matView, NULL, &matView);
-	pEffect->SetVector("g_vCameraPos", (_vec4*)&matView._41);
+	pEffect->SetVector("g_vCameraPos", (_vec4*)&matView._41);*/
 
 	return S_OK;
 }
