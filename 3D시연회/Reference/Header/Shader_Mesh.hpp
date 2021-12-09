@@ -40,6 +40,7 @@ struct VS_OUT
 	float4		vPosition : POSITION;
 	float4		vNormal : NORMAL;
 	float2		vTexUV : TEXCOORD0;
+	vector		vProjPos : TEXCOORD1;
 
 	//float4		vColor : COLOR0;
 };
@@ -55,6 +56,7 @@ VS_OUT		VS_MAIN(VS_IN In)
 	matWVP = mul(matWV, g_matProj);
 
 	Out.vPosition = mul(vector(In.vPosition.xyz, 1.f), matWVP);
+	Out.vProjPos = Out.vPosition;
 	Out.vTexUV = In.vTexUV;
 
 	Out.vNormal = normalize(mul(vector(In.vNormal.xyz, 0.f), g_matWorld));
@@ -91,12 +93,14 @@ struct PS_IN
 {
 	vector		vNormal : NORMAL;
 	float2		vTexUV : TEXCOORD0;
+	vector		vProjPos : TEXCOORD1;
 };
 
 struct PS_OUT
 {
 	float4		vColor : COLOR0;
 	float4		vNormal : COLOR1;
+	float4		vDepth : COLOR2;
 };
 
 // 픽셀 쉐이더
@@ -110,6 +114,10 @@ PS_OUT		PS_MAIN(PS_IN In)
 	//우리가 출력하고자 하는 랜더 타겟은 텍스처이기에 uv좌표에 해당하는 0~1사이 값으로 변환해줘야 한다..
 
 	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+
+	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w * 0.001f, 0.f, 0.f); // 0.001f = farz
+
+
 	Out.vColor.a = 1.f;
 	return Out;
 }

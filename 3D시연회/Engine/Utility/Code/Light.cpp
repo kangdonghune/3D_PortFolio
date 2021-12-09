@@ -89,8 +89,17 @@ HRESULT CLight::Render_Light(LPD3DXEFFECT& pEffect)
 	pEffect->SetVector("g_vLightAmbient", (_vec4*)&m_tLightInfo.Ambient);
 
 	_matrix	matView;
+	_matrix	matProj;
+
+
 	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
 	D3DXMatrixInverse(&matView, NULL, &matView);
+
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
+	D3DXMatrixInverse(&matProj, NULL, &matProj);
+
+	pEffect->SetMatrix("g_matViewInv", &matView);
+	pEffect->SetMatrix("g_matProjInv", &matProj);
 
 	pEffect->SetVector("g_vCamPos", (_vec4*)&matView._41);
 

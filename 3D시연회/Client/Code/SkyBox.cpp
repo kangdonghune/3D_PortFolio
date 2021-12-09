@@ -89,8 +89,30 @@ HRESULT CSkyBox::Add_Component(void)
 	pComponent->AddRef();
 	m_mapComponent[ID_STATIC].emplace(L"Com_Renderer", pComponent);
 
+
+	pComponent = m_pShaderCom = dynamic_cast<CShader*>(Clone_Proto(L"Proto_Shader_Mesh"));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_STATIC].emplace(L"Com_Shader", pComponent);
+
+
 	return S_OK;
 
+}
+
+HRESULT CSkyBox::SetUp_ConstantTable(LPD3DXEFFECT & pEffect)
+{
+	_matrix		matWorld, matView, matProj;
+
+	m_pTransformCom->Get_WorldMatrix(&matWorld);
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
+
+	pEffect->SetMatrix("g_matWorld", &matWorld);
+	pEffect->SetMatrix("g_matView", &matView);
+	pEffect->SetMatrix("g_matProj", &matProj);
+
+	m_pTextureCom->Set_Texture(pEffect, "g_BaseTexture",0);
+	return S_OK;
 }
 
 CSkyBox* CSkyBox::Create(LPDIRECT3DDEVICE9 pGraphicDev)

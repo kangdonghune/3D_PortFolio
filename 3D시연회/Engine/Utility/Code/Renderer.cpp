@@ -191,7 +191,7 @@ void CRenderer::Render_LightAcc(LPDIRECT3DDEVICE9 & pGraphicDev)
 	NULL_CHECK_RETURN(pEffect,);
 
 	SetUp_Shader(pEffect, L"Target_Nomal", "g_NormalTexture");
-
+	SetUp_Shader(pEffect, L"Target_Depth", "g_DepthTexture");
 	pEffect->AddRef();
 
 	_uint iPassMax = 0;
@@ -218,6 +218,7 @@ void CRenderer::Render_Blend(LPDIRECT3DDEVICE9 & pGraphicDev)
 
 	SetUp_Shader(pEffect, L"Target_Albedo", "g_AlbedoTexture");
 	SetUp_Shader(pEffect, L"Target_Shade", "g_ShadeTexture");
+	SetUp_Shader(pEffect, L"Target_Specular", "g_SpecularTexture");
 
 
 	pEffect->CommitChanges();

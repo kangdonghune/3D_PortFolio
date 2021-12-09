@@ -9,7 +9,7 @@ class CCubeTex;
 class CTexture;
 class CTransform;
 class CRenderer;
-
+class CShader;
 END
 class CSkyBox : public CGameObject
 {
@@ -25,12 +25,13 @@ public:
 
 private:
 	HRESULT					Add_Component(void);
-
+	HRESULT					SetUp_ConstantTable(LPD3DXEFFECT& pEffect);
 private:
 	CCubeTex*				m_pBufferCom = nullptr;
 	CTexture*				m_pTextureCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
+	CShader*				m_pShaderCom = nullptr;
 
 public:
 	static CSkyBox*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
