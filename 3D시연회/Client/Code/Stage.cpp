@@ -283,6 +283,25 @@ HRESULT CStage::Ready_LightInfo(void)
 
 	FAILED_CHECK_RETURN(Ready_Light(m_pGraphicDev, &tLightInfo, 0), E_FAIL);
 
+
+	tLightInfo.Type = D3DLIGHT_POINT;
+	tLightInfo.Diffuse = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+	tLightInfo.Specular = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+	tLightInfo.Ambient = D3DXCOLOR(0.2f, 0.f, 0.f, 1.f);
+	tLightInfo.Position = _vec3(5.f, 5.f, 5.f);
+	tLightInfo.Direction = _vec3(1.f, -1.f, 1.f);
+	tLightInfo.Range = 10.f;
+	FAILED_CHECK_RETURN(Ready_Light(m_pGraphicDev, &tLightInfo, 0), E_FAIL);
+
+	tLightInfo.Type = D3DLIGHT_POINT;
+	tLightInfo.Diffuse = D3DXCOLOR(0.f, 0.f, 1.f, 1.f);
+	tLightInfo.Specular = D3DXCOLOR(0.f, 0.f, 1.f, 1.f);
+	tLightInfo.Ambient = D3DXCOLOR(0.f, 0.f, 0.f, 0.2f);
+	tLightInfo.Position = _vec3(5.f, 5.f, 5.f);
+	tLightInfo.Direction = _vec3(1.f, -1.f, 1.f);
+	tLightInfo.Range = 10.f;
+	FAILED_CHECK_RETURN(Ready_Light(m_pGraphicDev, &tLightInfo, 0), E_FAIL);
+
 	return S_OK;
 }
 

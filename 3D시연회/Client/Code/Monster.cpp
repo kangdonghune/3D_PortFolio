@@ -81,7 +81,6 @@ Engine::_int CMonster::Update_Object(const _float& fTimeDelta)
 
 	m_pAttackSphereTransCom->Set_WorldMatrix(&(*m_pAttackSphere->Get_ParentBoneMartrix() * *m_pAttackSphere->Get_ParentWorldMartrix()));
 	m_pShprerTransCom->Set_WorldMatrix(&(*m_pSphere->Get_ParentBoneMartrix() * *m_pSphere->Get_ParentWorldMartrix()));
-
 	return 0;
 }
 
@@ -113,6 +112,7 @@ void CMonster::Render_Object(void)
 	pEffect->End();
 
 	Safe_Release(pEffect);
+
 
 
 }
@@ -300,7 +300,6 @@ void CMonster::Walk(_float fTimedelta)
 	D3DXVec3Normalize(&vDir, &vDir);
 	_vec3 vPos = {};
 	m_pTransformCom->Get_Info(INFO_POS, &vPos);
-
 	m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimedelta * 3.f)));
 
 	//if (Check_ObjectCollision())//0이 아니면 충돌

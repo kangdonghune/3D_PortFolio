@@ -84,7 +84,28 @@ HRESULT Engine::CLight::Ready_Light(const D3DLIGHT9* pLightInfo, const _uint& iI
 
 HRESULT CLight::Render_Light(LPD3DXEFFECT& pEffect)
 {
-	pEffect->SetVector("g_vLightDir", &_vec4(m_tLightInfo.Direction, 0.f));
+
+	_uint	iPass = 0;
+
+	if (D3DLIGHT_DIRECTIONAL == m_tLightInfo.Type)
+	{
+		pEffect->SetVector("g_vLightDir", &_vec4(m_tLightInfo.Direction, 0.f));
+		iPass = 0;
+	}
+
+	else if (D3DLIGHT_POINT == m_tLightInfo.Type)
+	{
+		pEffect->SetVector("g_vLightPos", &_vec4(m_tLightInfo.Position, 1.f));
+		pEffect->SetFloat("g_fRange", m_tLightInfo.Range);
+		iPass = 2;
+	}
+
+	else
+	{
+
+	}
+
+
 	pEffect->SetVector("g_vLightDiffuse", (_vec4*)&m_tLightInfo.Diffuse);
 	pEffect->SetVector("g_vLightAmbient", (_vec4*)&m_tLightInfo.Ambient);
 
@@ -105,7 +126,7 @@ HRESULT CLight::Render_Light(LPD3DXEFFECT& pEffect)
 
 	pEffect->CommitChanges();
 
-	pEffect->BeginPass(0);
+	pEffect->BeginPass(iPass);
 
 	m_pGraphicDev->SetStreamSource(0, m_pVB, 0, sizeof(VTXSCREEN));
 	m_pGraphicDev->SetFVF(FVF_SCREEN);
