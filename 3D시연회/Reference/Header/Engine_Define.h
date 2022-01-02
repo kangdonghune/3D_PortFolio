@@ -49,6 +49,6 @@ using namespace Engine;
 #define RADIAN 57.296f
 
 #define UNITLAYERTAG	L"GameLogic"
-#define OBJECTLAYERTAG	L"GameLogic"s
+#define OBJECTLAYERTAG	L"GameLogic"
 
 #endif // Engine_Define_h__

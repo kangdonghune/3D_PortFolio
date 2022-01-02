@@ -91,10 +91,10 @@ void CStage::Render_Scene(void)
 
 
 	//Render_Font(L"Font_Jinji", m_szFPS, &_vec2(600.f, 20.f), D3DXCOLOR(0.f, 0.f, 0.f, 1.f));
-	Render_Font(L"Font_UI", m_szHP, &_vec2(315.f, 33.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
-	Render_Font(L"Font_UI", m_szStamina, &_vec2(460.f, 33.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
-	Render_Font(L"Font_UI", m_szLoadedBullet, &_vec2(370.f, 60.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
-	Render_Font(L"Font_UI", m_szResidueBullet, &_vec2(390.f, 60.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+	Render_Font(L"Font_UI", m_szHP, &_vec2(WINCX/2 - 85.f, 33.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+	Render_Font(L"Font_UI", m_szStamina, &_vec2(WINCX / 2 + 60.f, 33.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+	Render_Font(L"Font_UI", m_szLoadedBullet, &_vec2(WINCX / 2 - 30.f, 60.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+	Render_Font(L"Font_UI", m_szResidueBullet, &_vec2(WINCX / 2 - 10.f, 60.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 	
 	CTriggerFunc::GetInstance()->Render_Text();
 	//hp
@@ -164,16 +164,16 @@ HRESULT CStage::Ready_UI_Layer()
 
 	// UI
 
-	pGameObject = CUI::Create(m_pGraphicDev, L"Proto_Texture_HPBar", 275, 40, 151, 15);
+	pGameObject = CUI::Create(m_pGraphicDev, L"Proto_Texture_HPBar", (WINCX / 2) - 125.f, 40, 151, 15);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"HPBar", pGameObject), E_FAIL);
 
-	pGameObject = CUI::Create(m_pGraphicDev, L"Proto_Texture_StaminaBar", 525, 40, 151, 15);
+	pGameObject = CUI::Create(m_pGraphicDev, L"Proto_Texture_StaminaBar", (WINCX / 2 + 125), 40, 151, 15);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"StaminaBar", pGameObject), E_FAIL);
 
 
-	pGameObject = CUI::Create(m_pGraphicDev, L"Proto_Texture_CrossHead", 400, 300, 70, 70);
+	pGameObject = CUI::Create(m_pGraphicDev, L"Proto_Texture_CrossHead", WINCX/2, WINCY/2, 70, 70);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI", pGameObject), E_FAIL);
 
@@ -184,15 +184,15 @@ HRESULT CStage::Ready_UI_Layer()
 
 	
 
-	pGameObject = CUI::Create(m_pGraphicDev, L"Proto_Texture_HpIcon", 360, 40, 21, 21);
+	pGameObject = CUI::Create(m_pGraphicDev, L"Proto_Texture_HpIcon", WINCX / 2 - 40, 40, 21, 21);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI", pGameObject), E_FAIL);
 
-	pGameObject = CUI::Create(m_pGraphicDev, L"Proto_Texture_Stamina", 440, 40, 21, 21);
+	pGameObject = CUI::Create(m_pGraphicDev, L"Proto_Texture_Stamina", WINCX / 2 + 40, 40, 21, 21);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI", pGameObject), E_FAIL);
 
-	pGameObject = CUI::Create(m_pGraphicDev, L"Proto_Texture_M4Icon", 400, 40, 49, 25);
+	pGameObject = CUI::Create(m_pGraphicDev, L"Proto_Texture_M4Icon", WINCX / 2, 40, 49, 25);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI", pGameObject), E_FAIL);
 
@@ -308,7 +308,7 @@ HRESULT CStage::Load_Data()
 {
 	FAILED_CHECK_RETURN(Load_NaviMesh(L"../../Resource/Data/NaviMesh/MFCCell.dat"), E_FAIL);
 	FAILED_CHECK_RETURN(Load_Trigger(L"../../Resource/Data/NaviMesh/MFCTrigger.dat"), E_FAIL);
-	//FAILED_CHECK_RETURN(Load_Building(L"../../Resource/Data/Object/Building.dat"), E_FAIL);
+	FAILED_CHECK_RETURN(Load_Building(L"../../Resource/Data/Object/Building.dat"), E_FAIL);
 	FAILED_CHECK_RETURN(Load_Stuff(L"../../Resource/Data/Object/Stuff.dat"), E_FAIL);
 	FAILED_CHECK_RETURN(Load_Player(L"../../Resource/Data/Unit/Player.dat"),E_FAIL);
 	FAILED_CHECK_RETURN(Load_Monster(L"../../Resource/Data/Unit/Monster.dat"), E_FAIL);

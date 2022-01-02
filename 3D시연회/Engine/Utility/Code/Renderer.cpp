@@ -258,7 +258,7 @@ void CRenderer::Render_Blend(LPDIRECT3DDEVICE9 & pGraphicDev)
 	pEffect->CommitChanges();
 
 	pEffect->Begin(NULL,0);
-	pEffect->BeginPass(0); 
+	pEffect->BeginPass(1); 
 
 	pGraphicDev->SetStreamSource(0, m_pVB, 0, sizeof(VTXSCREEN));
 	pGraphicDev->SetFVF(FVF_SCREEN);

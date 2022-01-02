@@ -25,15 +25,15 @@ void CTriggerFunc::Render_Text()
 	switch (m_iTextNum)
 	{
 	case 0:
-		Render_Font(L"Font_UI_M", L"미션: 공장으로 이동하라", &_vec2(300.f, 75.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+		Render_Font(L"Font_UI_M", L"미션: 공장으로 이동하라", &_vec2(WINCX/2 -100.f, 75.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 		break;
 	case 1:
 		_tchar szCount[256];
 		wsprintf(szCount, L"미션: 코일 수집 %d / 3", CObjAnime::GetInstance()->Get_CableCount());
-		Render_Font(L"Font_UI_M", szCount, &_vec2(300.f, 75.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+		Render_Font(L"Font_UI_M", szCount, &_vec2(WINCX / 2 - 100.f, 75.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 		break;
 	case 2:
-		Render_Font(L"Font_UI_L", L"탈 출 성 공", &_vec2(250.f, 300.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f)); 
+		Render_Font(L"Font_UI_L", L"탈 출 성 공", &_vec2(WINCX / 2 - 150.f, 300.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 		break;
 	default:
 		break;

@@ -74,7 +74,7 @@ Engine::_int CWeapon::Update_Object(const _float& fTimeDelta)
 	Collision_ToObject();
 
 
-	Add_RenderGroup(RENDER_SPECULAR, this);
+	Add_RenderGroup(RENDER_NONSPECULAR, this);
 
 	DeleteFlash(fTimeDelta);
 
@@ -93,7 +93,7 @@ void CWeapon::Render_Object(void)
 	_uint	iMaxPass = 1;
 
 	pEffect->Begin(&iMaxPass, 0);	// 1. 현재 쉐이더 파일이 가진 최대 pass의 개수 반환 2. 시작하는 방식에 대한 flag 값(default 값)
-	pEffect->BeginPass(1);
+	pEffect->BeginPass(0);
 
 	m_pMeshCom->Render_Meshes(pEffect);
 
@@ -146,7 +146,7 @@ void CWeapon::MuzzleFlash()
 	tLightInfo.Diffuse = D3DXCOLOR(1.f, 0.647f, 0.25f, 1.f);
 	tLightInfo.Specular = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
 	tLightInfo.Ambient = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.f);
-	tLightInfo.Position = _vec3(vPos.x +vLook.x*5.f, vPos.y + vLook.y*5.f, vPos.z + vLook.z*5.f);
+	tLightInfo.Position = _vec3(vPos.x + vLook.x + 10.f, vPos.y + 2.5f, vPos.z + vLook.z *10.f );
 	tLightInfo.Range = 15.f;
 	FAILED_CHECK_RETURN(Ready_Light(m_pGraphicDev, &tLightInfo, POINT_MUZZLE), );
 	m_pMuzzleLight = Get_LightClass(POINT_MUZZLE);

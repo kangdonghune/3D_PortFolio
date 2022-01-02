@@ -81,9 +81,9 @@ technique	Default_Device
 	// ±â´ÉÀÇ Ä¸½¶È­
 	pass Temp
 	{
-		/*alphablendenable = true;
+		alphablendenable = true;
 		srcblend = srcalpha;
-		destblend = invsrcalpha;*/
+		destblend = invsrcalpha;
 
 		vertexshader = compile vs_3_0 VS_MAIN();
 		pixelshader = compile ps_3_0 PS_MAIN();

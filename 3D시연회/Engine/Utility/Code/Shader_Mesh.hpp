@@ -135,6 +135,7 @@ technique	Default_Device
 {
 	pass Temp
 	{
+
 	vertexshader = compile vs_3_0 VS_MAIN();
 	pixelshader = compile ps_3_0 PS_MAIN();
 	}
@@ -148,7 +149,7 @@ technique	Default_Device
 	cullmode = none;
 
 	vertexshader = compile vs_3_0 VS_MAIN();
-	pixelshader = compile ps_3_0 PS_MAIN();
+	pixelshader = compile ps_3_0 PS_ALPHA();
 	}
 
 };

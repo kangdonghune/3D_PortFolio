@@ -73,8 +73,8 @@ PS_OUT	PS_MAIN(PS_IN In)
 	vector vReflect = normalize(reflect(normalize(vector(g_vLightDir.xyz, 0.f)), vNormal));
 	vector vLook = g_vCamPos - vPosition;
 
-	Out.vSpecular = pow(saturate(dot(normalize(vLook), vReflect)), g_fPower);
-	Out.vSpecular.a = 1.f;
+	Out.vSpecular = pow(saturate(dot(normalize(vLook), vReflect)), g_fPower)* 0.1f;
+	Out.vSpecular.a = 0.5f;
 	return Out;
 
 }
@@ -109,8 +109,8 @@ PS_OUT	PS_DICTIONAL(PS_IN In)
 	vector vReflect = normalize(reflect(normalize(vector(g_vLightDir.xyz, 0.f)), vNormal));
 	vector vLook = g_vCamPos - vPosition;
 
-	Out.vSpecular = pow(saturate(dot(normalize(vLook), vReflect)), g_fPower * 50.f);
-	Out.vSpecular.a = 1.f;
+	//Out.vSpecular = pow(saturate(dot(normalize(vLook), vReflect)), g_fPower * 50.f);
+	//Out.vSpecular.a = 1.f;
 	return Out;
 
 }
@@ -146,13 +146,13 @@ PS_OUT	PS_POINT(PS_IN In)
 	float  fAtt = saturate((g_fRange - fDistance) / (g_fRange/4));
 
 	Out.vShade = (saturate(dot(normalize(vector(vLightDir.xyz, 0.f))*-1.f, vNormal)) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
-	Out.vShade.a = 1.f;
+	Out.vShade.a = 0.f;
 
 	vector vReflect = normalize(reflect(normalize(vector(vLightDir.xyz, 0.f)), vNormal));
 	vector vLook = g_vCamPos - vPosition;
 
-	Out.vSpecular = (pow(saturate(dot(normalize(vLook), vReflect)), g_fPower * 50.f)) * fAtt;
-	Out.vSpecular.a = 1.f;
+	Out.vSpecular = (pow(saturate(dot(normalize(vLook), vReflect)), g_fPower * 50.f));
+	Out.vSpecular.a = 0.f;
 	return Out;
 
 }
@@ -187,7 +187,10 @@ technique	Default_Device
 	alphablendenable = true;
 	srcblend = one;
 	destblend = one;
+
 	zwriteenable = false;
+	vertexshader = NULL;
+
 	vertexshader = NULL;
 	pixelshader = compile ps_3_0 PS_POINT();
 }

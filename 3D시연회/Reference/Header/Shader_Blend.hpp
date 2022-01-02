@@ -49,7 +49,6 @@ PS_OUT	PS_SPECULAR(PS_IN In)
 	vector	vShade = tex2D(ShadeSampler, In.vTexUV);
 	vector	vSpecular = tex2D(SpecularSampler, In.vTexUV);
 	Out.vColor = vAlbedo * vShade +vSpecular;
-
 	return Out;
 }
 
@@ -67,7 +66,6 @@ technique	Default_Device
 	pixelshader = compile ps_3_0 PS_NONSPECULAR();
 	}
 
-
 	pass Blend2
 	{
 	zwriteenable = false;
@@ -77,5 +75,6 @@ technique	Default_Device
 	destblend = invsrcalpha;
 	pixelshader = compile ps_3_0 PS_SPECULAR();
 	}
+
 
 };

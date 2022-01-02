@@ -1103,10 +1103,10 @@ void CPlayer::Update_StatBar()
 	_float fStaminaPer = m_fStamina / 200.f;
 
 	m_pHPBar->Set_XSize(151 * fHPPer);
-	m_pHPBar->Set_X(275 - (m_pHPBar->Get_XSize()-151)/2);
+	m_pHPBar->Set_X(WINCX/2 -125.f - (m_pHPBar->Get_XSize()-151)/2);
 
 	m_pStaminaBar->Set_XSize(151 * fStaminaPer);
-	m_pStaminaBar->Set_X(525 + (m_pStaminaBar->Get_XSize() - 151)/2);
+	m_pStaminaBar->Set_X(WINCX / 2 + 125.f + (m_pStaminaBar->Get_XSize() - 151)/2);
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pObjProtoName)
