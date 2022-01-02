@@ -59,7 +59,7 @@ Engine::_int CMonster::Update_Object(const _float& fTimeDelta)
 	Update_TargetDist();
 	
 
-	Add_RenderGroup(RENDER_NONALPHA, this);
+	Add_RenderGroup(RENDER_NONSPECULAR, this);
 
 	if (nullptr == m_pSphere->Get_ParentBoneMartrix())
 	{

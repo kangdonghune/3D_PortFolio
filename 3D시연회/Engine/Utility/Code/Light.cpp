@@ -102,7 +102,6 @@ HRESULT CLight::Render_Light(LPD3DXEFFECT& pEffect)
 
 	else
 	{
-
 	}
 
 

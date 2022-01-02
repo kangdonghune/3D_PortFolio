@@ -27,6 +27,8 @@ private:
 	LPDIRECT3DVERTEXBUFFER9	m_pVB;
 	LPDIRECT3DINDEXBUFFER9	m_pIB;
 
+
+
 public:
 	static CLight*		Create(LPDIRECT3DDEVICE9 pGraphicDev, 
 								const D3DLIGHT9* pLightInfo, 

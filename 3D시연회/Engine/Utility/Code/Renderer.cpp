@@ -90,16 +90,21 @@ void Engine::CRenderer::Add_RenderGroup(RENDERID eID, CGameObject* pGameObject)
 void Engine::CRenderer::Render_GameObject(LPDIRECT3DDEVICE9& pGraphicDev)
 {
 	Render_Priority(pGraphicDev);	
+	Render_Debug(pGraphicDev);
 
 	Render_Deferred(pGraphicDev);
 	Render_LightAcc(pGraphicDev);
 	Render_Blend(pGraphicDev);
-
+	//Render_BlendSpecular(pGraphicDev);
 	Render_Alpha(pGraphicDev);
 	Render_UI(pGraphicDev);
 
-	Render_DebugMRT(L"MRT_Deferred");
-	Render_DebugMRT(L"MRT_LightAcc");
+	if (GetAsyncKeyState(VK_TAB) & 0x8000)
+	{
+		Render_DebugMRT(L"MRT_Deferred");
+		Render_DebugMRT(L"MRT_LightAcc");
+	}
+
 	Clear_RenderGroup();
 }
 
@@ -127,6 +132,24 @@ void CRenderer::Render_Nonalpha(LPDIRECT3DDEVICE9 & pGraphicDev)
 	for (auto& iter : m_RenderGroup[RENDER_NONALPHA])
 	{
 		if(iter->Get_IsRender())
+			iter->Render_Object();
+	}
+}
+
+void CRenderer::Render_NonSpecular(LPDIRECT3DDEVICE9 & pGraphicDev)
+{
+	for (auto& iter : m_RenderGroup[RENDER_NONSPECULAR])
+	{
+		if (iter->Get_IsRender())
+			iter->Render_Object();
+	}
+}
+
+void CRenderer::Render_Specular(LPDIRECT3DDEVICE9 & pGraphicDev)
+{
+	for (auto& iter : m_RenderGroup[RENDER_SPECULAR])
+	{
+		if (iter->Get_IsRender())
 			iter->Render_Object();
 	}
 }
@@ -173,10 +196,21 @@ void CRenderer::Render_UI(LPDIRECT3DDEVICE9 & pGraphicDev)
 
 }
 
+void CRenderer::Render_Debug(LPDIRECT3DDEVICE9 & pGraphicDev)
+{
+	for (auto& iter : m_RenderGroup[RENDER_DEBUG])
+	{
+		if (iter->Get_IsRender())
+			iter->Render_Object();
+	}
+}
+
 void CRenderer::Render_Deferred(LPDIRECT3DDEVICE9 & pGraphicDev)
 {
 	Begin_MRT(L"MRT_Deferred");
 	Render_Nonalpha(pGraphicDev);
+	Render_NonSpecular(pGraphicDev);
+	Render_Specular(pGraphicDev);
 	End_MRT(L"MRT_Deferred");
 }
 
@@ -235,6 +269,40 @@ void CRenderer::Render_Blend(LPDIRECT3DDEVICE9 & pGraphicDev)
 	pEffect->End();
 
 	Safe_Release(pEffect);
+}
+
+void CRenderer::Render_BlendSpecular(LPDIRECT3DDEVICE9 & pGraphicDev)
+{
+	for (auto& iter : m_RenderGroup[RENDER_SPECULAR])
+	{
+		CShader* pShader = dynamic_cast<CShader*>(Clone_Proto(L"Proto_Shader_Blend"));
+		NULL_CHECK_RETURN(pShader, );
+
+		LPD3DXEFFECT pEffect = pShader->Get_EffectHandle();
+		NULL_CHECK_RETURN(pEffect, );
+		pEffect->AddRef();
+
+		SetUp_Shader(pEffect, L"Target_Albedo", "g_AlbedoTexture");
+		SetUp_Shader(pEffect, L"Target_Shade", "g_ShadeTexture");
+		SetUp_Shader(pEffect, L"Target_Specular", "g_SpecularTexture");
+
+
+		pEffect->CommitChanges();
+
+		pEffect->Begin(NULL, 0);
+		pEffect->BeginPass(1);
+
+		pGraphicDev->SetStreamSource(0, m_pVB, 0, sizeof(VTXSCREEN));
+		pGraphicDev->SetFVF(FVF_SCREEN);
+		pGraphicDev->SetIndices(m_pIB);
+		pGraphicDev->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
+
+		pEffect->EndPass();
+		pEffect->End();
+
+		Safe_Release(pEffect);
+	}
+
 }
 
 void Engine::CRenderer::Free(void)

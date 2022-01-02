@@ -60,6 +60,24 @@ void CSkyBox::Render_Object(void)
 	m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
+	//LPD3DXEFFECT	pEffect = m_pShaderCom->Get_EffectHandle();
+	//NULL_CHECK(pEffect);
+	//pEffect->AddRef();
+
+	//FAILED_CHECK_RETURN(SetUp_ConstantTable(pEffect), );
+
+	//_uint	iMaxPass = 0;
+
+	//pEffect->Begin(&iMaxPass, 0);	// 1. 현재 쉐이더 파일이 가진 최대 pass의 개수 반환 2. 시작하는 방식에 대한 flag 값(default 값)
+	//pEffect->BeginPass(0);
+
+	//m_pBufferCom->Render_Buffer();
+
+	//pEffect->EndPass();
+	//pEffect->End();
+
+	//Safe_Release(pEffect);
+
 
 }
 

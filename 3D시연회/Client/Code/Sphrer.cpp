@@ -43,7 +43,8 @@ HRESULT CSphere::Ready_Object(void)
 	m_pVB->Lock(0, 0, (void**)&pVert, 0);
 	for (_int i = 0; i < iNumVertex; i++)
 	{
-		pVert[i].dwColor = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
+		pVert[i].dwColor = D3DXCOLOR(0.f, 1.f, 0.f, 0.5f);
+
 	}
 	m_pVB->Unlock();
 	m_pVB->Release();
@@ -60,7 +61,7 @@ Engine::_int CSphere::Update_Object(const _float& fTimeDelta)
 		return 0;
 
 	CGameObject::Update_Object(fTimeDelta);
-	Add_RenderGroup(RENDER_NONALPHA, this);
+	Add_RenderGroup(RENDER_UI, this);
 	
 	//if (nullptr == m_pParentBoneMatrix)
 	//{
@@ -144,6 +145,8 @@ HRESULT CSphere::Add_Component(void)
 	return S_OK;
 
 }
+
+
 
 void CSphere::Set_ID()
 {

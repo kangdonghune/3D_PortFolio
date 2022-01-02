@@ -128,9 +128,24 @@ const D3DLIGHT9*		Get_Light(const _ulong& iIndex)
 	return CLightMgr::GetInstance()->Get_Light(iIndex);
 }
 
+
 void				Render_Light(LPD3DXEFFECT& pEffect)
 {
-	return	CLightMgr::GetInstance()->Render_Light(pEffect);
+	CLightMgr::GetInstance()->Render_Light(pEffect);
+}
+
+CLight*					Get_LightClass(const _ulong& iIndex)
+{
+	return	CLightMgr::GetInstance()->Get_LightClass(iIndex);
+}
+
+void				Delete_Light(CLight* pLight)
+{
+	CLightMgr::GetInstance()->Delete_Light(pLight);
+}
+void				Delete_Light(const _uint& iIndex)
+{
+	CLightMgr::GetInstance()->Delete_Light(iIndex);
 }
 
 
@@ -142,3 +157,4 @@ void				Release_Utility(void)
 	CProtoMgr::GetInstance()->DestroyInstance();
 	CManagement::GetInstance()->DestroyInstance();
 }
+

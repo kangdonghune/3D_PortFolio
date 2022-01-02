@@ -133,6 +133,7 @@ void Engine::CCell::Render_Cell(void)
 	m_pD3DXLine->DrawTransform(vPoint, 4, D3DXMatrixIdentity(&matTemp), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));	// 3d라인을 그리는 함수
 
 	m_pD3DXLine->End();
+
 }
 
 CCell* Engine::CCell::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _ulong& dwIndex, const _vec3* pPointA, const _vec3* pPointB, const _vec3* pPointC)

@@ -12,6 +12,15 @@ namespace Engine
 
 	const _ulong	FVF_COL = D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX0;
 
+	typedef	struct tagVertexColorSphere
+	{
+		_vec3		vPos;
+		_vec4		vColor;
+
+	}VTXCOLS;
+
+	const _ulong	FVF_COLS = D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX0;
+
 	typedef	struct tagVertexTexture
 	{
 		_vec3		vPos;

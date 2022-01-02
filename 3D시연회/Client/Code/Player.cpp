@@ -67,8 +67,8 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 
 //	Key_Input(fTimeDelta);
 	
-	Check_State(fTimeDelta);
 
+	Check_State(fTimeDelta);
 
 	if (m_State == PlayerState::FIRE)
 	{
@@ -77,7 +77,7 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 	else
 		m_pMeshCom->Play_Animation(fTimeDelta);
 
-	Engine::Add_RenderGroup(RENDER_NONALPHA, this);
+	Engine::Add_RenderGroup(RENDER_NONSPECULAR, this);
 
 	if (nullptr == m_pShprer->Get_ParentBoneMartrix())
 	{
@@ -97,9 +97,6 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 	//list<CGameObject*> pBuildinglst = Engine::Get_List(GAMELOGIC, L"Building");
 	//m_pOptimizationCom->Isin_FrustumForOBuilding(pBuildinglst);
 
-
-
-
 	//_vec3	vPos;
 	//m_pTransformCom->Get_Info(INFO_POS, &vPos);
 	//m_pShprerTransCom->Set_Pos(vPos.x, vPos.y+ m_pShprer->Get_Height(), vPos.z);
@@ -110,6 +107,9 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 
 void CPlayer::Render_Object(void)
 {
+	_matrix matWorld;
+	m_pTransformCom->Get_WorldMatrix(&matWorld);
+	m_pDynamicColliderCom->Render_Buffer(&matWorld);
 
 	//m_pMeshCom->Render_Meshes();
 	LPD3DXEFFECT	pEffect = m_pShaderCom->Get_EffectHandle();
@@ -130,9 +130,7 @@ void CPlayer::Render_Object(void)
 
 	Safe_Release(pEffect);
 	
-	_matrix matWorld;
-	m_pTransformCom->Get_WorldMatrix(&matWorld);
-	m_pDynamicColliderCom->Render_Buffer(&matWorld);
+
 
 }
 
@@ -372,7 +370,7 @@ void CPlayer::Walk(const _float & fTimeDelta)
 	m_pTransformCom->Get_WorldMatrix(&matWorld);
 	m_pDynamicColliderCom->Render_Buffer(&matWorld);
 	if (Check_ObjectCollision())//0이 아니면 충돌
-		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(m_vDir *fTimeDelta * -5.f)));
+		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(m_vDir *fTimeDelta * -7.f)));
 
 }
 
@@ -519,7 +517,7 @@ void CPlayer::Run(const _float & fTimeDelta)
 	m_pTransformCom->Get_WorldMatrix(&matWorld);
 	m_pDynamicColliderCom->Render_Buffer(&matWorld);
 	if (Check_ObjectCollision())//0이 아니면 충돌
-		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(m_vDir *fTimeDelta * -7.f)));
+		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(m_vDir *fTimeDelta * -9.f)));
 
 }
 
@@ -693,7 +691,7 @@ void CPlayer::AimWalk(const _float & fTimeDelta)
 	m_pTransformCom->Get_WorldMatrix(&matWorld);
 	m_pDynamicColliderCom->Render_Buffer(&matWorld);
 	if (Check_ObjectCollision())//0이 아니면 충돌
-		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(m_vDir *fTimeDelta * -3.f)));
+		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(m_vDir *fTimeDelta * -4.f)));
 
 }
 

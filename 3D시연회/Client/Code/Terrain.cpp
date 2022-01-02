@@ -47,6 +47,7 @@ Engine::_int CTerrain::Update_Object(const _float& fTimeDelta)
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
 
+
 	return 0;
 }
 
@@ -55,6 +56,13 @@ void CTerrain::Render_Object(void)
 	//FAILED_CHECK_RETURN(SetUp_Material(), );
 
 	//m_pBufferCom->Copy_Index(m_pIndex, m_dwTriCnt);
+
+
+
+	if (GetAsyncKeyState(VK_SPACE) & 0x8001)
+	{
+		m_pNaviCom->Render_NaviMesh();
+	}
 
 	LPD3DXEFFECT	pEffect = m_pShaderCom->Get_EffectHandle();
 	NULL_CHECK(pEffect);
@@ -73,11 +81,6 @@ void CTerrain::Render_Object(void)
 	pEffect->End();
 
 	Safe_Release(pEffect);
-
-	if (GetAsyncKeyState(VK_SPACE) & 0x8001)
-	{
-		m_pNaviCom->Render_NaviMesh();
-	}
 
 
 

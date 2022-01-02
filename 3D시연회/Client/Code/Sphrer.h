@@ -30,6 +30,7 @@ public:
 private:
 	HRESULT					Add_Component(void);
 
+
 public:
 	const _float					Get_Radius() { return m_fRadius; }
 	const _float					Get_Height() { return m_fHeight; }

@@ -143,15 +143,15 @@ PS_OUT	PS_POINT(PS_IN In)
 	vector vLightDir = vPosition - g_vLightPos;
 	float  fDistance = length(vLightDir);
 
-	float  fAtt = saturate((g_fRange - fDistance) / g_fRange);
+	float  fAtt = saturate((g_fRange - fDistance) / (g_fRange/4));
 
-	Out.vShade = saturate(dot(normalize(vector(vLightDir.xyz, 0.f))*-1.f, vNormal)) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient) * fAtt;
+	Out.vShade = (saturate(dot(normalize(vector(vLightDir.xyz, 0.f))*-1.f, vNormal)) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
 	Out.vShade.a = 1.f;
 
 	vector vReflect = normalize(reflect(normalize(vector(vLightDir.xyz, 0.f)), vNormal));
 	vector vLook = g_vCamPos - vPosition;
 
-	Out.vSpecular = pow(saturate(dot(normalize(vLook), vReflect)), g_fPower * 50.f) * fAtt;
+	Out.vSpecular = (pow(saturate(dot(normalize(vLook), vReflect)), g_fPower * 50.f)) * fAtt;
 	Out.vSpecular.a = 1.f;
 	return Out;
 

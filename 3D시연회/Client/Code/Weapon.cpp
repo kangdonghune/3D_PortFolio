@@ -6,12 +6,16 @@
 
 CWeapon::CWeapon(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev)
+	, m_fMuzzleLightTime(0.0f)
+	, m_fMuzzleLightLimit(0.05f)
 {
 
 }
 
 CWeapon::CWeapon(const CWeapon& rhs)
 	: CGameObject(rhs)
+	, m_fMuzzleLightTime(0.0f)
+	, m_fMuzzleLightLimit(0.05f)
 {
 
 }
@@ -70,20 +74,33 @@ Engine::_int CWeapon::Update_Object(const _float& fTimeDelta)
 	Collision_ToObject();
 
 
-	Add_RenderGroup(RENDER_NONALPHA, this);
+	Add_RenderGroup(RENDER_SPECULAR, this);
+
+	DeleteFlash(fTimeDelta);
 
 	return 0;
 }
 
 void CWeapon::Render_Object(void)
 {
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
-	m_pMeshCom->Render_Meshes();
-	
-	//m_pColliderCom->Render_Collider(COLLTYPE(false), m_pTransformCom->Get_WorldMatrix());
-	//m_pColliderCom->Render_Collider(COLLTYPE(false), m_pTransformCom->Get_WorldMatrix());
 
-	//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_NRotWorldMatrix());
+	LPD3DXEFFECT	pEffect = m_pShaderCom->Get_EffectHandle();
+	NULL_CHECK(pEffect);
+	pEffect->AddRef();
+
+	FAILED_CHECK_RETURN(SetUp_ConstantTable(pEffect), );
+
+	_uint	iMaxPass = 1;
+
+	pEffect->Begin(&iMaxPass, 0);	// 1. 현재 쉐이더 파일이 가진 최대 pass의 개수 반환 2. 시작하는 방식에 대한 flag 값(default 값)
+	pEffect->BeginPass(1);
+
+	m_pMeshCom->Render_Meshes(pEffect);
+
+	pEffect->EndPass();
+	pEffect->End();
+
+	Safe_Release(pEffect);
 }
 
 void CWeapon::Shot()
@@ -93,6 +110,8 @@ void CWeapon::Shot()
 		return;
 	}
 	m_iLoadedBullet--;
+	MuzzleFlash();
+
 }
 
 void CWeapon::ReLoad()
@@ -107,6 +126,49 @@ void CWeapon::ReLoad()
 		m_iLoadedBullet = 30 - abs(m_iResidueBullet);
 		m_iResidueBullet = 0;
 	}
+}
+
+void CWeapon::MuzzleFlash()
+{
+	if (nullptr != m_pMuzzleLight)
+	{
+		return;
+	}
+	D3DLIGHT9			tLightInfo;
+	ZeroMemory(&tLightInfo, sizeof(D3DLIGHT9));
+	_vec3 vPos = {};
+	m_pTransformCom->Get_Info(INFO_POS, &vPos);
+
+	_vec3 vLook = {};
+	m_pTransformCom->Get_Info(INFO_LOOK, &vLook);
+
+	tLightInfo.Type = D3DLIGHT_POINT;
+	tLightInfo.Diffuse = D3DXCOLOR(1.f, 0.647f, 0.25f, 1.f);
+	tLightInfo.Specular = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	tLightInfo.Ambient = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.f);
+	tLightInfo.Position = _vec3(vPos.x +vLook.x*5.f, vPos.y + vLook.y*5.f, vPos.z + vLook.z*5.f);
+	tLightInfo.Range = 15.f;
+	FAILED_CHECK_RETURN(Ready_Light(m_pGraphicDev, &tLightInfo, POINT_MUZZLE), );
+	m_pMuzzleLight = Get_LightClass(POINT_MUZZLE);
+	m_fMuzzleLightTime = 0.f; // 새로 총구 조명 만들면 시간 초기화
+
+}
+
+void CWeapon::DeleteFlash(const _float& fTimeDelta)
+{
+	if (m_pMuzzleLight == nullptr)
+	{
+		return;
+	} //출력 중인 총구 조명 없으면 생략
+	m_fMuzzleLightTime += fTimeDelta;
+	if (m_fMuzzleLightTime > m_fMuzzleLightLimit)
+	{
+		Delete_Light(m_pMuzzleLight);
+		m_pMuzzleLight = nullptr;
+	}
+
+
+
 }
 
 HRESULT CWeapon::Add_Component(void)
@@ -134,7 +196,9 @@ HRESULT CWeapon::Add_Component(void)
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
-
+	pComponent = m_pShaderCom = dynamic_cast<CShader*>(Clone_Proto(L"Proto_Shader_Mesh"));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_STATIC].emplace(L"Com_Shader", pComponent);
 	return S_OK;
 
 }
@@ -147,6 +211,21 @@ HRESULT CWeapon::Add_Collider(void)
 	m_pSphrerTransformCom = (CTransform*)m_pSphere->Get_Component(L"Com_Transform", ID_DYNAMIC);
 	m_pSphrerTransformCom->Set_Pos(&_vec3{ 0.0f, 0.0f, 0.f });
 
+
+	return S_OK;
+}
+
+HRESULT CWeapon::SetUp_ConstantTable(LPD3DXEFFECT & pEffect)
+{
+	_matrix		matWorld, matView, matProj;
+
+	m_pTransformCom->Get_WorldMatrix(&matWorld);
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
+
+	pEffect->SetMatrix("g_matWorld", &matWorld);
+	pEffect->SetMatrix("g_matView", &matView);
+	pEffect->SetMatrix("g_matProj", &matProj);
 
 	return S_OK;
 }

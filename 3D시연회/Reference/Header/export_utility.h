@@ -77,12 +77,15 @@ inline void			Clear_RenderGroup(void);
 inline HRESULT		Ready_Renderer(LPDIRECT3DDEVICE9& pGraphicDev);
 
 // light
-inline HRESULT				Ready_Light(LPDIRECT3DDEVICE9 pGraphicDev, const D3DLIGHT9* pLightInfo, const _uint& iIndex);
-inline const D3DLIGHT9*		Get_Light(const _ulong& iIndex = 0);
+inline	HRESULT				Ready_Light(LPDIRECT3DDEVICE9 pGraphicDev, const D3DLIGHT9* pLightInfo, const _uint& iIndex);
+inline	const D3DLIGHT9*	Get_Light(const _ulong& iIndex = 0);
 inline	void				Render_Light(LPD3DXEFFECT& pEffect);
+inline	CLight*				Get_LightClass(const _ulong& iIndex = 0);
+inline	void				Delete_Light(CLight* pLight);
+inline	void				Delete_Light(const _uint& iIndex);
 
 
-inline void				Release_Utility(void);
+inline	void					Release_Utility(void);
 
 #include "Export_Utility.inl"
 

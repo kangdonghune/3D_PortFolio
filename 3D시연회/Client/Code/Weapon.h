@@ -12,7 +12,8 @@ class CTransform;
 class CRenderer;
 class CCalculator;
 class CCollider;
-
+class CShader;
+class CLight;
 END
 class CWeapon : public CGameObject
 {
@@ -32,14 +33,21 @@ public:
 	virtual void Render_Object(void) override;
 
 
+public:
 	_int					Get_LoadedBullet() { return m_iLoadedBullet; }
 	_int					Get_ResidueBullet() { return m_iResidueBullet;}
 	void					Shot();
 	void					ReLoad();
 
 private:
+
+	void					MuzzleFlash();
+	void					DeleteFlash(const _float& fTimeDelta);
+
+private:
 	HRESULT					Add_Component(void);
 	HRESULT					Add_Collider(void);
+	HRESULT					SetUp_ConstantTable(LPD3DXEFFECT& pEffect);
 
 	_bool					Collision_ToObject();
 
@@ -54,6 +62,12 @@ private:
 	CCalculator*			m_pCalculatorCom = nullptr;
 	CSphere*				m_pSphere = nullptr;
 	CTransform*				m_pSphrerTransformCom = nullptr;
+	CShader*				m_pShaderCom = nullptr;
+
+
+	CLight*					m_pMuzzleLight = nullptr;
+	_float					m_fMuzzleLightTime;
+	_float					m_fMuzzleLightLimit;
 
 	const _matrix*			m_pParentBoneMatrix = nullptr;
 	const _matrix*			m_pParentWorldMatrix = nullptr;
